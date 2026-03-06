@@ -106,6 +106,7 @@ nightfall-mix --help
 For full control documentation, see [GUI_TUTORIAL.md](GUI_TUTORIAL.md).
 
 ## Main GUI Workspaces
+<img width="1559" height="1336" alt="image" src="https://github.com/user-attachments/assets/93153fd5-7b5e-4160-98a6-e4cc6190b3a1" />
 
 ### 1) Lo-Fi Studio
 
