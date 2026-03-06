@@ -1,0 +1,2 @@
+"""Desktop service layer."""
+

@@ -1,0 +1,2 @@
+"""Nightfall desktop GUI package."""
+
