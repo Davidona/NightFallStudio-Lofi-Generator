@@ -26,24 +26,7 @@ It includes:
 
 ## Installation
 
-### 1. Clone
-
-```bash
-git clone <your-repo-url>
-cd "NightFall Lofi Generator"
-```
-
-### 2. Create virtual environment
-
-```bash
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# macOS/Linux
-source .venv/bin/activate
-```
-
-### 3. Install dependencies
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
