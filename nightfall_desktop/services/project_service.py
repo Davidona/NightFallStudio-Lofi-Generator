@@ -5,7 +5,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional, TypeVar
 
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, SmartOrderingMode
+from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, SmartOrderingMode
 from nightfall_desktop.models.session_models import GuiSettings, PresetOverrides, WorkspaceMode
 
 SUPPORTED_PROJECT_VERSION = 1
@@ -67,8 +67,27 @@ def _parse_enum(enum_cls: type[E], raw_value: object, default: E) -> E:
 def _serialize_override(override: PresetOverrides) -> dict[str, Optional[float]]:
     return {
         "lpf_hz": override.lpf_hz,
+        "hpf_hz": override.hpf_hz,
+        "lpf_q": override.lpf_q,
         "saturation_scale": override.saturation_scale,
+        "tape_drive": override.tape_drive,
+        "tape_bias": override.tape_bias,
         "compression_scale": override.compression_scale,
+        "comp_attack_ms": override.comp_attack_ms,
+        "comp_release_ms": override.comp_release_ms,
+        "comp_ratio": override.comp_ratio,
+        "bit_depth": override.bit_depth,
+        "sample_rate_reduction_hz": override.sample_rate_reduction_hz,
+        "wow_depth": override.wow_depth,
+        "wow_rate_hz": override.wow_rate_hz,
+        "flutter_depth": override.flutter_depth,
+        "flutter_rate_hz": override.flutter_rate_hz,
+        "stereo_width": override.stereo_width,
+        "vinyl_noise_level_db": override.vinyl_noise_level_db,
+        "tape_hiss_level_db": override.tape_hiss_level_db,
+        "atmosphere_volume_db": override.atmosphere_volume_db,
+        "atmosphere_stereo_width": override.atmosphere_stereo_width,
+        "atmosphere_lpf_hz": override.atmosphere_lpf_hz,
     }
 
 
@@ -78,17 +97,109 @@ def _deserialize_override(payload: object) -> PresetOverrides:
     lpf_override = _as_optional_float(payload.get("lpf_hz"))
     if lpf_override is not None:
         lpf_override = _clamp(lpf_override, 4000.0, 18000.0)
+    hpf_override = _as_optional_float(payload.get("hpf_hz"))
+    if hpf_override is not None:
+        hpf_override = _clamp(hpf_override, 20.0, 180.0)
+    lpf_q = _as_optional_float(payload.get("lpf_q"))
+    if lpf_q is not None:
+        lpf_q = _clamp(lpf_q, 0.4, 2.0)
+    bit_depth = _as_optional_int(payload.get("bit_depth"))
+    if bit_depth is not None:
+        bit_depth = int(_clamp(float(bit_depth), 8.0, 16.0))
     return PresetOverrides(
         lpf_hz=lpf_override,
-        saturation_scale=_clamp(
-            _as_float(payload.get("saturation_scale", 1.0), 1.0),
-            0.3,
-            1.5,
+        hpf_hz=hpf_override,
+        lpf_q=lpf_q,
+        saturation_scale=(
+            _clamp(_as_float(payload.get("saturation_scale"), 1.0), 0.3, 1.8)
+            if payload.get("saturation_scale") is not None
+            else None
         ),
-        compression_scale=_clamp(
-            _as_float(payload.get("compression_scale", 1.0), 1.0),
-            0.3,
-            1.5,
+        tape_drive=(
+            _clamp(_as_float(payload.get("tape_drive"), 1.0), 0.5, 2.0)
+            if payload.get("tape_drive") is not None
+            else None
+        ),
+        tape_bias=(
+            _clamp(_as_float(payload.get("tape_bias"), 0.0), -0.5, 0.5)
+            if payload.get("tape_bias") is not None
+            else None
+        ),
+        compression_scale=(
+            _clamp(_as_float(payload.get("compression_scale"), 1.0), 0.3, 1.8)
+            if payload.get("compression_scale") is not None
+            else None
+        ),
+        comp_attack_ms=(
+            _clamp(_as_float(payload.get("comp_attack_ms"), 20.0), 1.0, 200.0)
+            if payload.get("comp_attack_ms") is not None
+            else None
+        ),
+        comp_release_ms=(
+            _clamp(_as_float(payload.get("comp_release_ms"), 200.0), 40.0, 1200.0)
+            if payload.get("comp_release_ms") is not None
+            else None
+        ),
+        comp_ratio=(
+            _clamp(_as_float(payload.get("comp_ratio"), 2.0), 1.0, 8.0)
+            if payload.get("comp_ratio") is not None
+            else None
+        ),
+        bit_depth=bit_depth,
+        sample_rate_reduction_hz=(
+            _clamp(_as_float(payload.get("sample_rate_reduction_hz"), 44100.0), 8000.0, 44100.0)
+            if payload.get("sample_rate_reduction_hz") is not None
+            else None
+        ),
+        wow_depth=(
+            _clamp(_as_float(payload.get("wow_depth"), 0.0), 0.0, 0.02)
+            if payload.get("wow_depth") is not None
+            else None
+        ),
+        wow_rate_hz=(
+            _clamp(_as_float(payload.get("wow_rate_hz"), 0.0), 0.0, 2.0)
+            if payload.get("wow_rate_hz") is not None
+            else None
+        ),
+        flutter_depth=(
+            _clamp(_as_float(payload.get("flutter_depth"), 0.0), 0.0, 0.01)
+            if payload.get("flutter_depth") is not None
+            else None
+        ),
+        flutter_rate_hz=(
+            _clamp(_as_float(payload.get("flutter_rate_hz"), 0.0), 0.0, 12.0)
+            if payload.get("flutter_rate_hz") is not None
+            else None
+        ),
+        stereo_width=(
+            _clamp(_as_float(payload.get("stereo_width"), 0.9), 0.4, 1.2)
+            if payload.get("stereo_width") is not None
+            else None
+        ),
+        vinyl_noise_level_db=(
+            _clamp(_as_float(payload.get("vinyl_noise_level_db"), -120.0), -120.0, -20.0)
+            if payload.get("vinyl_noise_level_db") is not None
+            else None
+        ),
+        tape_hiss_level_db=(
+            _clamp(_as_float(payload.get("tape_hiss_level_db"), -120.0), -120.0, -20.0)
+            if payload.get("tape_hiss_level_db") is not None
+            else None
+        ),
+        atmosphere_volume_db=(
+            _clamp(_as_float(payload.get("atmosphere_volume_db"), 0.0), -18.0, 18.0)
+            if payload.get("atmosphere_volume_db") is not None
+            else None
+        ),
+        atmosphere_stereo_width=(
+            _clamp(_as_float(payload.get("atmosphere_stereo_width"), 1.0), 0.0, 1.2)
+            if payload.get("atmosphere_stereo_width") is not None
+            else None
+        ),
+        atmosphere_lpf_hz=(
+            _clamp(_as_float(payload.get("atmosphere_lpf_hz"), 10000.0), 2000.0, 18000.0)
+            if payload.get("atmosphere_lpf_hz") is not None
+            else None
         ),
     )
 
@@ -120,6 +231,8 @@ def save_project_file(path: Path, settings: GuiSettings, ordered_paths: list[Pat
             "adaptive_crest_threshold_low": settings.adaptive_crest_threshold_low,
             "adaptive_crest_threshold_high": settings.adaptive_crest_threshold_high,
             "rain_level_db": settings.rain_level_db,
+            "rain_presence": settings.rain_presence.value,
+            "rain_preserve_low_drops": settings.rain_preserve_low_drops,
             "crossfade_sec": settings.crossfade_sec,
             "lufs": settings.lufs,
             "shuffle": settings.shuffle,
@@ -198,6 +311,8 @@ def load_project_file(path: Path) -> tuple[GuiSettings, list[Path]]:
         adaptive_crest_threshold_low=_as_float(settings.get("adaptive_crest_threshold_low", 8.0), 8.0),
         adaptive_crest_threshold_high=_as_float(settings.get("adaptive_crest_threshold_high", 14.0), 14.0),
         rain_level_db=_as_float(settings.get("rain_level_db", -28.0), -28.0),
+        rain_presence=_parse_enum(RainPresence, settings.get("rain_presence"), RainPresence.balanced),
+        rain_preserve_low_drops=_as_bool(settings.get("rain_preserve_low_drops", True), True),
         crossfade_sec=_as_float(settings.get("crossfade_sec", 6.0), 6.0),
         lufs=_as_float(settings.get("lufs", -14.0), -14.0),
         shuffle=_as_bool(settings.get("shuffle", False), False),

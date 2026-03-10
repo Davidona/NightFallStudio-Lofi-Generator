@@ -12,7 +12,8 @@ It includes:
 - GUI + CLI workflows
 - Smart crossfade and smart ordering (BPM/key-aware)
 - Adaptive lo-fi processing (per-track metrics + rationale)
-- Optional rain layer + loudness targeting (LUFS)
+- Expanded lo-fi preset editor: filters, tape drive/bias, compression timing, bit reduction, wow/flutter, stereo, noise, and atmosphere controls
+- Optional rain layer + loudness targeting (LUFS / true peak)
 - Preview system (short/full) with playback controls
 - Output bitrate selector and size estimates
 - Optional post-render MP3 chunk export
@@ -151,6 +152,8 @@ When rendering a lo-fi mix, Nightfall also writes:
 
 If adaptive mode is enabled, it also writes adaptive analysis reports (path configurable in GUI/CLI).
 
+Example preset override payload: [examples/preset_config.sample.json](examples/preset_config.sample.json)
+
 ## Project Structure
 
 ```text
@@ -185,4 +188,3 @@ Type-check/lint can be added if needed (not enforced in current baseline).
 
 - Long renders seem stalled:
   - Final master stage can take longer on multi-hour timelines; watch log panel for stage updates.
-

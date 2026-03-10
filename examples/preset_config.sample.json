@@ -1,0 +1,27 @@
+{
+  "preset": "classic_lofi_hip_hop",
+  "preset_overrides": {
+    "hpf_hz": 40.0,
+    "lpf_hz": 7500.0,
+    "lpf_q": 0.92,
+    "saturation_scale": 1.02,
+    "tape_drive": 1.08,
+    "tape_bias": -0.03,
+    "compression_scale": 1.0,
+    "comp_attack_ms": 26.0,
+    "comp_release_ms": 230.0,
+    "comp_ratio": 2.2,
+    "bit_depth": 12,
+    "sample_rate_reduction_hz": 32000.0,
+    "wow_depth": 0.0024,
+    "wow_rate_hz": 0.24,
+    "flutter_depth": 0.0007,
+    "flutter_rate_hz": 5.4,
+    "stereo_width": 0.85,
+    "vinyl_noise_level_db": -54.0,
+    "tape_hiss_level_db": -64.0,
+    "atmosphere_volume_db": 0.0,
+    "atmosphere_stereo_width": 0.94,
+    "atmosphere_lpf_hz": 10500.0
+  }
+}

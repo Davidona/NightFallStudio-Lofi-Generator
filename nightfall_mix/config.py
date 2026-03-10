@@ -32,12 +32,23 @@ class PresetName(str, Enum):
     rainy_microcassette = "rainy_microcassette"
     velvet_room = "velvet_room"
     sunrise_clean = "sunrise_clean"
+    classic_lofi_hip_hop = "classic_lofi_hip_hop"
+    vinyl_cafe = "vinyl_cafe"
+    tape_nostalgia = "tape_nostalgia"
+    rainy_study = "rainy_study"
+    dusty_mpc = "dusty_mpc"
 
 
 class OutputFormat(str, Enum):
     auto = "auto"
     mp3 = "mp3"
     wav = "wav"
+
+
+class RainPresence(str, Enum):
+    behind = "behind"
+    balanced = "balanced"
+    upfront = "upfront"
 
 
 class RunConfig(BaseModel):
@@ -59,6 +70,8 @@ class RunConfig(BaseModel):
     metadata_json: Optional[Path] = None
     quality_mode: QualityMode = QualityMode.best
     rain_level_db: float = -28.0
+    rain_presence: RainPresence = RainPresence.balanced
+    rain_preserve_low_drops: bool = True
     mix_log: Optional[Path] = None
     enable_warp: bool = False
     output_format: OutputFormat = OutputFormat.auto

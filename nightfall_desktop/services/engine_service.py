@@ -85,6 +85,8 @@ class GuiEngineService:
             metadata_json=settings.metadata_json,
             quality_mode=settings.quality_mode,
             rain_level_db=settings.rain_level_db,
+            rain_presence=settings.rain_presence,
+            rain_preserve_low_drops=settings.rain_preserve_low_drops,
             mix_log=settings.mix_log,
             output_format=settings.output_format,
             bitrate=settings.bitrate,
@@ -130,11 +132,22 @@ class GuiEngineService:
             probe_out = Path(td) / "rain_probe.w64"
             probe_src = session.mix_plan.instances[0].track.path
             probe_sec = max(4.0, min(12.0, session.mix_plan.instances[0].track.duration_ms / 1000.0))
+            if config.rain_presence.value == "behind":
+                rain_hpf_hz = 110.0
+                rain_lpf_hz = 10_500.0
+            elif config.rain_presence.value == "upfront":
+                rain_hpf_hz = 45.0
+                rain_lpf_hz = 15_500.0
+            else:
+                rain_hpf_hz = 75.0
+                rain_lpf_hz = 13_000.0
+            if config.rain_preserve_low_drops:
+                rain_hpf_hz = min(rain_hpf_hz, 55.0)
             filtergraph = (
                 f"[0:a]aformat=sample_rates=48000:channel_layouts=stereo,"
                 f"aresample=48000,atrim=duration={probe_sec:.3f}[main];"
                 f"[1:a]aformat=sample_rates=48000:channel_layouts=stereo,"
-                f"aresample=48000,highpass=f=200,lowpass=f=11000,"
+                f"aresample=48000,highpass=f={rain_hpf_hz:.1f},lowpass=f={rain_lpf_hz:.1f},"
                 f"volume={config.rain_level_db}dB,asetpts=PTS-STARTPTS,"
                 f"atrim=duration={probe_sec:.3f}[rain];"
                 "[main][rain]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[outa]"
@@ -239,22 +252,52 @@ class GuiEngineService:
     def _resolve_preset(self, settings: GuiSettings) -> PresetSpec:
         base = get_preset(settings.preset)
         overrides: PresetOverrides = settings.preset_overrides
-        if overrides.lpf_hz is None:
-            lpf_hz = base.lpf_hz
-        else:
-            lpf_hz = max(4000.0, min(18000.0, overrides.lpf_hz))
-        sat_scale = max(0.3, min(1.5, overrides.saturation_scale))
-        comp_scale = max(0.3, min(1.5, overrides.compression_scale))
-        softclip_threshold = 1.0 - (1.0 - base.softclip_threshold) * sat_scale
-        softclip_threshold = max(0.9, min(0.999, softclip_threshold))
-        comp_ratio = 1.0 + (base.comp_ratio - 1.0) * comp_scale
-        comp_threshold = base.comp_threshold_db + (1.0 - comp_scale) * 3.0
+
+        def _coalesce(value, fallback):
+            return fallback if value is None else value
+
         return replace(
             base,
-            lpf_hz=lpf_hz,
-            softclip_threshold=softclip_threshold,
-            comp_ratio=comp_ratio,
-            comp_threshold_db=comp_threshold,
+            lpf_hz=max(4000.0, min(18000.0, _coalesce(overrides.lpf_hz, base.lpf_hz))),
+            hpf_hz=max(20.0, min(180.0, _coalesce(overrides.hpf_hz, base.hpf_hz))),
+            lpf_q=max(0.4, min(2.0, _coalesce(overrides.lpf_q, base.lpf_q))),
+            saturation_scale=max(0.3, min(1.8, _coalesce(overrides.saturation_scale, base.saturation_scale))),
+            tape_drive=max(0.5, min(2.0, _coalesce(overrides.tape_drive, base.tape_drive))),
+            tape_bias=max(-0.5, min(0.5, _coalesce(overrides.tape_bias, base.tape_bias))),
+            compression_scale=max(0.3, min(1.8, _coalesce(overrides.compression_scale, base.compression_scale))),
+            comp_attack_ms=max(1.0, min(200.0, _coalesce(overrides.comp_attack_ms, base.comp_attack_ms))),
+            comp_release_ms=max(40.0, min(1200.0, _coalesce(overrides.comp_release_ms, base.comp_release_ms))),
+            comp_ratio=max(1.0, min(8.0, _coalesce(overrides.comp_ratio, base.comp_ratio))),
+            bit_depth=int(max(8, min(16, _coalesce(overrides.bit_depth, base.bit_depth)))),
+            sample_rate_reduction_hz=max(
+                8000.0,
+                min(44100.0, _coalesce(overrides.sample_rate_reduction_hz, base.sample_rate_reduction_hz)),
+            ),
+            wow_depth=max(0.0, min(0.02, _coalesce(overrides.wow_depth, base.wow_depth))),
+            wow_rate_hz=max(0.0, min(2.0, _coalesce(overrides.wow_rate_hz, base.wow_rate_hz))),
+            flutter_depth=max(0.0, min(0.01, _coalesce(overrides.flutter_depth, base.flutter_depth))),
+            flutter_rate_hz=max(0.0, min(12.0, _coalesce(overrides.flutter_rate_hz, base.flutter_rate_hz))),
+            stereo_width=max(0.4, min(1.2, _coalesce(overrides.stereo_width, base.stereo_width))),
+            vinyl_noise_level_db=max(
+                -120.0,
+                min(0.0, _coalesce(overrides.vinyl_noise_level_db, base.vinyl_noise_level_db)),
+            ),
+            tape_hiss_level_db=max(
+                -120.0,
+                min(0.0, _coalesce(overrides.tape_hiss_level_db, base.tape_hiss_level_db)),
+            ),
+            atmosphere_volume_db=max(
+                -18.0,
+                min(18.0, _coalesce(overrides.atmosphere_volume_db, base.atmosphere_volume_db)),
+            ),
+            atmosphere_stereo_width=max(
+                0.0,
+                min(1.2, _coalesce(overrides.atmosphere_stereo_width, base.atmosphere_stereo_width)),
+            ),
+            atmosphere_lpf_hz=max(
+                2000.0,
+                min(18000.0, _coalesce(overrides.atmosphere_lpf_hz, base.atmosphere_lpf_hz)),
+            ),
         )
 
     @staticmethod

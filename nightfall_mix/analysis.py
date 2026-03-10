@@ -699,12 +699,16 @@ def fallback_adaptive_processing(
     config: RunConfig,
     warning: str,
 ) -> AdaptiveProcessing:
+    fallback_noise_db: Optional[float] = None
+    for candidate in (preset.vinyl_noise_level_db, preset.tape_hiss_level_db):
+        if candidate > -90.0:
+            fallback_noise_db = candidate if fallback_noise_db is None else max(fallback_noise_db, candidate)
     return AdaptiveProcessing(
         lpf_cutoff_hz=preset.lpf_hz,
         saturation_strength=1.0,
         compression_strength=1.0,
         stereo_width_target=max(config.adaptive_stereo_min_width, preset.stereo_width),
-        noise_added_db=(preset.noise_level_db if preset.noise_level_db > -90.0 else None),
+        noise_added_db=fallback_noise_db,
         lofi_needed_score=50.0,
         rationale=f"adaptive fallback: {warning}",
         used_fallback=True,

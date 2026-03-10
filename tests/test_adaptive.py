@@ -101,9 +101,9 @@ def test_filtergraph_adaptive_mode_uses_glue_master_chain(tmp_path: Path) -> Non
         include_rain=False,
         per_track_processing=True,
     )
-    assert "highpass=f=40,acompressor=threshold=-22dB:ratio=1.35" in graph
+    assert "highpass=f=30.0:t=q:w=0.707,acompressor=threshold=0.079433:ratio=1.35" in graph
     assert "anoisesrc" in graph
-    assert "alimiter=limit=0.891[outa]" in graph
+    assert "alimiter=limit=0.891:attack=5:release=50:level=false[outa]" in graph
 
 
 def test_analyze_track_warns_when_smart_ordering_without_librosa(monkeypatch) -> None:

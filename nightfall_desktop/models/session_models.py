@@ -6,15 +6,34 @@ from pathlib import Path
 from typing import Optional
 
 from nightfall_mix.analysis import TrackAnalysis
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, SmartOrderingMode
+from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, SmartOrderingMode
 from nightfall_mix.mixer import MixPlan, TrackSource
 
 
 @dataclass
 class PresetOverrides:
     lpf_hz: Optional[float] = None
-    saturation_scale: float = 1.0
-    compression_scale: float = 1.0
+    hpf_hz: Optional[float] = None
+    lpf_q: Optional[float] = None
+    saturation_scale: Optional[float] = None
+    tape_drive: Optional[float] = None
+    tape_bias: Optional[float] = None
+    compression_scale: Optional[float] = None
+    comp_attack_ms: Optional[float] = None
+    comp_release_ms: Optional[float] = None
+    comp_ratio: Optional[float] = None
+    bit_depth: Optional[int] = None
+    sample_rate_reduction_hz: Optional[float] = None
+    wow_depth: Optional[float] = None
+    wow_rate_hz: Optional[float] = None
+    flutter_depth: Optional[float] = None
+    flutter_rate_hz: Optional[float] = None
+    stereo_width: Optional[float] = None
+    vinyl_noise_level_db: Optional[float] = None
+    tape_hiss_level_db: Optional[float] = None
+    atmosphere_volume_db: Optional[float] = None
+    atmosphere_stereo_width: Optional[float] = None
+    atmosphere_lpf_hz: Optional[float] = None
 
 
 class WorkspaceMode(str, Enum):
@@ -44,6 +63,8 @@ class GuiSettings:
     adaptive_crest_threshold_low: float = 8.0
     adaptive_crest_threshold_high: float = 14.0
     rain_level_db: float = -28.0
+    rain_presence: RainPresence = RainPresence.balanced
+    rain_preserve_low_drops: bool = True
     crossfade_sec: float = 6.0
     lufs: float = -14.0
     shuffle: bool = False

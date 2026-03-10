@@ -54,9 +54,50 @@ def test_filtergraph_contains_expected_blocks(tmp_path: Path) -> None:
         per_track_processing=True,
     )
     assert "acrossfade" in graph
-    assert "highpass=f=200" in graph
+    assert "highpass=f=55.0" in graph
+    assert "lowpass=f=11000.0:t=q:w=0.707" in graph
+    assert "acrusher=bits=14" in graph
     assert "loudnorm" in graph
     assert "[outa]" in graph
+
+
+def test_filtergraph_rain_presence_upfront_preserves_more_body(tmp_path: Path) -> None:
+    songs_folder = tmp_path / "songs"
+    songs_folder.mkdir()
+    rain = tmp_path / "rain.mp3"
+    rain.write_bytes(b"stub")
+    output = tmp_path / "mix.mp3"
+
+    t0 = _stub_track(songs_folder, "a.mp3", 30_000, "t0")
+    instances = [TrackInstance(instance_index=0, track=t0, cycle_index=0)]
+    analyses = {"t0": TrackAnalysis(track_id="t0")}
+    plan = build_mix_plan(
+        instances=instances,
+        analyses=analyses,
+        crossfade_sec=6.0,
+        smart_crossfade=False,
+        target_duration_min=None,
+    )
+    cfg = RunConfig(
+        songs_folder=songs_folder,
+        output=output,
+        rain=rain,
+        quality_mode=QualityMode.best,
+        preset=PresetName.rainy_study,
+        rain_presence="upfront",
+        rain_preserve_low_drops=True,
+    )
+    graph = build_filtergraph(
+        mix_plan=plan,
+        analyses=analyses,
+        config=cfg,
+        preset=get_preset(cfg.preset),
+        include_master=True,
+        include_rain=True,
+        per_track_processing=True,
+    )
+    assert "highpass=f=45.0" in graph
+    assert "lowpass=f=9200.0:t=q:w=0.707" in graph
 
 
 def test_filtergraph_preview_adds_trim(tmp_path: Path) -> None:

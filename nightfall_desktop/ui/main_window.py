@@ -43,7 +43,7 @@ except Exception:
     MULTIMEDIA_AVAILABLE = False
 
 from nightfall_mix.analysis import TrackAnalysis, read_analysis_cache_summary
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, SmartOrderingMode
+from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, SmartOrderingMode
 from nightfall_mix.effects_presets import get_preset
 from nightfall_mix.mixer import discover_audio_files
 from nightfall_mix.utils import ffprobe_duration_ms, format_hms
@@ -270,6 +270,17 @@ class MainWindow(QMainWindow):
         self.rain_slider.setValue(-28)
         self.rain_label = QLabel("-28 dB")
         self.rain_slider.valueChanged.connect(lambda v: self.rain_label.setText(f"{v} dB"))
+        self.rain_presence_combo = QComboBox()
+        self.rain_presence_combo.addItem("Behind", RainPresence.behind.value)
+        self.rain_presence_combo.addItem("Balanced", RainPresence.balanced.value)
+        self.rain_presence_combo.addItem("Upfront", RainPresence.upfront.value)
+        self.rain_presence_combo.setCurrentIndex(1)
+        self.rain_presence_combo.setToolTip("Controls how tucked-in or forward the rain layer sounds.")
+        self.rain_low_drops_checkbox = QCheckBox("Preserve Low Drops")
+        self.rain_low_drops_checkbox.setChecked(True)
+        self.rain_low_drops_checkbox.setToolTip(
+            "Keeps more low-frequency body from window hits, heavier drops, and darker ambience."
+        )
 
         self.crossfade_spin = QDoubleSpinBox()
         self.crossfade_spin.setRange(0.5, 20.0)
@@ -319,6 +330,8 @@ class MainWindow(QMainWindow):
         self.lufs_spin.valueChanged.connect(self._mark_preview_dirty)
         self.rain_line.textChanged.connect(self._mark_preview_dirty)
         self.rain_slider.valueChanged.connect(self._mark_preview_dirty)
+        self.rain_presence_combo.currentIndexChanged.connect(self._mark_preview_dirty)
+        self.rain_low_drops_checkbox.toggled.connect(self._mark_preview_dirty)
         self.shuffle_checkbox.toggled.connect(self._mark_preview_dirty)
         self.adaptive_checkbox.toggled.connect(self._mark_preview_dirty)
         self.quality_combo.currentIndexChanged.connect(self._mark_preview_dirty)
@@ -387,8 +400,11 @@ class MainWindow(QMainWindow):
         rain_layout.addWidget(QLabel("Rain Volume"), 1, 0)
         rain_layout.addWidget(self.rain_slider, 1, 1, 1, 3)
         rain_layout.addWidget(self.rain_label, 1, 4)
-        rain_layout.addWidget(QLabel("Target LUFS"), 2, 0)
-        rain_layout.addWidget(self.lufs_spin, 2, 1)
+        rain_layout.addWidget(QLabel("Rain Presence"), 2, 0)
+        rain_layout.addWidget(self.rain_presence_combo, 2, 1)
+        rain_layout.addWidget(self.rain_low_drops_checkbox, 2, 2, 1, 3)
+        rain_layout.addWidget(QLabel("Target LUFS"), 3, 0)
+        rain_layout.addWidget(self.lufs_spin, 3, 1)
 
         reports_box = QGroupBox("Reports")
         reports_layout = QGridLayout(reports_box)
@@ -1070,8 +1086,27 @@ class MainWindow(QMainWindow):
     def _clone_overrides(self, overrides: PresetOverrides) -> PresetOverrides:
         return PresetOverrides(
             lpf_hz=overrides.lpf_hz,
+            hpf_hz=overrides.hpf_hz,
+            lpf_q=overrides.lpf_q,
             saturation_scale=overrides.saturation_scale,
+            tape_drive=overrides.tape_drive,
+            tape_bias=overrides.tape_bias,
             compression_scale=overrides.compression_scale,
+            comp_attack_ms=overrides.comp_attack_ms,
+            comp_release_ms=overrides.comp_release_ms,
+            comp_ratio=overrides.comp_ratio,
+            bit_depth=overrides.bit_depth,
+            sample_rate_reduction_hz=overrides.sample_rate_reduction_hz,
+            wow_depth=overrides.wow_depth,
+            wow_rate_hz=overrides.wow_rate_hz,
+            flutter_depth=overrides.flutter_depth,
+            flutter_rate_hz=overrides.flutter_rate_hz,
+            stereo_width=overrides.stereo_width,
+            vinyl_noise_level_db=overrides.vinyl_noise_level_db,
+            tape_hiss_level_db=overrides.tape_hiss_level_db,
+            atmosphere_volume_db=overrides.atmosphere_volume_db,
+            atmosphere_stereo_width=overrides.atmosphere_stereo_width,
+            atmosphere_lpf_hz=overrides.atmosphere_lpf_hz,
         )
 
     def _clone_override_map(self) -> dict[PresetName, PresetOverrides]:
@@ -1581,6 +1616,8 @@ class MainWindow(QMainWindow):
             adaptive_lofi=self.adaptive_checkbox.isChecked(),
             adaptive_report=Path(self.adaptive_report_line.text().strip() or "adaptive_report.json"),
             rain_level_db=float(self.rain_slider.value()),
+            rain_presence=RainPresence(str(self.rain_presence_combo.currentData())),
+            rain_preserve_low_drops=self.rain_low_drops_checkbox.isChecked(),
             crossfade_sec=self.crossfade_spin.value(),
             lufs=self.lufs_spin.value(),
             shuffle=self.shuffle_checkbox.isChecked(),
@@ -1748,7 +1785,7 @@ class MainWindow(QMainWindow):
         base_preset = get_preset(preset)
         dialog = PresetEditorDialog(
             active,
-            base_lpf_hz=base_preset.lpf_hz,
+            base_preset=base_preset,
             preset_name=preset.value,
             parent=self,
         )
@@ -1757,8 +1794,11 @@ class MainWindow(QMainWindow):
             updated = self._preset_overrides_by_preset[preset]
             self._append_log(
                 f"{preset.value} overrides updated: lpf={updated.lpf_hz}, "
-                f"sat={updated.saturation_scale:.2f}, "
-                f"comp={updated.compression_scale:.2f}"
+                f"hpf={updated.hpf_hz}, "
+                f"sat={updated.saturation_scale}, "
+                f"comp={updated.compression_scale}, "
+                f"bits={updated.bit_depth}, "
+                f"sr={updated.sample_rate_reduction_hz}"
             )
             self._mark_preview_dirty()
 
@@ -2252,6 +2292,10 @@ class MainWindow(QMainWindow):
             self.smart_ordering_mode_combo.setCurrentIndex(mode_idx)
         self.shuffle_checkbox.setChecked(settings.shuffle)
         self.rain_slider.setValue(int(settings.rain_level_db))
+        presence_idx = self.rain_presence_combo.findData(settings.rain_presence.value)
+        if presence_idx >= 0:
+            self.rain_presence_combo.setCurrentIndex(presence_idx)
+        self.rain_low_drops_checkbox.setChecked(settings.rain_preserve_low_drops)
         self.crossfade_spin.setValue(settings.crossfade_sec)
         self.lufs_spin.setValue(settings.lufs)
         self.target_checkbox.setChecked(settings.target_duration_min is not None)
