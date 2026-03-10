@@ -1,0 +1,822 @@
+[
+  {
+    "track": "Drizzle Over Shinjuku Lights.mp3",
+    "metrics": {
+      "lufs": -13.19,
+      "crest_factor_db": 13.774993592291445,
+      "spectral_centroid_hz": 1583.8902392256919,
+      "rolloff_hz": 3830.7,
+      "stereo_width": 0.07527826834586833,
+      "noise_floor_dbfs": -23.456071631420198
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.075,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.06
+    },
+    "rationale": "LPF skipped (rolloff 3831Hz), compression moderate (crest 13.8dB), stereo unchanged (0.08), noise skipped (floor -23.5dBFS)"
+  },
+  {
+    "track": "Crosswalk Lights in the Storm.mp3",
+    "metrics": {
+      "lufs": -12.51,
+      "crest_factor_db": 11.606093767880783,
+      "spectral_centroid_hz": 1877.977288061482,
+      "rolloff_hz": 4823.866666666667,
+      "stereo_width": 0.025198866772843272,
+      "noise_floor_dbfs": -20.416955058171887
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.269,
+      "compression_strength": 0.965,
+      "stereo_width_target": 0.025,
+      "noise_added_db": null,
+      "lofi_needed_score": 15.03
+    },
+    "rationale": "LPF skipped (rolloff 4824Hz), compression moderate (crest 11.6dB), stereo unchanged (0.03), noise skipped (floor -20.4dBFS)"
+  },
+  {
+    "track": "Lights in the Storm.mp3",
+    "metrics": {
+      "lufs": -13.06,
+      "crest_factor_db": 12.290019943731291,
+      "spectral_centroid_hz": 1720.5619734708412,
+      "rolloff_hz": 4362.55,
+      "stereo_width": 0.026320122679599135,
+      "noise_floor_dbfs": -22.656600550645134
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.271,
+      "compression_strength": 0.968,
+      "stereo_width_target": 0.026,
+      "noise_added_db": null,
+      "lofi_needed_score": 17.88
+    },
+    "rationale": "LPF skipped (rolloff 4363Hz), compression moderate (crest 12.3dB), stereo unchanged (0.03), noise skipped (floor -22.7dBFS)"
+  },
+  {
+    "track": "Midnight Boulevard.mp3",
+    "metrics": {
+      "lufs": -12.93,
+      "crest_factor_db": 13.864416402280419,
+      "spectral_centroid_hz": 1992.0236447531265,
+      "rolloff_hz": 4998.466666666667,
+      "stereo_width": 0.07833411732919579,
+      "noise_floor_dbfs": -24.614751754425996
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.078,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.44
+    },
+    "rationale": "LPF skipped (rolloff 4998Hz), compression moderate (crest 13.9dB), stereo unchanged (0.08), noise skipped (floor -24.6dBFS)"
+  },
+  {
+    "track": "Retro Drizzle Over Shibuya.mp3",
+    "metrics": {
+      "lufs": -13.86,
+      "crest_factor_db": 12.420666815924607,
+      "spectral_centroid_hz": 2112.029712884441,
+      "rolloff_hz": 5339.683333333333,
+      "stereo_width": 0.07871273062559007,
+      "noise_floor_dbfs": -22.370786649620456
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.272,
+      "compression_strength": 0.968,
+      "stereo_width_target": 0.079,
+      "noise_added_db": null,
+      "lofi_needed_score": 18.42
+    },
+    "rationale": "LPF skipped (rolloff 5340Hz), compression moderate (crest 12.4dB), stereo unchanged (0.08), noise skipped (floor -22.4dBFS)"
+  },
+  {
+    "track": "Crosswalks After Midnight.mp3",
+    "metrics": {
+      "lufs": -12.83,
+      "crest_factor_db": 11.515230469109952,
+      "spectral_centroid_hz": 1943.4103507053883,
+      "rolloff_hz": 4910.6,
+      "stereo_width": 0.11584562953304418,
+      "noise_floor_dbfs": -24.0146983726477
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.268,
+      "compression_strength": 0.965,
+      "stereo_width_target": 0.116,
+      "noise_added_db": null,
+      "lofi_needed_score": 14.65
+    },
+    "rationale": "LPF skipped (rolloff 4911Hz), compression moderate (crest 11.5dB), stereo unchanged (0.12), noise skipped (floor -24.0dBFS)"
+  },
+  {
+    "track": "Rooftop Drizzle.mp3",
+    "metrics": {
+      "lufs": -12.42,
+      "crest_factor_db": 13.00790880178163,
+      "spectral_centroid_hz": 2083.077302457932,
+      "rolloff_hz": 5353.6,
+      "stereo_width": 0.09349927997817167,
+      "noise_floor_dbfs": -21.188093188355268
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.093,
+      "noise_added_db": null,
+      "lofi_needed_score": 20.87
+    },
+    "rationale": "LPF skipped (rolloff 5354Hz), compression moderate (crest 13.0dB), stereo unchanged (0.09), noise skipped (floor -21.2dBFS)"
+  },
+  {
+    "track": "After Hours in Ginza.mp3",
+    "metrics": {
+      "lufs": -12.5,
+      "crest_factor_db": 13.560043055335107,
+      "spectral_centroid_hz": 1857.3608889731404,
+      "rolloff_hz": 4354.483333333334,
+      "stereo_width": 0.022245854204239877,
+      "noise_floor_dbfs": -21.60168497335733
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.022,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.17
+    },
+    "rationale": "LPF skipped (rolloff 4354Hz), compression moderate (crest 13.6dB), stereo unchanged (0.02), noise skipped (floor -21.6dBFS)"
+  },
+  {
+    "track": "Ginza Neon After The Dark.mp3",
+    "metrics": {
+      "lufs": -12.98,
+      "crest_factor_db": 12.108316458414354,
+      "spectral_centroid_hz": 1609.8140953445036,
+      "rolloff_hz": 4088.2666666666664,
+      "stereo_width": 0.025832812117193644,
+      "noise_floor_dbfs": -23.86911763025955
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.27,
+      "compression_strength": 0.967,
+      "stereo_width_target": 0.026,
+      "noise_added_db": null,
+      "lofi_needed_score": 17.12
+    },
+    "rationale": "LPF skipped (rolloff 4088Hz), compression moderate (crest 12.1dB), stereo unchanged (0.03), noise skipped (floor -23.9dBFS)"
+  },
+  {
+    "track": "Midnight Boulevard Drizzle.mp3",
+    "metrics": {
+      "lufs": -12.9,
+      "crest_factor_db": 13.08928851514763,
+      "spectral_centroid_hz": 1941.7412255640613,
+      "rolloff_hz": 4790.6833333333325,
+      "stereo_width": 0.08393705636846924,
+      "noise_floor_dbfs": -22.126426215850763
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.084,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.21
+    },
+    "rationale": "LPF skipped (rolloff 4791Hz), compression moderate (crest 13.1dB), stereo unchanged (0.08), noise skipped (floor -22.1dBFS)"
+  },
+  {
+    "track": "Midnight Taxi Through Neon Rain (1).mp3",
+    "metrics": {
+      "lufs": -13.9,
+      "crest_factor_db": 13.8403772284526,
+      "spectral_centroid_hz": 1773.6800191098612,
+      "rolloff_hz": 4427.9,
+      "stereo_width": 0.003920238971893544,
+      "noise_floor_dbfs": -28.41881041996816
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.004,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.33
+    },
+    "rationale": "LPF skipped (rolloff 4428Hz), compression moderate (crest 13.8dB), stereo unchanged (0.00), noise skipped (floor -28.4dBFS)"
+  },
+  {
+    "track": "Rain On The Yamanote.mp3",
+    "metrics": {
+      "lufs": -15.87,
+      "crest_factor_db": 13.97424881513682,
+      "spectral_centroid_hz": 1597.226514295418,
+      "rolloff_hz": 3592.9666666666667,
+      "stereo_width": 0.033122533511063396,
+      "noise_floor_dbfs": -24.589476394149642
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.975,
+      "stereo_width_target": 0.033,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.89
+    },
+    "rationale": "LPF skipped (rolloff 3593Hz), compression moderate (crest 14.0dB), stereo unchanged (0.03), noise skipped (floor -24.6dBFS)"
+  },
+  {
+    "track": "Boulevard of Fading Headlights.mp3",
+    "metrics": {
+      "lufs": -13.74,
+      "crest_factor_db": 14.427450061338268,
+      "spectral_centroid_hz": 1293.2554269769748,
+      "rolloff_hz": 2790.4833333333336,
+      "stereo_width": 0.002161966358318986,
+      "noise_floor_dbfs": -28.03229230265606
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.002,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 2790Hz), compression increased (crest 14.4dB), stereo unchanged (0.00), noise skipped (floor -28.0dBFS)"
+  },
+  {
+    "track": "Late Train Platform Hush.mp3",
+    "metrics": {
+      "lufs": -14.52,
+      "crest_factor_db": 14.489746495860413,
+      "spectral_centroid_hz": 2078.6408129278966,
+      "rolloff_hz": 4707.450000000001,
+      "stereo_width": 0.07675827502190036,
+      "noise_floor_dbfs": -22.019516601958493
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.077,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 4707Hz), compression increased (crest 14.5dB), stereo unchanged (0.08), noise skipped (floor -22.0dBFS)"
+  },
+  {
+    "track": "Midnight Taxi Through Neon Rain.mp3",
+    "metrics": {
+      "lufs": -14.33,
+      "crest_factor_db": 11.34676060452199,
+      "spectral_centroid_hz": 2323.212777926673,
+      "rolloff_hz": 5089.766666666666,
+      "stereo_width": 0.10384640889726748,
+      "noise_floor_dbfs": -22.13038102803365
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.268,
+      "compression_strength": 0.964,
+      "stereo_width_target": 0.104,
+      "noise_added_db": null,
+      "lofi_needed_score": 13.94
+    },
+    "rationale": "LPF skipped (rolloff 5090Hz), compression moderate (crest 11.3dB), stereo unchanged (0.10), noise skipped (floor -22.1dBFS)"
+  },
+  {
+    "track": "After Hours in Ginza Rain.mp3",
+    "metrics": {
+      "lufs": -14.48,
+      "crest_factor_db": 12.675647796141806,
+      "spectral_centroid_hz": 2166.1814717377156,
+      "rolloff_hz": 5457.95,
+      "stereo_width": 0.06220385664094207,
+      "noise_floor_dbfs": -23.795773648483866
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.273,
+      "compression_strength": 0.969,
+      "stereo_width_target": 0.062,
+      "noise_added_db": null,
+      "lofi_needed_score": 19.48
+    },
+    "rationale": "LPF skipped (rolloff 5458Hz), compression moderate (crest 12.7dB), stereo unchanged (0.06), noise skipped (floor -23.8dBFS)"
+  },
+  {
+    "track": "Last Train Under Neon Rain.mp3",
+    "metrics": {
+      "lufs": -14.65,
+      "crest_factor_db": 15.06910907492382,
+      "spectral_centroid_hz": 2270.6561245325192,
+      "rolloff_hz": 5656.15,
+      "stereo_width": 0.07205136974241383,
+      "noise_floor_dbfs": -28.122107557837126
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.072,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 5656Hz), compression increased (crest 15.1dB), stereo unchanged (0.07), noise skipped (floor -28.1dBFS)"
+  },
+  {
+    "track": "Last Train From Shinjuku.mp3",
+    "metrics": {
+      "lufs": -14.1,
+      "crest_factor_db": 16.10180770081363,
+      "spectral_centroid_hz": 1798.7222534951434,
+      "rolloff_hz": 4411.066666666667,
+      "stereo_width": 0.10537079384267689,
+      "noise_floor_dbfs": -22.16724708689467
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.105,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 4411Hz), compression increased (crest 16.1dB), stereo unchanged (0.11), noise skipped (floor -22.2dBFS)"
+  },
+  {
+    "track": "Rain On The Crosswalk Light.mp3",
+    "metrics": {
+      "lufs": -13.93,
+      "crest_factor_db": 12.763988576359463,
+      "spectral_centroid_hz": 1584.8101178818738,
+      "rolloff_hz": 3713.2999999999997,
+      "stereo_width": 0.04648740905442808,
+      "noise_floor_dbfs": -22.162002424234316
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.273,
+      "compression_strength": 0.97,
+      "stereo_width_target": 0.046,
+      "noise_added_db": null,
+      "lofi_needed_score": 19.85
+    },
+    "rationale": "LPF skipped (rolloff 3713Hz), compression moderate (crest 12.8dB), stereo unchanged (0.05), noise skipped (floor -22.2dBFS)"
+  },
+  {
+    "track": "Retro Drizzle Over Shibuya (1).mp3",
+    "metrics": {
+      "lufs": -14.71,
+      "crest_factor_db": 13.234446600142283,
+      "spectral_centroid_hz": 1310.0011573027987,
+      "rolloff_hz": 2842.45,
+      "stereo_width": 0.10431490234115791,
+      "noise_floor_dbfs": -22.29732247967082
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.275,
+      "compression_strength": 0.972,
+      "stereo_width_target": 0.104,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.81
+    },
+    "rationale": "LPF skipped (rolloff 2842Hz), compression moderate (crest 13.2dB), stereo unchanged (0.10), noise skipped (floor -22.3dBFS)"
+  },
+  {
+    "track": "Shibuya After Midnight Rain.mp3",
+    "metrics": {
+      "lufs": -12.38,
+      "crest_factor_db": 11.296239066269205,
+      "spectral_centroid_hz": 1854.6816399495688,
+      "rolloff_hz": 4447.733333333334,
+      "stereo_width": 0.03356972146724818,
+      "noise_floor_dbfs": -18.44922626064269
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.267,
+      "compression_strength": 0.964,
+      "stereo_width_target": 0.034,
+      "noise_added_db": null,
+      "lofi_needed_score": 13.73
+    },
+    "rationale": "LPF skipped (rolloff 4448Hz), compression moderate (crest 11.3dB), stereo unchanged (0.03), noise skipped (floor -18.4dBFS)"
+  },
+  {
+    "track": "Shibuya, 3AM.mp3",
+    "metrics": {
+      "lufs": -14.05,
+      "crest_factor_db": 13.353638280702155,
+      "spectral_centroid_hz": 1858.3572519209345,
+      "rolloff_hz": 4728.233333333334,
+      "stereo_width": 0.018263530070633215,
+      "noise_floor_dbfs": -23.055517677739694
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.275,
+      "compression_strength": 0.972,
+      "stereo_width_target": 0.018,
+      "noise_added_db": null,
+      "lofi_needed_score": 22.31
+    },
+    "rationale": "LPF skipped (rolloff 4728Hz), compression moderate (crest 13.4dB), stereo unchanged (0.02), noise skipped (floor -23.1dBFS)"
+  },
+  {
+    "track": "Neon Rain From the Window.mp3",
+    "metrics": {
+      "lufs": -14.27,
+      "crest_factor_db": 15.331881926098072,
+      "spectral_centroid_hz": 1738.9961218172848,
+      "rolloff_hz": 3892.4666666666667,
+      "stereo_width": 0.11363160218748093,
+      "noise_floor_dbfs": -28.68999165423309
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.114,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 3892Hz), compression increased (crest 15.3dB), stereo unchanged (0.11), noise skipped (floor -28.7dBFS)"
+  },
+  {
+    "track": "Empty Boulevard, Wet Headlights.mp3",
+    "metrics": {
+      "lufs": -13.11,
+      "crest_factor_db": 14.787634600541576,
+      "spectral_centroid_hz": 1946.2811500781,
+      "rolloff_hz": 4802.083333333334,
+      "stereo_width": 0.040707140176313016,
+      "noise_floor_dbfs": -23.610235893801615
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.041,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 4802Hz), compression increased (crest 14.8dB), stereo unchanged (0.04), noise skipped (floor -23.6dBFS)"
+  },
+  {
+    "track": "Drizzle in the Electric Glow.mp3",
+    "metrics": {
+      "lufs": -13.82,
+      "crest_factor_db": 13.304622641536891,
+      "spectral_centroid_hz": 2791.0500922871265,
+      "rolloff_hz": 6665.233333333334,
+      "stereo_width": 0.10532348741938377,
+      "noise_floor_dbfs": -25.677275010784598
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.275,
+      "compression_strength": 0.972,
+      "stereo_width_target": 0.105,
+      "noise_added_db": null,
+      "lofi_needed_score": 22.1
+    },
+    "rationale": "LPF skipped (rolloff 6665Hz), compression moderate (crest 13.3dB), stereo unchanged (0.11), noise skipped (floor -25.7dBFS)"
+  },
+  {
+    "track": "Drizzle on the Dial.mp3",
+    "metrics": {
+      "lufs": -13.63,
+      "crest_factor_db": 11.820407626874527,
+      "spectral_centroid_hz": 2008.2210505499893,
+      "rolloff_hz": 4818.766666666666,
+      "stereo_width": 0.06681988664429028,
+      "noise_floor_dbfs": -21.782585913318712
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.269,
+      "compression_strength": 0.966,
+      "stereo_width_target": 0.067,
+      "noise_added_db": null,
+      "lofi_needed_score": 15.92
+    },
+    "rationale": "LPF skipped (rolloff 4819Hz), compression moderate (crest 11.8dB), stereo unchanged (0.07), noise skipped (floor -21.8dBFS)"
+  },
+  {
+    "track": "Rain on Neon Glass.mp3",
+    "metrics": {
+      "lufs": -13.46,
+      "crest_factor_db": 13.549821548467122,
+      "spectral_centroid_hz": 1798.8460484508382,
+      "rolloff_hz": 4339.25,
+      "stereo_width": 0.07926069081049414,
+      "noise_floor_dbfs": -22.833818017047548
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.079,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.12
+    },
+    "rationale": "LPF skipped (rolloff 4339Hz), compression moderate (crest 13.5dB), stereo unchanged (0.08), noise skipped (floor -22.8dBFS)"
+  },
+  {
+    "track": "Rain on Tokyo Rooftops.mp3",
+    "metrics": {
+      "lufs": -13.65,
+      "crest_factor_db": 12.271604622967535,
+      "spectral_centroid_hz": 2210.3667741695176,
+      "rolloff_hz": 5181.2,
+      "stereo_width": 0.11155833905246947,
+      "noise_floor_dbfs": -23.604015968420377
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.271,
+      "compression_strength": 0.968,
+      "stereo_width_target": 0.112,
+      "noise_added_db": null,
+      "lofi_needed_score": 17.8
+    },
+    "rationale": "LPF skipped (rolloff 5181Hz), compression moderate (crest 12.3dB), stereo unchanged (0.11), noise skipped (floor -23.6dBFS)"
+  },
+  {
+    "track": "Skyline Fading Into Rain.mp3",
+    "metrics": {
+      "lufs": -14.64,
+      "crest_factor_db": 13.063017905722775,
+      "spectral_centroid_hz": 2123.269139955776,
+      "rolloff_hz": 5332.266666666666,
+      "stereo_width": 0.12984575814011826,
+      "noise_floor_dbfs": -24.537553040554133
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.13,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.1
+    },
+    "rationale": "LPF skipped (rolloff 5332Hz), compression moderate (crest 13.1dB), stereo unchanged (0.13), noise skipped (floor -24.5dBFS)"
+  },
+  {
+    "track": "Ginza After the Lights Dim.mp3",
+    "metrics": {
+      "lufs": -13.34,
+      "crest_factor_db": 12.025436810044635,
+      "spectral_centroid_hz": 2102.226037176012,
+      "rolloff_hz": 4941.083333333333,
+      "stereo_width": 0.05921213178662245,
+      "noise_floor_dbfs": -24.729291791309592
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.27,
+      "compression_strength": 0.967,
+      "stereo_width_target": 0.059,
+      "noise_added_db": null,
+      "lofi_needed_score": 16.77
+    },
+    "rationale": "LPF skipped (rolloff 4941Hz), compression moderate (crest 12.0dB), stereo unchanged (0.06), noise skipped (floor -24.7dBFS)"
+  },
+  {
+    "track": "Reflections Between Train Lines.mp3",
+    "metrics": {
+      "lufs": -14.11,
+      "crest_factor_db": 15.003894032809253,
+      "spectral_centroid_hz": 1250.542141868158,
+      "rolloff_hz": 2864.2666666666664,
+      "stereo_width": 0.0026311761375393088,
+      "noise_floor_dbfs": -26.88013797376413
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.003,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 2864Hz), compression increased (crest 15.0dB), stereo unchanged (0.00), noise skipped (floor -26.9dBFS)"
+  },
+  {
+    "track": "Neon Rain Reverie.mp3",
+    "metrics": {
+      "lufs": -15.34,
+      "crest_factor_db": 14.069803854903913,
+      "spectral_centroid_hz": 2021.1548597644746,
+      "rolloff_hz": 4912.516666666666,
+      "stereo_width": 0.061928787354775125,
+      "noise_floor_dbfs": -29.729172429776007
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.062,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 4913Hz), compression increased (crest 14.1dB), stereo unchanged (0.06), noise skipped (floor -29.7dBFS)"
+  },
+  {
+    "track": "Shinjuku Neon Memory.mp3",
+    "metrics": {
+      "lufs": -14.22,
+      "crest_factor_db": 13.179546565942339,
+      "spectral_centroid_hz": 2425.684588204057,
+      "rolloff_hz": 5546.049999999999,
+      "stereo_width": 0.042583094106088674,
+      "noise_floor_dbfs": -20.58610995176251
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.972,
+      "stereo_width_target": 0.043,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.58
+    },
+    "rationale": "LPF skipped (rolloff 5546Hz), compression moderate (crest 13.2dB), stereo unchanged (0.04), noise skipped (floor -20.6dBFS)"
+  },
+  {
+    "track": "Neon Echoes on Wet Streets.mp3",
+    "metrics": {
+      "lufs": -14.56,
+      "crest_factor_db": 13.507861101573804,
+      "spectral_centroid_hz": 2070.7198266642226,
+      "rolloff_hz": 4998.316666666667,
+      "stereo_width": 0.021921389247352426,
+      "noise_floor_dbfs": -23.222306433952927
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.022,
+      "noise_added_db": null,
+      "lofi_needed_score": 22.95
+    },
+    "rationale": "LPF skipped (rolloff 4998Hz), compression moderate (crest 13.5dB), stereo unchanged (0.02), noise skipped (floor -23.2dBFS)"
+  },
+  {
+    "track": "Shibuya After Midnight.mp3",
+    "metrics": {
+      "lufs": -14.12,
+      "crest_factor_db": 12.99186025497291,
+      "spectral_centroid_hz": 1482.5887205995807,
+      "rolloff_hz": 3738.6666666666665,
+      "stereo_width": 0.11617599401993034,
+      "noise_floor_dbfs": -22.678667991682545
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.116,
+      "noise_added_db": null,
+      "lofi_needed_score": 20.8
+    },
+    "rationale": "LPF skipped (rolloff 3739Hz), compression moderate (crest 13.0dB), stereo unchanged (0.12), noise skipped (floor -22.7dBFS)"
+  },
+  {
+    "track": "Apartment Window in Neon Rain.mp3",
+    "metrics": {
+      "lufs": -14.39,
+      "crest_factor_db": 13.685266080768086,
+      "spectral_centroid_hz": 1183.6191636396613,
+      "rolloff_hz": 2852.2166666666667,
+      "stereo_width": 0.003336874676468358,
+      "noise_floor_dbfs": -27.209133176493037
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.003,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.69
+    },
+    "rationale": "LPF skipped (rolloff 2852Hz), compression moderate (crest 13.7dB), stereo unchanged (0.00), noise skipped (floor -27.2dBFS)"
+  },
+  {
+    "track": "Platform Hiss.mp3",
+    "metrics": {
+      "lufs": -11.17,
+      "crest_factor_db": 12.50498209294065,
+      "spectral_centroid_hz": 1971.6724539664783,
+      "rolloff_hz": 4751.9,
+      "stereo_width": 0.07162090580075722,
+      "noise_floor_dbfs": -18.49977689921178
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.272,
+      "compression_strength": 0.969,
+      "stereo_width_target": 0.072,
+      "noise_added_db": null,
+      "lofi_needed_score": 18.77
+    },
+    "rationale": "LPF skipped (rolloff 4752Hz), compression moderate (crest 12.5dB), stereo unchanged (0.07), noise skipped (floor -18.5dBFS)"
+  },
+  {
+    "track": "Alleyways of Quiet Romance.mp3",
+    "metrics": {
+      "lufs": -14.0,
+      "crest_factor_db": 12.661553928194628,
+      "spectral_centroid_hz": 2456.368127281593,
+      "rolloff_hz": 6242.083333333334,
+      "stereo_width": 0.032095127731227066,
+      "noise_floor_dbfs": -22.04080213788366
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.272,
+      "compression_strength": 0.969,
+      "stereo_width_target": 0.032,
+      "noise_added_db": null,
+      "lofi_needed_score": 19.42
+    },
+    "rationale": "LPF skipped (rolloff 6242Hz), compression moderate (crest 12.7dB), stereo unchanged (0.03), noise skipped (floor -22.0dBFS)"
+  },
+  {
+    "track": "Rain On The Neon Tracks.mp3",
+    "metrics": {
+      "lufs": -13.66,
+      "crest_factor_db": 14.251654428617648,
+      "spectral_centroid_hz": 1726.5221979584728,
+      "rolloff_hz": 4368.733333333334,
+      "stereo_width": 0.04818590996560229,
+      "noise_floor_dbfs": -22.652296997941285
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.048,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 4369Hz), compression increased (crest 14.3dB), stereo unchanged (0.05), noise skipped (floor -22.7dBFS)"
+  },
+  {
+    "track": "Crosswalk Signals in the Storm.mp3",
+    "metrics": {
+      "lufs": -11.83,
+      "crest_factor_db": 13.066614352900146,
+      "spectral_centroid_hz": 2540.53211536282,
+      "rolloff_hz": 6363.733333333334,
+      "stereo_width": 0.06573585810246882,
+      "noise_floor_dbfs": -20.512328532825855
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.066,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.11
+    },
+    "rationale": "LPF skipped (rolloff 6364Hz), compression moderate (crest 13.1dB), stereo unchanged (0.07), noise skipped (floor -20.5dBFS)"
+  },
+  {
+    "track": "Reflections on Wet Asphalt.mp3",
+    "metrics": {
+      "lufs": -14.57,
+      "crest_factor_db": 11.337726427000463,
+      "spectral_centroid_hz": 1836.573953072811,
+      "rolloff_hz": 4751.266666666666,
+      "stereo_width": 0.05679127279789856,
+      "noise_floor_dbfs": -26.53593437032596
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.268,
+      "compression_strength": 0.964,
+      "stereo_width_target": 0.057,
+      "noise_added_db": null,
+      "lofi_needed_score": 13.91
+    },
+    "rationale": "LPF skipped (rolloff 4751Hz), compression moderate (crest 11.3dB), stereo unchanged (0.06), noise skipped (floor -26.5dBFS)"
+  }
+]
