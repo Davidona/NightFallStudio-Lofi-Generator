@@ -27,24 +27,7 @@ It includes:
 
 ## Installation
 
-### 1. Clone
-
-```bash
-git clone <your-repo-url>
-cd "NightFall Lofi Generator"
-```
-
-### 2. Create virtual environment
-
-```bash
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# macOS/Linux
-source .venv/bin/activate
-```
-
-### 3. Install dependencies
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -107,6 +90,7 @@ nightfall-mix --help
 For full control documentation, see [GUI_TUTORIAL.md](GUI_TUTORIAL.md).
 
 ## Main GUI Workspaces
+<img width="1559" height="1336" alt="image" src="https://github.com/user-attachments/assets/93153fd5-7b5e-4160-98a6-e4cc6190b3a1" />
 
 ### 1) Lo-Fi Studio
 
