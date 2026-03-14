@@ -49,16 +49,15 @@ def _best_loudnorm_filter(target_lufs: float, measured: dict[str, float]) -> str
 
 
 def _track_loudness_steps(config: RunConfig, analysis: TrackAnalysis | None) -> list[str]:
-    if config.quality_mode == QualityMode.fast:
-        gain_db = analysis.loudness.recommended_gain_db if analysis else None
-        if gain_db is not None and math.isfinite(gain_db):
-            return [f"volume={max(-12.0, min(12.0, gain_db)):.2f}dB"]
+    gain_db = analysis.loudness.recommended_gain_db if analysis else None
+    if gain_db is None or not math.isfinite(gain_db):
         return []
-    if config.quality_mode == QualityMode.balanced:
-        return [f"loudnorm=I={config.lufs}:TP=-1.0:LRA=11"]
-    measured = analysis.loudness.measured if analysis else {}
-    return [_best_loudnorm_filter(target_lufs=config.lufs, measured=measured or {})]
 
+    # Per-track stage should only do rough balancing.
+    # Final export loudness is handled once at the master stage.
+    clamp_db = 6.0 if config.quality_mode != QualityMode.fast else 12.0
+    gain_db = max(-clamp_db, min(clamp_db, gain_db))
+    return [f"volume={gain_db:.2f}dB"]
 
 def _compressor_filter(
     threshold_db: float,
@@ -179,7 +178,7 @@ def _add_noise_layers(
             f"highpass=f=120,lowpass=f=7800,atrim=duration={duration_sec:.3f}{vinyl_label}"
         )
         out_label = f"[{output_prefix}noise{mix_index}]"
-        lines.append(f"{current_label}{vinyl_label}amix=inputs=2:duration=first:dropout_transition=0{out_label}")
+        lines.append(f"{current_label}{vinyl_label}amix=inputs=2:duration=first:dropout_transition=0:normalize=0{out_label}")
         current_label = out_label
         mix_index += 1
     if hiss_db is not None and hiss_db > -90.0:
@@ -190,7 +189,7 @@ def _add_noise_layers(
             f"highpass=f=3500,lowpass=f=14000,atrim=duration={duration_sec:.3f}{hiss_label}"
         )
         out_label = f"[{output_prefix}noise{mix_index}]"
-        lines.append(f"{current_label}{hiss_label}amix=inputs=2:duration=first:dropout_transition=0{out_label}")
+        lines.append(f"{current_label}{hiss_label}amix=inputs=2:duration=first:dropout_transition=0:normalize=0{out_label}")
         current_label = out_label
     return current_label
 
@@ -205,7 +204,6 @@ def _per_track_chain(
         _hq_resample_filter(),
     ]
     chain.extend(_track_loudness_steps(config=config, analysis=analysis))
-    chain.append("volume=-3dB")
     if lpf_dip:
         chain.append("lowpass=f=7800:t=q:w=0.707")
     return ",".join(chain)
@@ -222,7 +220,6 @@ def _adaptive_track_chain(
         _hq_resample_filter(),
     ]
     chain.extend(_track_loudness_steps(config=config, analysis=analysis))
-    chain.append("volume=-3dB")
 
     proc: Optional[AdaptiveProcessing] = analysis.adaptive_processing if analysis else None
     if proc is not None:

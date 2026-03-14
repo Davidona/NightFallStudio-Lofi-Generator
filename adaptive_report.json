@@ -38,5 +38,705 @@
       "lofi_needed_score": 18.16
     },
     "rationale": "LPF skipped (rolloff 883Hz), compression moderate (crest 12.4dB), stereo unchanged (0.32), noise skipped (floor -21.4dBFS)"
+  },
+  {
+    "track": "Before The Night Ends.mp3",
+    "metrics": {
+      "lufs": -11.95,
+      "crest_factor_db": 13.558318795257705,
+      "spectral_centroid_hz": 262.6100646833496,
+      "rolloff_hz": 745.587158203125,
+      "stereo_width": 0.3459844558791218,
+      "noise_floor_dbfs": -24.056098402694495
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.346,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.16
+    },
+    "rationale": "LPF skipped (rolloff 746Hz), compression moderate (crest 13.6dB), stereo unchanged (0.35), noise skipped (floor -24.1dBFS)"
+  },
+  {
+    "track": "Last Light Before Sunrise.mp3",
+    "metrics": {
+      "lufs": -12.95,
+      "crest_factor_db": 12.99315007172899,
+      "spectral_centroid_hz": 240.92914233522748,
+      "rolloff_hz": 831.719970703125,
+      "stereo_width": 0.6414806871538359,
+      "noise_floor_dbfs": -21.045529146862172
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.641,
+      "noise_added_db": null,
+      "lofi_needed_score": 20.8
+    },
+    "rationale": "LPF skipped (rolloff 832Hz), compression moderate (crest 13.0dB), stereo unchanged (0.64), noise skipped (floor -21.0dBFS)"
+  },
+  {
+    "track": "Late Night Vanishing Point.mp3",
+    "metrics": {
+      "lufs": -15.8,
+      "crest_factor_db": 16.87589583399007,
+      "spectral_centroid_hz": 217.4023077918285,
+      "rolloff_hz": 686.370849609375,
+      "stereo_width": 0.38526993605850757,
+      "noise_floor_dbfs": -25.808269015397336
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.385,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 686Hz), compression increased (crest 16.9dB), stereo unchanged (0.39), noise skipped (floor -25.8dBFS)"
+  },
+  {
+    "track": "Melancholic Rain Street.mp3",
+    "metrics": {
+      "lufs": -13.48,
+      "crest_factor_db": 14.043796351684078,
+      "spectral_centroid_hz": 214.85395733129826,
+      "rolloff_hz": 559.86328125,
+      "stereo_width": 0.5061712237306569,
+      "noise_floor_dbfs": -25.830208824271136
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.506,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 560Hz), compression increased (crest 14.0dB), stereo unchanged (0.51), noise skipped (floor -25.8dBFS)"
+  },
+  {
+    "track": "Neon Rain Silence (1).mp3",
+    "metrics": {
+      "lufs": -12.27,
+      "crest_factor_db": 14.151625620848256,
+      "spectral_centroid_hz": 380.42264534517943,
+      "rolloff_hz": 1146.64306640625,
+      "stereo_width": 0.23776758418704247,
+      "noise_floor_dbfs": -23.406629346967513
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.238,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 1147Hz), compression increased (crest 14.2dB), stereo unchanged (0.24), noise skipped (floor -23.4dBFS)"
+  },
+  {
+    "track": "Last Storm Of The Night.mp3",
+    "metrics": {
+      "lufs": -14.27,
+      "crest_factor_db": 14.445839426301433,
+      "spectral_centroid_hz": 295.93881907411117,
+      "rolloff_hz": 831.719970703125,
+      "stereo_width": 0.42198707986313266,
+      "noise_floor_dbfs": -25.3710254750765
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.422,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 832Hz), compression increased (crest 14.4dB), stereo unchanged (0.42), noise skipped (floor -25.4dBFS)"
+  },
+  {
+    "track": "Rain Before Dawn.mp3",
+    "metrics": {
+      "lufs": -16.16,
+      "crest_factor_db": 17.07191014067927,
+      "spectral_centroid_hz": 187.02900915053658,
+      "rolloff_hz": 559.86328125,
+      "stereo_width": 0.7104375912131508,
+      "noise_floor_dbfs": -28.312994058051785
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.71,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 560Hz), compression increased (crest 17.1dB), stereo unchanged (0.71), noise skipped (floor -28.3dBFS)"
+  },
+  {
+    "track": "Cold Neon Reflections.mp3",
+    "metrics": {
+      "lufs": -14.34,
+      "crest_factor_db": 14.398807440746687,
+      "spectral_centroid_hz": 153.8465770645211,
+      "rolloff_hz": 586.77978515625,
+      "stereo_width": 0.20420600380952192,
+      "noise_floor_dbfs": -27.91632438813422
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.204,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 587Hz), compression increased (crest 14.4dB), stereo unchanged (0.20), noise skipped (floor -27.9dBFS)"
+  },
+  {
+    "track": "Rain on Glass.mp3",
+    "metrics": {
+      "lufs": -14.25,
+      "crest_factor_db": 15.124376763962545,
+      "spectral_centroid_hz": 191.162028569595,
+      "rolloff_hz": 678.2958984375,
+      "stereo_width": 0.13508569773993687,
+      "noise_floor_dbfs": -27.379898924182115
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.135,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 678Hz), compression increased (crest 15.1dB), stereo unchanged (0.14), noise skipped (floor -27.4dBFS)"
+  },
+  {
+    "track": "Rain On Empty Platforms.mp3",
+    "metrics": {
+      "lufs": -14.41,
+      "crest_factor_db": 15.881747752365698,
+      "spectral_centroid_hz": 301.0069647996895,
+      "rolloff_hz": 702.520751953125,
+      "stereo_width": 0.2740229922154753,
+      "noise_floor_dbfs": -22.65842171752481
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.274,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 703Hz), compression increased (crest 15.9dB), stereo unchanged (0.27), noise skipped (floor -22.7dBFS)"
+  },
+  {
+    "track": "Lost Thoughts in Heavy Storm.mp3",
+    "metrics": {
+      "lufs": -13.84,
+      "crest_factor_db": 13.833765056289199,
+      "spectral_centroid_hz": 173.70360626262283,
+      "rolloff_hz": 627.154541015625,
+      "stereo_width": 0.4076911256234781,
+      "noise_floor_dbfs": -20.836766293715108
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.408,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.31
+    },
+    "rationale": "LPF skipped (rolloff 627Hz), compression moderate (crest 13.8dB), stereo unchanged (0.41), noise skipped (floor -20.8dBFS)"
+  },
+  {
+    "track": "Hallway Thunder.mp3",
+    "metrics": {
+      "lufs": -11.4,
+      "crest_factor_db": 12.307430365176067,
+      "spectral_centroid_hz": 195.56486525019508,
+      "rolloff_hz": 699.8291015625,
+      "stereo_width": 0.2787266161974835,
+      "noise_floor_dbfs": -21.68659346296854
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.271,
+      "compression_strength": 0.968,
+      "stereo_width_target": 0.279,
+      "noise_added_db": null,
+      "lofi_needed_score": 17.95
+    },
+    "rationale": "LPF skipped (rolloff 700Hz), compression moderate (crest 12.3dB), stereo unchanged (0.28), noise skipped (floor -21.7dBFS)"
+  },
+  {
+    "track": "Rain Across Rooftops.mp3",
+    "metrics": {
+      "lufs": -14.67,
+      "crest_factor_db": 15.681390254205743,
+      "spectral_centroid_hz": 239.87391150598347,
+      "rolloff_hz": 697.137451171875,
+      "stereo_width": 0.23431051100825806,
+      "noise_floor_dbfs": -26.843757437041617
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.234,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 697Hz), compression increased (crest 15.7dB), stereo unchanged (0.23), noise skipped (floor -26.8dBFS)"
+  },
+  {
+    "track": "Rain Before Morning.mp3",
+    "metrics": {
+      "lufs": -16.1,
+      "crest_factor_db": 16.438186053269792,
+      "spectral_centroid_hz": 161.77244688010336,
+      "rolloff_hz": 492.572021484375,
+      "stereo_width": 0.48625940483175045,
+      "noise_floor_dbfs": -27.33646905498513
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.486,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 493Hz), compression increased (crest 16.4dB), stereo unchanged (0.49), noise skipped (floor -27.3dBFS)"
+  },
+  {
+    "track": "Forgotten Midnight Streets.mp3",
+    "metrics": {
+      "lufs": -12.97,
+      "crest_factor_db": 12.312732565821722,
+      "spectral_centroid_hz": 156.42504417621993,
+      "rolloff_hz": 468.34716796875,
+      "stereo_width": 0.40603200196099976,
+      "noise_floor_dbfs": -24.245057796951556
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.271,
+      "compression_strength": 0.968,
+      "stereo_width_target": 0.406,
+      "noise_added_db": null,
+      "lofi_needed_score": 17.97
+    },
+    "rationale": "LPF skipped (rolloff 468Hz), compression moderate (crest 12.3dB), stereo unchanged (0.41), noise skipped (floor -24.2dBFS)"
+  },
+  {
+    "track": "Empty City Rain.mp3",
+    "metrics": {
+      "lufs": -13.21,
+      "crest_factor_db": 13.52420106567902,
+      "spectral_centroid_hz": 175.64219124437562,
+      "rolloff_hz": 433.355712890625,
+      "stereo_width": 0.26380514070055383,
+      "noise_floor_dbfs": -21.65444176366029
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.264,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.02
+    },
+    "rationale": "LPF skipped (rolloff 433Hz), compression moderate (crest 13.5dB), stereo unchanged (0.26), noise skipped (floor -21.7dBFS)"
+  },
+  {
+    "track": "Melancholic Station Rain.mp3",
+    "metrics": {
+      "lufs": -13.84,
+      "crest_factor_db": 15.11237669006765,
+      "spectral_centroid_hz": 290.1313723445943,
+      "rolloff_hz": 1103.57666015625,
+      "stereo_width": 0.4051146502728456,
+      "noise_floor_dbfs": -26.376749906131387
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.405,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 1104Hz), compression increased (crest 15.1dB), stereo unchanged (0.41), noise skipped (floor -26.4dBFS)"
+  },
+  {
+    "track": "Fading Neon In Heavy Rain.mp3",
+    "metrics": {
+      "lufs": -14.28,
+      "crest_factor_db": 14.563009647829467,
+      "spectral_centroid_hz": 208.757402537796,
+      "rolloff_hz": 664.837646484375,
+      "stereo_width": 0.2088661923081136,
+      "noise_floor_dbfs": -24.26597178659761
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.209,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 665Hz), compression increased (crest 14.6dB), stereo unchanged (0.21), noise skipped (floor -24.3dBFS)"
+  },
+  {
+    "track": "Neon Rain Silence.mp3",
+    "metrics": {
+      "lufs": -15.18,
+      "crest_factor_db": 15.884681475013936,
+      "spectral_centroid_hz": 241.75135480104467,
+      "rolloff_hz": 662.14599609375,
+      "stereo_width": 0.286774661189542,
+      "noise_floor_dbfs": -22.309077034309606
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.287,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 662Hz), compression increased (crest 15.9dB), stereo unchanged (0.29), noise skipped (floor -22.3dBFS)"
+  },
+  {
+    "track": "Neon After the Storm.mp3",
+    "metrics": {
+      "lufs": -12.85,
+      "crest_factor_db": 13.882930802918883,
+      "spectral_centroid_hz": 374.6224038658324,
+      "rolloff_hz": 1052.435302734375,
+      "stereo_width": 0.29907285001850836,
+      "noise_floor_dbfs": -24.539719942946668
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.975,
+      "stereo_width_target": 0.299,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.51
+    },
+    "rationale": "LPF skipped (rolloff 1052Hz), compression moderate (crest 13.9dB), stereo unchanged (0.30), noise skipped (floor -24.5dBFS)"
+  },
+  {
+    "track": "Distant Thunder Memory.mp3",
+    "metrics": {
+      "lufs": -13.68,
+      "crest_factor_db": 15.608855582656364,
+      "spectral_centroid_hz": 366.7033104467586,
+      "rolloff_hz": 1049.74365234375,
+      "stereo_width": 0.3393193233056116,
+      "noise_floor_dbfs": -24.781920093987303
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.339,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 1050Hz), compression increased (crest 15.6dB), stereo unchanged (0.34), noise skipped (floor -24.8dBFS)"
+  },
+  {
+    "track": "Melancholic Rain Reflection.mp3",
+    "metrics": {
+      "lufs": -13.13,
+      "crest_factor_db": 14.536421882073135,
+      "spectral_centroid_hz": 274.4468365885226,
+      "rolloff_hz": 864.019775390625,
+      "stereo_width": 0.35577198866935217,
+      "noise_floor_dbfs": -25.92800870730607
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.356,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 864Hz), compression increased (crest 14.5dB), stereo unchanged (0.36), noise skipped (floor -25.9dBFS)"
+  },
+  {
+    "track": "Midnight Thunder Reflections.mp3",
+    "metrics": {
+      "lufs": -13.36,
+      "crest_factor_db": 14.60401728492621,
+      "spectral_centroid_hz": 225.50099817686538,
+      "rolloff_hz": 662.14599609375,
+      "stereo_width": 0.4346214118165729,
+      "noise_floor_dbfs": -22.940310897440817
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.435,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 662Hz), compression increased (crest 14.6dB), stereo unchanged (0.43), noise skipped (floor -22.9dBFS)"
+  },
+  {
+    "track": "Apartment Window in the Rain.mp3",
+    "metrics": {
+      "lufs": -14.97,
+      "crest_factor_db": 14.259820817445972,
+      "spectral_centroid_hz": 153.0824029248769,
+      "rolloff_hz": 489.88037109375,
+      "stereo_width": 0.2313069387026928,
+      "noise_floor_dbfs": -26.789130218697018
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.231,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 490Hz), compression increased (crest 14.3dB), stereo unchanged (0.23), noise skipped (floor -26.8dBFS)"
+  },
+  {
+    "track": "Midnight Storm Memory.mp3",
+    "metrics": {
+      "lufs": -14.67,
+      "crest_factor_db": 14.797104227909216,
+      "spectral_centroid_hz": 128.42207143403039,
+      "rolloff_hz": 436.04736328125,
+      "stereo_width": 0.13881150008847068,
+      "noise_floor_dbfs": -25.734976284538764
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.139,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 436Hz), compression increased (crest 14.8dB), stereo unchanged (0.14), noise skipped (floor -25.7dBFS)"
+  },
+  {
+    "track": "Rain In The Corridor.mp3",
+    "metrics": {
+      "lufs": -13.22,
+      "crest_factor_db": 16.586917331330397,
+      "spectral_centroid_hz": 265.2146053317677,
+      "rolloff_hz": 775.1953125,
+      "stereo_width": 0.6714290401703324,
+      "noise_floor_dbfs": -31.410359640022826
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.671,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 775Hz), compression increased (crest 16.6dB), stereo unchanged (0.67), noise skipped (floor -31.4dBFS)"
+  },
+  {
+    "track": "Apartment Hallway Rain.mp3",
+    "metrics": {
+      "lufs": -13.74,
+      "crest_factor_db": 14.364830158903423,
+      "spectral_centroid_hz": 268.23140169615374,
+      "rolloff_hz": 742.8955078125,
+      "stereo_width": 0.4763514055138192,
+      "noise_floor_dbfs": -26.20873769935021
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.476,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 743Hz), compression increased (crest 14.4dB), stereo unchanged (0.48), noise skipped (floor -26.2dBFS)"
+  },
+  {
+    "track": "Heavy Midnight Storm.mp3",
+    "metrics": {
+      "lufs": -14.12,
+      "crest_factor_db": 15.647832835340061,
+      "spectral_centroid_hz": 136.2956617417186,
+      "rolloff_hz": 554.47998046875,
+      "stereo_width": 0.12763922142650524,
+      "noise_floor_dbfs": -34.03122801118322
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.128,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 554Hz), compression increased (crest 15.6dB), stereo unchanged (0.13), noise skipped (floor -34.0dBFS)"
+  },
+  {
+    "track": "Midnight Window Thoughts.mp3",
+    "metrics": {
+      "lufs": -13.21,
+      "crest_factor_db": 14.293070369886472,
+      "spectral_centroid_hz": 280.14158336338363,
+      "rolloff_hz": 1044.3603515625,
+      "stereo_width": 0.4728579386057511,
+      "noise_floor_dbfs": -22.926314787634333
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.473,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 1044Hz), compression increased (crest 14.3dB), stereo unchanged (0.47), noise skipped (floor -22.9dBFS)"
+  },
+  {
+    "track": "Cold Window Reflections.mp3",
+    "metrics": {
+      "lufs": -15.69,
+      "crest_factor_db": 15.117571893229567,
+      "spectral_centroid_hz": 160.48026544471415,
+      "rolloff_hz": 559.86328125,
+      "stereo_width": 0.2588711515259103,
+      "noise_floor_dbfs": -31.060169156418517
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.259,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 560Hz), compression increased (crest 15.1dB), stereo unchanged (0.26), noise skipped (floor -31.1dBFS)"
+  },
+  {
+    "track": "Empty Balcony in the Rain.mp3",
+    "metrics": {
+      "lufs": -14.61,
+      "crest_factor_db": 13.934056396835086,
+      "spectral_centroid_hz": 181.87514270246882,
+      "rolloff_hz": 586.77978515625,
+      "stereo_width": 0.595618920590249,
+      "noise_floor_dbfs": -22.282386760252727
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.975,
+      "stereo_width_target": 0.596,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.73
+    },
+    "rationale": "LPF skipped (rolloff 587Hz), compression moderate (crest 13.9dB), stereo unchanged (0.60), noise skipped (floor -22.3dBFS)"
+  },
+  {
+    "track": "Night Bus Reflections.mp3",
+    "metrics": {
+      "lufs": -14.42,
+      "crest_factor_db": 16.523290718933183,
+      "spectral_centroid_hz": 182.61590068287413,
+      "rolloff_hz": 522.18017578125,
+      "stereo_width": 0.5273415771064055,
+      "noise_floor_dbfs": -29.48516027063524
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.527,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 522Hz), compression increased (crest 16.5dB), stereo unchanged (0.53), noise skipped (floor -29.5dBFS)"
+  },
+  {
+    "track": "Quiet After the Storm.mp3",
+    "metrics": {
+      "lufs": -15.04,
+      "crest_factor_db": 16.783296581784104,
+      "spectral_centroid_hz": 303.9742668659777,
+      "rolloff_hz": 791.34521484375,
+      "stereo_width": 0.5583889955500088,
+      "noise_floor_dbfs": -29.509955470758285
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.558,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 791Hz), compression increased (crest 16.8dB), stereo unchanged (0.56), noise skipped (floor -29.5dBFS)"
+  },
+  {
+    "track": "After The Thunder.mp3",
+    "metrics": {
+      "lufs": -14.69,
+      "crest_factor_db": 12.513984554889523,
+      "spectral_centroid_hz": 159.67623965728507,
+      "rolloff_hz": 592.1630859375,
+      "stereo_width": 0.32801013084306263,
+      "noise_floor_dbfs": -27.839341465052136
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.272,
+      "compression_strength": 0.969,
+      "stereo_width_target": 0.328,
+      "noise_added_db": null,
+      "lofi_needed_score": 18.81
+    },
+    "rationale": "LPF skipped (rolloff 592Hz), compression moderate (crest 12.5dB), stereo unchanged (0.33), noise skipped (floor -27.8dBFS)"
+  },
+  {
+    "track": "Balcony Rainfall.mp3",
+    "metrics": {
+      "lufs": -14.53,
+      "crest_factor_db": 13.826046627350312,
+      "spectral_centroid_hz": 109.87053176382052,
+      "rolloff_hz": 465.655517578125,
+      "stereo_width": 0.42110056436167453,
+      "noise_floor_dbfs": -24.669995681436184
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.421,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.28
+    },
+    "rationale": "LPF skipped (rolloff 466Hz), compression moderate (crest 13.8dB), stereo unchanged (0.42), noise skipped (floor -24.7dBFS)"
   }
 ]
