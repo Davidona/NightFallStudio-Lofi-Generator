@@ -483,15 +483,31 @@ def _analysis_offsets(duration_sec: float, window_sec: float = 30.0, max_windows
 def _chunk_spectral_metrics(mono: np.ndarray, sample_rate: int) -> tuple[float, float]:
     if mono.size == 0:
         return 0.0, 0.0
-    spec = np.abs(np.fft.rfft(mono))
-    power = np.maximum(spec, EPS)
-    freqs = np.fft.rfftfreq(mono.size, d=1.0 / sample_rate)
+    n_fft = min(4096, mono.size)
+    if n_fft < 512:
+        spec = np.abs(np.fft.rfft(mono))
+        power = np.maximum(np.square(spec, dtype=np.float64), EPS)
+        freqs = np.fft.rfftfreq(mono.size, d=1.0 / sample_rate)
+    else:
+        hop = max(256, n_fft // 4)
+        window = np.hanning(n_fft).astype(np.float64)
+        frame_power: list[np.ndarray] = []
+        for start in range(0, mono.size - n_fft + 1, hop):
+            frame = mono[start : start + n_fft].astype(np.float64, copy=False) * window
+            spec = np.fft.rfft(frame)
+            frame_power.append(np.square(np.abs(spec), dtype=np.float64))
+        if not frame_power:
+            frame = mono[:n_fft].astype(np.float64, copy=False) * window
+            spec = np.fft.rfft(frame)
+            frame_power.append(np.square(np.abs(spec), dtype=np.float64))
+        power = np.maximum(np.mean(frame_power, axis=0), EPS)
+        freqs = np.fft.rfftfreq(n_fft, d=1.0 / sample_rate)
     total = float(np.sum(power))
     if total <= EPS:
         return 0.0, 0.0
     centroid = float(np.sum(freqs * power) / total)
     cumulative = np.cumsum(power)
-    rolloff_idx = int(np.searchsorted(cumulative, 0.85 * cumulative[-1], side="left"))
+    rolloff_idx = int(np.searchsorted(cumulative, 0.95 * cumulative[-1], side="left"))
     rolloff_idx = min(max(0, rolloff_idx), len(freqs) - 1)
     rolloff = float(freqs[rolloff_idx])
     return centroid, rolloff
@@ -564,7 +580,7 @@ def analyze_adaptive_metrics(
         side = 0.5 * (left - right)
         mid_energy = float(np.mean(np.square(mid), dtype=np.float64))
         side_energy = float(np.mean(np.square(side), dtype=np.float64))
-        width = side_energy / (mid_energy + EPS)
+        width = float(np.sqrt(side_energy / (mid_energy + EPS)))
         noise_floor = _chunk_noise_floor_dbfs(mono)
 
         rms_values.append(_to_db(rms))

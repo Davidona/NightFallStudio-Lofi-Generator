@@ -79,6 +79,7 @@ def _music_processing_steps(
     preset: PresetSpec,
     *,
     lpf_hz: Optional[float] = None,
+    apply_lpf: bool = True,
     saturation_scale: Optional[float] = None,
     compression_scale: Optional[float] = None,
     stereo_width: Optional[float] = None,
@@ -105,10 +106,9 @@ def _music_processing_steps(
     wow_depth = _clamp(preset.wow_depth * wow_depth_scale, 0.0, 0.02)
     flutter_depth = _clamp(preset.flutter_depth * wow_depth_scale, 0.0, 0.01)
 
-    steps: list[str] = [
-        f"highpass=f={effective_hpf:.1f}:t=q:w=0.707",
-        f"lowpass=f={effective_lpf:.1f}:t=q:w={effective_q:.3f}",
-    ]
+    steps: list[str] = [f"highpass=f={effective_hpf:.1f}:t=q:w=0.707"]
+    if apply_lpf:
+        steps.append(f"lowpass=f={effective_lpf:.1f}:t=q:w={effective_q:.3f}")
     if abs(bias_gain_db) > 0.01:
         steps.append(f"equalizer=f=3400:t=q:w=0.85:g={bias_gain_db:.2f}")
     if abs(pre_gain_db) > 0.01:
@@ -203,9 +203,9 @@ def _per_track_chain(
     chain: list[str] = [
         "aformat=sample_rates=48000:channel_layouts=stereo",
         _hq_resample_filter(),
-        "volume=-3dB",
     ]
     chain.extend(_track_loudness_steps(config=config, analysis=analysis))
+    chain.append("volume=-3dB")
     if lpf_dip:
         chain.append("lowpass=f=7800:t=q:w=0.707")
     return ",".join(chain)
@@ -220,16 +220,17 @@ def _adaptive_track_chain(
     chain: list[str] = [
         "aformat=sample_rates=48000:channel_layouts=stereo",
         _hq_resample_filter(),
-        "volume=-3dB",
     ]
     chain.extend(_track_loudness_steps(config=config, analysis=analysis))
+    chain.append("volume=-3dB")
 
     proc: Optional[AdaptiveProcessing] = analysis.adaptive_processing if analysis else None
     if proc is not None:
         chain.extend(
             _music_processing_steps(
                 preset,
-                lpf_hz=proc.lpf_cutoff_hz if proc.lpf_cutoff_hz is not None else preset.lpf_hz,
+                lpf_hz=proc.lpf_cutoff_hz,
+                apply_lpf=proc.lpf_cutoff_hz is not None,
                 saturation_scale=preset.saturation_scale * proc.saturation_strength,
                 compression_scale=preset.compression_scale * proc.compression_strength,
                 stereo_width=proc.stereo_width_target,

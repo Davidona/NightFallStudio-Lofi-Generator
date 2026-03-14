@@ -1,42 +1,42 @@
 [
   {
-    "track": "Warm Desk Lamp Rain.mp3",
+    "track": "Late Night Streetlights.mp3",
     "metrics": {
-      "lufs": -13.44,
-      "crest_factor_db": 14.13746189957481,
-      "spectral_centroid_hz": 2378.09114314798,
-      "rolloff_hz": 5366.6,
-      "stereo_width": 0.08323111474518131,
-      "noise_floor_dbfs": -24.940578198016937
+      "lufs": -15.59,
+      "crest_factor_db": 15.957266151366287,
+      "spectral_centroid_hz": 222.12302665883567,
+      "rolloff_hz": 624.462890625,
+      "stereo_width": 0.29911276457833136,
+      "noise_floor_dbfs": -26.140845459536386
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
       "saturation_strength": 0.277,
       "compression_strength": 1.17,
-      "stereo_width_target": 0.083,
+      "stereo_width_target": 0.299,
       "noise_added_db": null,
       "lofi_needed_score": 25.0
     },
-    "rationale": "LPF skipped (rolloff 5367Hz), compression increased (crest 14.1dB), stereo unchanged (0.08), noise skipped (floor -24.9dBFS)"
+    "rationale": "LPF skipped (rolloff 624Hz), compression increased (crest 16.0dB), stereo unchanged (0.30), noise skipped (floor -26.1dBFS)"
   },
   {
-    "track": "Autumn Window Beats.mp3",
+    "track": "3AM Regret Rain.mp3",
     "metrics": {
-      "lufs": -14.16,
-      "crest_factor_db": 15.251903188156978,
-      "spectral_centroid_hz": 2076.9263950452014,
-      "rolloff_hz": 4919.766666666666,
-      "stereo_width": 0.10656250495847187,
-      "noise_floor_dbfs": -25.56512068092724
+      "lufs": -11.55,
+      "crest_factor_db": 12.357964765167567,
+      "spectral_centroid_hz": 279.10899096349067,
+      "rolloff_hz": 882.861328125,
+      "stereo_width": 0.32168085946169656,
+      "noise_floor_dbfs": -21.43022787298204
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.107,
+      "saturation_strength": 0.271,
+      "compression_strength": 0.968,
+      "stereo_width_target": 0.322,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 18.16
     },
-    "rationale": "LPF skipped (rolloff 4920Hz), compression increased (crest 15.3dB), stereo unchanged (0.11), noise skipped (floor -25.6dBFS)"
+    "rationale": "LPF skipped (rolloff 883Hz), compression moderate (crest 12.4dB), stereo unchanged (0.32), noise skipped (floor -21.4dBFS)"
   }
 ]
