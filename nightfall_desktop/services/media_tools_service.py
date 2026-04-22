@@ -79,6 +79,12 @@ class MediaToolsService:
             if seg_sec <= 0.0:
                 continue
             out_path = output_dir / f"{input_path.stem}_part_{idx + 1:03d}.mp3"
+            # Stream-copy the segment without re-encoding.
+            # Re-encoding with libmp3lame introduces encoder delay (~13–26 ms of
+            # silence) at the start of every chunk.  Those silent samples survive
+            # through video creation and produce an audible gap at every stitch
+            # point.  Stream copy avoids that entirely; the split is lossless and
+            # frame-accurate (within one MP3 frame ≈ 26 ms, which is inaudible).
             cmd = [
                 "ffmpeg",
                 "-hide_banner",
@@ -94,9 +100,7 @@ class MediaToolsService:
                 "-vn",
                 "-sn",
                 "-c:a",
-                "libmp3lame",
-                "-b:a",
-                bitrate,
+                "copy",
                 str(out_path),
             ]
             run_command(cmd, logger=self.logger)
@@ -146,6 +150,7 @@ class MediaToolsService:
         right_duration_s: float,
         base_crossfade_sec: float,
     ) -> float:
+        max_allowed = max(0.5, min(base_crossfade_sec, min(left_duration_s, right_duration_s) - 0.5))
         if (
             left_analysis is not None
             and right_analysis is not None
@@ -157,9 +162,37 @@ class MediaToolsService:
             avg_bpm = (left_analysis.bpm + right_analysis.bpm) / 2.0
             beat_sec = 60.0 / max(1e-6, avg_bpm)
             candidate = 4.0 * beat_sec
-            return max(0.5, min(4.0, candidate))
+            return max(0.5, min(max_allowed, candidate))
+        if (
+            left_analysis is not None
+            and right_analysis is not None
+            and left_analysis.tail_rms_curve
+            and right_analysis.head_rms_curve
+        ):
+            base_ms = int(base_crossfade_sec * 1000)
+            max_ms = int(max_allowed * 1000)
+            min_ms = 500
+            candidates = list(range(min_ms, max_ms + 1, 250))
+            if base_ms not in candidates and min_ms <= base_ms <= max_ms:
+                candidates.append(base_ms)
+            best_ms = base_ms
+            best_score = float("inf")
+            for ms in sorted(set(candidates)):
+                frames = max(1, int(ms / 50))
+                tail = left_analysis.tail_rms_curve
+                head = right_analysis.head_rms_curve
+                tail_window = tail[max(0, len(tail) - frames):]
+                head_window = head[:min(len(head), frames)]
+                tail_energy = sum(tail_window) / max(1, len(tail_window))
+                head_energy = sum(head_window) / max(1, len(head_window))
+                score = tail_energy + head_energy
+                score += 0.15 * abs(ms - base_ms) / max(base_ms, 1)
+                if score < best_score:
+                    best_score = score
+                    best_ms = ms
+            return max(0.5, min(max_allowed, best_ms / 1000.0))
         relative = min(left_duration_s, right_duration_s) * 0.06
-        return max(0.5, min(4.0, max(base_crossfade_sec, relative)))
+        return max(0.5, min(max_allowed, max(base_crossfade_sec, relative)))
 
     def _stitch_with_audio_crossfade(
         self,
@@ -212,7 +245,7 @@ class MediaToolsService:
                         base_crossfade_sec=base_crossfade_sec,
                     )
                     next_label = "[aout]" if idx == len(files) - 1 else f"[af{idx}]"
-                    lines.append(f"{current}[a{idx}]acrossfade=d={d:.3f}:c1=tri:c2=tri{next_label}")
+                    lines.append(f"{current}[a{idx}]acrossfade=d={d:.3f}:c1=qsin:c2=qsin{next_label}")
                     current = next_label
 
             graph_path.write_text(";\n".join(lines), encoding="utf-8")

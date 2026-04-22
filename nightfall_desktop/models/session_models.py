@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 from nightfall_mix.analysis import TrackAnalysis
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, SmartOrderingMode
+from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
 from nightfall_mix.mixer import MixPlan, TrackSource
 
 
@@ -39,6 +39,11 @@ class PresetOverrides:
 class WorkspaceMode(str, Enum):
     simple = "simple"
     advanced = "advanced"
+
+
+class StudioMode(str, Enum):
+    lofi = "lofi"
+    playlist_creator = "playlist_creator"
 
 
 @dataclass
@@ -76,6 +81,8 @@ class GuiSettings:
     preview_mode: bool = False
     preview_duration_sec: float = 60.0
     workspace_mode: WorkspaceMode = WorkspaceMode.advanced
+    studio_mode: StudioMode = StudioMode.lofi
+    render_style: RenderStyle = RenderStyle.lofi
     metadata_tags: dict[str, str] = field(default_factory=dict)
     metadata_json: Optional[Path] = None
     mix_log: Optional[Path] = None

@@ -5,8 +5,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional, TypeVar
 
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, SmartOrderingMode
-from nightfall_desktop.models.session_models import GuiSettings, PresetOverrides, WorkspaceMode
+from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
+from nightfall_desktop.models.session_models import GuiSettings, PresetOverrides, StudioMode, WorkspaceMode
 
 SUPPORTED_PROJECT_VERSION = 1
 E = TypeVar("E", bound=Enum)
@@ -244,6 +244,8 @@ def save_project_file(path: Path, settings: GuiSettings, ordered_paths: list[Pat
             "preview_mode": settings.preview_mode,
             "preview_duration_sec": settings.preview_duration_sec,
             "workspace_mode": settings.workspace_mode.value,
+            "studio_mode": settings.studio_mode.value,
+            "render_style": settings.render_style.value,
             "metadata_tags": dict(settings.metadata_tags),
             "metadata_json": str(settings.metadata_json) if settings.metadata_json else None,
             "mix_log": str(settings.mix_log) if settings.mix_log else None,
@@ -290,6 +292,17 @@ def load_project_file(path: Path) -> tuple[GuiSettings, list[Path]]:
     if not parsed_overrides_by_name:
         parsed_overrides_by_name[loaded_preset] = legacy_override
 
+    loaded_studio_mode = _parse_enum(
+        StudioMode,
+        settings.get("studio_mode"),
+        StudioMode.lofi,
+    )
+    loaded_render_style = _parse_enum(
+        RenderStyle,
+        settings.get("render_style"),
+        RenderStyle.clean_playlist if loaded_studio_mode == StudioMode.playlist_creator else RenderStyle.lofi,
+    )
+
     loaded = GuiSettings(
         songs_folder=Path(settings["songs_folder"]),
         output_path=Path(settings["output_path"]),
@@ -332,6 +345,8 @@ def load_project_file(path: Path) -> tuple[GuiSettings, list[Path]]:
             settings.get("workspace_mode"),
             WorkspaceMode.advanced,
         ),
+        studio_mode=loaded_studio_mode,
+        render_style=loaded_render_style,
         metadata_tags={
             str(k): str(v)
             for k, v in (settings.get("metadata_tags") or {}).items()

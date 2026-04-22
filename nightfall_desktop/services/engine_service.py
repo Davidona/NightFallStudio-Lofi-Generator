@@ -79,6 +79,7 @@ class GuiEngineService:
             smart_crossfade=settings.smart_crossfade,
             smart_ordering=settings.smart_ordering,
             smart_ordering_mode=settings.smart_ordering_mode,
+            render_style=settings.render_style,
             lufs=settings.lufs,
             preset=settings.preset,
             metadata_tags=settings.metadata_tags,

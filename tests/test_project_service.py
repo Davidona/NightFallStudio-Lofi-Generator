@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from nightfall_mix.config import PresetName, RainPresence, SmartOrderingMode
-from nightfall_desktop.models.session_models import GuiSettings, PresetOverrides, WorkspaceMode
+from nightfall_mix.config import PresetName, RainPresence, RenderStyle, SmartOrderingMode
+from nightfall_desktop.models.session_models import GuiSettings, PresetOverrides, StudioMode, WorkspaceMode
 from nightfall_desktop.services.project_service import load_project_file, save_project_file
 
 
@@ -23,6 +23,8 @@ def test_project_save_load_roundtrip(tmp_path: Path) -> None:
         output_chunk_minutes=15,
         target_duration_min=120,
         workspace_mode=WorkspaceMode.simple,
+        studio_mode=StudioMode.playlist_creator,
+        render_style=RenderStyle.clean_playlist,
         metadata_tags={"title": "Night Session", "artist": "Nightfall"},
         rain_presence=RainPresence.upfront,
         rain_preserve_low_drops=False,
@@ -51,6 +53,8 @@ def test_project_save_load_roundtrip(tmp_path: Path) -> None:
     assert loaded.output_chunks_enabled is True
     assert loaded.output_chunk_minutes == 15
     assert loaded.workspace_mode == WorkspaceMode.simple
+    assert loaded.studio_mode == StudioMode.playlist_creator
+    assert loaded.render_style == RenderStyle.clean_playlist
     assert loaded.rain_presence == RainPresence.upfront
     assert loaded.rain_preserve_low_drops is False
     assert loaded.metadata_tags == {"title": "Night Session", "artist": "Nightfall"}

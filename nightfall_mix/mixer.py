@@ -336,9 +336,11 @@ def _smart_crossfade_ms(
         frames = max(1, int(ms / 50))
         tail = left_analysis.tail_rms_curve
         head = right_analysis.head_rms_curve
-        tail_idx = max(0, len(tail) - frames - 1)
-        head_idx = min(len(head) - 1, frames - 1)
-        score = tail[tail_idx] + head[head_idx]
+        tail_window = tail[max(0, len(tail) - frames):]
+        head_window = head[:min(len(head), frames)]
+        tail_energy = sum(tail_window) / max(1, len(tail_window))
+        head_energy = sum(head_window) / max(1, len(head_window))
+        score = tail_energy + head_energy
         score += 0.15 * abs(ms - base_ms) / max(base_ms, 1)
         if score < best_score:
             best_score = score
@@ -376,6 +378,8 @@ def build_mix_plan(
         right = instances[idx + 1]
         left_analysis = analyses.get(left.track.id)
         right_analysis = analyses.get(right.track.id)
+        dist = key_distance(left_analysis.key if left_analysis else None, right_analysis.key if right_analysis else None)
+        lpf_duck_ms: Optional[int] = None
         if smart_crossfade:
             crossfade_ms, reason = _smart_crossfade_ms(
                 left.track,
@@ -385,26 +389,25 @@ def build_mix_plan(
                 base_ms=base_ms,
             )
             smart_used = reason.startswith("smart")
+            if (
+                dist is not None
+                and left_analysis is not None
+                and right_analysis is not None
+                and (left_analysis.key_confidence or 0.0) >= 0.4
+                and (right_analysis.key_confidence or 0.0) >= 0.4
+                and dist >= 5
+            ):
+                min_ms, max_allowed = _crossfade_bounds(left.track, right.track)
+                extended = min(crossfade_ms + 500, max_allowed)
+                if extended > crossfade_ms:
+                    crossfade_ms = extended
+                lpf_duck_ms = 1200
+                reason = f"{reason}+key-mask"
         else:
             min_ms, max_allowed = _crossfade_bounds(left.track, right.track)
             crossfade_ms = max(min_ms, min(base_ms, max_allowed))
             reason = "fixed"
             smart_used = False
-
-        dist = key_distance(left_analysis.key if left_analysis else None, right_analysis.key if right_analysis else None)
-        lpf_duck_ms: Optional[int] = None
-        if (
-            dist is not None
-            and left_analysis is not None
-            and right_analysis is not None
-            and (left_analysis.key_confidence or 0.0) >= 0.4
-            and (right_analysis.key_confidence or 0.0) >= 0.4
-            and dist >= 5
-        ):
-            min_ms, max_allowed = _crossfade_bounds(left.track, right.track)
-            crossfade_ms = min(crossfade_ms + 500, max(min_ms, max_allowed))
-            lpf_duck_ms = 1200
-            reason = f"{reason}+key-mask"
 
         transitions.append(
             TransitionPlan(

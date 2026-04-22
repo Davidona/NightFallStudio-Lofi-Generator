@@ -43,7 +43,7 @@ except Exception:
     MULTIMEDIA_AVAILABLE = False
 
 from nightfall_mix.analysis import TrackAnalysis, read_analysis_cache_summary
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, SmartOrderingMode
+from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
 from nightfall_mix.effects_presets import get_preset
 from nightfall_mix.mixer import discover_audio_files
 from nightfall_mix.utils import ffprobe_duration_ms, format_hms
@@ -51,6 +51,7 @@ from nightfall_desktop.models.session_models import (
     EngineSessionModel,
     GuiSettings,
     PresetOverrides,
+    StudioMode,
     WorkspaceMode,
 )
 from nightfall_desktop.services.engine_service import GuiEngineService
@@ -143,6 +144,31 @@ class MainWindow(QMainWindow):
         root = QVBoxLayout(self.lofi_tab)
         root.setContentsMargins(12, 12, 12, 12)
         root.setSpacing(10)
+
+        studio_panel = QFrame()
+        studio_panel.setObjectName("panel")
+        root.addWidget(studio_panel)
+        studio_layout = QVBoxLayout(studio_panel)
+        studio_layout.setContentsMargins(10, 10, 10, 10)
+        studio_layout.setSpacing(8)
+
+        studio_header = QHBoxLayout()
+        studio_header.addWidget(QLabel("Studio"))
+        self.studio_mode_tabs = QTabBar()
+        self.studio_mode_tabs.setExpanding(False)
+        self.studio_mode_tabs.addTab("Lo-Fi Generator")
+        self.studio_mode_tabs.addTab("Playlist Creator")
+        self.studio_mode_tabs.currentChanged.connect(self._on_studio_mode_changed)
+        studio_header.addWidget(self.studio_mode_tabs)
+        studio_header.addStretch(1)
+        studio_layout.addLayout(studio_header)
+
+        self.studio_mode_hint = QLabel(
+            "Lo-Fi Generator applies the full Nightfall processing chain, adaptive profile, and optional rain bed."
+        )
+        self.studio_mode_hint.setWordWrap(True)
+        self.studio_mode_hint.setStyleSheet("color: #6A7583;")
+        studio_layout.addWidget(self.studio_mode_hint)
 
         mode_panel = QFrame()
         mode_panel.setObjectName("panel")
@@ -351,8 +377,8 @@ class MainWindow(QMainWindow):
         self.cache_folder_btn = QPushButton("Cache...")
         self.cache_folder_btn.clicked.connect(self._choose_cache_folder)
 
-        profile_box = QGroupBox("Sound Profile")
-        profile_layout = QGridLayout(profile_box)
+        self.profile_box = QGroupBox("Sound Profile")
+        profile_layout = QGridLayout(self.profile_box)
         profile_layout.setHorizontalSpacing(8)
         profile_layout.setVerticalSpacing(6)
         profile_layout.addWidget(QLabel("Preset"), 0, 0)
@@ -364,8 +390,8 @@ class MainWindow(QMainWindow):
         profile_layout.addWidget(self.quality_combo, 1, 1)
         profile_layout.addWidget(self.adaptive_checkbox, 1, 2, 1, 3)
 
-        transition_box = QGroupBox("Transitions And Ordering")
-        transition_layout = QGridLayout(transition_box)
+        self.transition_box = QGroupBox("Transitions And Ordering")
+        transition_layout = QGridLayout(self.transition_box)
         transition_layout.setHorizontalSpacing(8)
         transition_layout.setVerticalSpacing(6)
         transition_layout.addWidget(self.smart_crossfade_checkbox, 0, 0)
@@ -375,8 +401,8 @@ class MainWindow(QMainWindow):
         transition_layout.addWidget(QLabel("Crossfade"), 1, 0)
         transition_layout.addWidget(self.crossfade_spin, 1, 1)
 
-        length_box = QGroupBox("Length And Scope")
-        length_layout = QGridLayout(length_box)
+        self.length_box = QGroupBox("Length And Scope")
+        length_layout = QGridLayout(self.length_box)
         length_layout.setHorizontalSpacing(8)
         length_layout.setVerticalSpacing(6)
         length_layout.addWidget(self.target_checkbox, 0, 0)
@@ -390,8 +416,8 @@ class MainWindow(QMainWindow):
         length_hint.setStyleSheet("color: #6A7583;")
         length_layout.addWidget(length_hint, 2, 0, 1, 2)
 
-        rain_box = QGroupBox("Rain And Mastering")
-        rain_layout = QGridLayout(rain_box)
+        self.rain_box = QGroupBox("Rain And Mastering")
+        rain_layout = QGridLayout(self.rain_box)
         rain_layout.setHorizontalSpacing(8)
         rain_layout.setVerticalSpacing(6)
         rain_layout.addWidget(QLabel("Rain File"), 0, 0)
@@ -406,8 +432,8 @@ class MainWindow(QMainWindow):
         rain_layout.addWidget(QLabel("Target LUFS"), 3, 0)
         rain_layout.addWidget(self.lufs_spin, 3, 1)
 
-        reports_box = QGroupBox("Reports")
-        reports_layout = QGridLayout(reports_box)
+        self.reports_box = QGroupBox("Reports")
+        reports_layout = QGridLayout(self.reports_box)
         reports_layout.setHorizontalSpacing(8)
         reports_layout.setVerticalSpacing(6)
         reports_layout.addWidget(QLabel("Adaptive Report JSON"), 0, 0)
@@ -417,10 +443,10 @@ class MainWindow(QMainWindow):
         reports_layout.addWidget(self.cache_folder_line, 1, 1)
         reports_layout.addWidget(self.cache_folder_btn, 1, 2)
 
-        top.addWidget(profile_box, 0, 0)
-        top.addWidget(transition_box, 0, 1)
-        top.addWidget(length_box, 1, 0)
-        top.addWidget(rain_box, 1, 1)
+        top.addWidget(self.profile_box, 0, 0)
+        top.addWidget(self.transition_box, 0, 1)
+        top.addWidget(self.length_box, 1, 0)
+        top.addWidget(self.rain_box, 1, 1)
         top.setColumnStretch(0, 1)
         top.setColumnStretch(1, 1)
 
@@ -457,7 +483,7 @@ class MainWindow(QMainWindow):
 
         self.track_tree = ReorderableTrackTree()
         self.track_tree.setColumnCount(7)
-        self.track_tree.setHeaderLabels(["#", "Track", "Duration", "BPM", "Key", "Cache", "Lo-Fi"])
+        self.track_tree.setHeaderLabels(["#", "Track", "Duration", "BPM", "Key", "Cache", "Profile"])
         self.track_tree.setRootIsDecorated(False)
         self.track_tree.setSelectionBehavior(QTreeWidget.SelectRows)
         self.track_tree.setDragDropMode(QTreeWidget.InternalMove)
@@ -472,7 +498,7 @@ class MainWindow(QMainWindow):
         center_layout = QVBoxLayout(center_panel)
         center_layout.setContentsMargins(10, 10, 10, 10)
         center_layout.setSpacing(8)
-        center_layout.addWidget(reports_box)
+        center_layout.addWidget(self.reports_box)
         center_layout.addWidget(QLabel("Timeline"))
         self.timeline = TimelineWidget()
         center_layout.addWidget(self.timeline, 1)
@@ -485,8 +511,8 @@ class MainWindow(QMainWindow):
         right_layout.setContentsMargins(10, 10, 10, 10)
         right_layout.setSpacing(8)
 
-        metrics_box = QGroupBox("Adaptive Analysis")
-        metrics_form = QFormLayout(metrics_box)
+        self.metrics_box = QGroupBox("Adaptive Analysis")
+        metrics_form = QFormLayout(self.metrics_box)
         self.metric_labels: dict[str, QLabel] = {}
         for key in (
             "lufs",
@@ -500,8 +526,8 @@ class MainWindow(QMainWindow):
             self.metric_labels[key] = lbl
             metrics_form.addRow(key.replace("_", " ").title(), lbl)
 
-        process_box = QGroupBox("Applied Processing")
-        process_form = QFormLayout(process_box)
+        self.process_box = QGroupBox("Applied Processing")
+        process_form = QFormLayout(self.process_box)
         self.proc_labels: dict[str, QLabel] = {}
         for key in (
             "lpf_cutoff_hz",
@@ -519,8 +545,8 @@ class MainWindow(QMainWindow):
         self.rationale_console.setPlaceholderText("Track rationale appears here.")
         self.rationale_console.setFixedHeight(140)
 
-        right_layout.addWidget(metrics_box)
-        right_layout.addWidget(process_box)
+        right_layout.addWidget(self.metrics_box)
+        right_layout.addWidget(self.process_box)
         right_layout.addWidget(QLabel("Explanation"))
         right_layout.addWidget(self.rationale_console)
         body_row.addWidget(right_panel, 0)
@@ -637,8 +663,10 @@ class MainWindow(QMainWindow):
         bottom_layout.addLayout(action_row)
         root.addWidget(bottom_panel)
         self._apply_recommended_defaults(mark_dirty=False)
+        self.studio_mode_tabs.setCurrentIndex(0)
         self.mode_tabs.setCurrentIndex(1)
         self._on_mode_tab_changed(1)
+        self._refresh_studio_mode_ui()
         self._sync_simple_from_advanced()
         self._refresh_action_state()
         self._refresh_estimates()
@@ -1275,6 +1303,80 @@ class MainWindow(QMainWindow):
             return WorkspaceMode.simple
         return WorkspaceMode.advanced
 
+    def _active_studio_mode(self) -> StudioMode:
+        if hasattr(self, "studio_mode_tabs") and self.studio_mode_tabs.currentIndex() == 1:
+            return StudioMode.playlist_creator
+        return StudioMode.lofi
+
+    def _is_playlist_creator_mode(self) -> bool:
+        return self._active_studio_mode() == StudioMode.playlist_creator
+
+    def _set_studio_mode(self, mode: StudioMode) -> None:
+        if not hasattr(self, "studio_mode_tabs"):
+            return
+        idx = 1 if mode == StudioMode.playlist_creator else 0
+        if self.studio_mode_tabs.currentIndex() != idx:
+            self.studio_mode_tabs.setCurrentIndex(idx)
+        else:
+            self._on_studio_mode_changed(idx)
+
+    def _on_studio_mode_changed(self, _index: int) -> None:
+        self._refresh_studio_mode_ui()
+        if self._session is not None:
+            self._populate_tracks(self._session)
+            self.timeline.set_plan(
+                self._session.mix_plan,
+                has_rain=(not self._is_playlist_creator_mode()) and self._session.settings.rain_path is not None,
+            )
+        self._refresh_action_state()
+        self._refresh_preview_controls()
+        self._refresh_estimates()
+        self._mark_preview_dirty()
+
+    def _refresh_studio_mode_ui(self) -> None:
+        playlist_mode = self._is_playlist_creator_mode()
+        self.profile_box.setVisible(not playlist_mode)
+        self.rain_box.setVisible(not playlist_mode)
+        self.adaptive_checkbox.setEnabled(not playlist_mode and not self._busy)
+        self.preset_combo.setEnabled(not playlist_mode and not self._busy)
+        self.preset_editor_btn.setEnabled(not playlist_mode and not self._busy)
+        self.reset_preset_btn.setEnabled(not playlist_mode and not self._busy)
+        self.reset_all_presets_btn.setEnabled(not playlist_mode and not self._busy)
+        self.simple_preset_combo.setEnabled(not playlist_mode and not self._busy)
+        self.adaptive_report_line.setEnabled(not playlist_mode and not self._busy)
+        self.adaptive_report_btn.setEnabled(not playlist_mode and not self._busy)
+        self.rain_line.setEnabled(not playlist_mode and not self._busy)
+        self.rain_browse_btn.setEnabled(not playlist_mode and not self._busy)
+        self.rain_slider.setEnabled(not playlist_mode and not self._busy)
+        self.rain_presence_combo.setEnabled(not playlist_mode and not self._busy)
+        self.rain_low_drops_checkbox.setEnabled(not playlist_mode and not self._busy)
+        if playlist_mode:
+            self.studio_mode_hint.setText(
+                "Playlist Creator keeps your music clean and original while reusing smart ordering, BPM/key-aware fades, previewing, and export."
+            )
+            self.simple_hint.setText(
+                "Playlist Creator keeps original tone. Use smart fade and smart ordering to build a smooth sequence without lo-fi processing."
+            )
+            self.metrics_box.setTitle("Track Analysis")
+            self.process_box.setTitle("Playlist Processing")
+            self.rationale_console.setPlaceholderText(
+                "Playlist Creator preserves the original track tone and only applies sequencing and master loudness matching."
+            )
+            self.render_btn.setText("Render Playlist")
+            self.analyze_btn.setText("Analyze Playlist")
+        else:
+            self.studio_mode_hint.setText(
+                "Lo-Fi Generator applies the full Nightfall processing chain, adaptive profile, and optional rain bed."
+            )
+            self.simple_hint.setText(
+                "Simple mode uses recommended defaults for advanced DSP and transition settings."
+            )
+            self.metrics_box.setTitle("Adaptive Analysis")
+            self.process_box.setTitle("Applied Processing")
+            self.rationale_console.setPlaceholderText("Track rationale appears here.")
+            self.render_btn.setText("Render")
+            self.analyze_btn.setText("Analyze")
+
     def _set_workspace_mode(self, mode: WorkspaceMode) -> None:
         if not hasattr(self, "mode_tabs"):
             return
@@ -1602,18 +1704,20 @@ class MainWindow(QMainWindow):
             self._preset_overrides_by_preset.get(preset, PresetOverrides())
         )
         output_format = OutputFormat(self.format_combo.currentText())
+        studio_mode = self._active_studio_mode()
+        playlist_mode = studio_mode == StudioMode.playlist_creator
         return GuiSettings(
             songs_folder=songs_folder,
             output_path=output,
             cache_folder=cache_folder,
-            rain_path=rain,
+            rain_path=None if playlist_mode else rain,
             preset=preset,
             quality_mode=QualityMode(self.quality_combo.currentText()),
             output_format=output_format,
             bitrate=self.bitrate_combo.currentText().strip() or "192k",
             output_chunks_enabled=self.chunk_output_checkbox.isChecked(),
             output_chunk_minutes=max(1, int(self.chunk_minutes_spin.value())),
-            adaptive_lofi=self.adaptive_checkbox.isChecked(),
+            adaptive_lofi=(not playlist_mode) and self.adaptive_checkbox.isChecked(),
             adaptive_report=Path(self.adaptive_report_line.text().strip() or "adaptive_report.json"),
             rain_level_db=float(self.rain_slider.value()),
             rain_presence=RainPresence(str(self.rain_presence_combo.currentData())),
@@ -1628,6 +1732,8 @@ class MainWindow(QMainWindow):
             preview_mode=self.preview_checkbox.isChecked(),
             preview_duration_sec=float(self.preview_spin.value()),
             workspace_mode=self._active_workspace_mode(),
+            studio_mode=studio_mode,
+            render_style=RenderStyle.clean_playlist if playlist_mode else RenderStyle.lofi,
             metadata_tags=dict(self._render_metadata_tags),
             preset_overrides=active_override,
             preset_overrides_by_name=self._clone_override_map(),
@@ -1649,6 +1755,7 @@ class MainWindow(QMainWindow):
         for widget in (
             self.folder_line,
             self.folder_browse_btn,
+            self.studio_mode_tabs,
             self.mode_tabs,
             self.reset_recommended_btn,
             self.remove_track_btn,
@@ -1702,6 +1809,7 @@ class MainWindow(QMainWindow):
             self._refresh_smart_ordering_mode_state()
             self._refresh_bitrate_state()
             self._refresh_chunk_output_state()
+            self._refresh_studio_mode_ui()
         self._refresh_action_state()
         self._refresh_preview_controls()
 
@@ -1887,16 +1995,21 @@ class MainWindow(QMainWindow):
     def _populate_tracks(self, session: EngineSessionModel) -> None:
         self.track_tree.clear()
         analysis_by_id = session.analyses
+        playlist_mode = self._is_playlist_creator_mode()
         for idx, src in enumerate(session.track_sources, start=1):
             analysis = analysis_by_id.get(src.id)
             bpm = f"{analysis.bpm:.1f}" if analysis and analysis.bpm else "--"
             key = analysis.key if analysis and analysis.key else "--"
             cache_text = self._cache_status_text(read_analysis_cache_summary(src.path))
-            score = (
-                analysis.adaptive_processing.lofi_needed_score
-                if analysis and analysis.adaptive_processing
-                else None
-            )
+            score = None
+            profile_text = "Original" if playlist_mode else "--"
+            if not playlist_mode:
+                score = (
+                    analysis.adaptive_processing.lofi_needed_score
+                    if analysis and analysis.adaptive_processing
+                    else None
+                )
+                profile_text = self._adaptive_status_text(score)
             item = QTreeWidgetItem(
                 [
                     str(idx),
@@ -1905,12 +2018,13 @@ class MainWindow(QMainWindow):
                     bpm,
                     key,
                     cache_text,
-                    self._adaptive_status_text(score),
+                    profile_text,
                 ]
             )
             item.setData(0, Qt.UserRole, str(src.path))
             item.setData(1, Qt.UserRole, src.id)
-            item.setForeground(6, self._status_brush(score))
+            if not playlist_mode:
+                item.setForeground(6, self._status_brush(score))
             self.track_tree.addTopLevelItem(item)
         self._renumber_tree(self.track_tree)
         self.track_tree.resizeColumnToContents(0)
@@ -1933,26 +2047,27 @@ class MainWindow(QMainWindow):
         analysis = self._session.analyses.get(track_id)
         if analysis is None:
             return
+        playlist_mode = self._is_playlist_creator_mode()
         metrics = {
             "lufs": analysis.adaptive_metrics.lufs if analysis.adaptive_metrics else analysis.loudness.input_i,
-            "crest_factor_db": analysis.adaptive_metrics.crest_factor_db if analysis.adaptive_metrics else None,
-            "spectral_centroid_hz": analysis.adaptive_metrics.spectral_centroid_hz if analysis.adaptive_metrics else None,
-            "rolloff_hz": analysis.adaptive_metrics.rolloff_hz if analysis.adaptive_metrics else None,
-            "stereo_width": analysis.adaptive_metrics.stereo_width if analysis.adaptive_metrics else None,
-            "noise_floor_dbfs": analysis.adaptive_metrics.noise_floor_dbfs if analysis.adaptive_metrics else None,
+            "crest_factor_db": None if playlist_mode else analysis.adaptive_metrics.crest_factor_db if analysis.adaptive_metrics else None,
+            "spectral_centroid_hz": None if playlist_mode else analysis.adaptive_metrics.spectral_centroid_hz if analysis.adaptive_metrics else None,
+            "rolloff_hz": None if playlist_mode else analysis.adaptive_metrics.rolloff_hz if analysis.adaptive_metrics else None,
+            "stereo_width": None if playlist_mode else analysis.adaptive_metrics.stereo_width if analysis.adaptive_metrics else None,
+            "noise_floor_dbfs": None if playlist_mode else analysis.adaptive_metrics.noise_floor_dbfs if analysis.adaptive_metrics else None,
         }
         processing = {
-            "lpf_cutoff_hz": analysis.adaptive_processing.lpf_cutoff_hz if analysis.adaptive_processing else None,
-            "saturation_strength": analysis.adaptive_processing.saturation_strength
+            "lpf_cutoff_hz": None if playlist_mode else analysis.adaptive_processing.lpf_cutoff_hz if analysis.adaptive_processing else None,
+            "saturation_strength": None if playlist_mode else analysis.adaptive_processing.saturation_strength
             if analysis.adaptive_processing
             else None,
-            "compression_strength": analysis.adaptive_processing.compression_strength
+            "compression_strength": None if playlist_mode else analysis.adaptive_processing.compression_strength
             if analysis.adaptive_processing
             else None,
-            "stereo_width_target": analysis.adaptive_processing.stereo_width_target
+            "stereo_width_target": None if playlist_mode else analysis.adaptive_processing.stereo_width_target
             if analysis.adaptive_processing
             else None,
-            "noise_added_db": analysis.adaptive_processing.noise_added_db if analysis.adaptive_processing else None,
+            "noise_added_db": None if playlist_mode else analysis.adaptive_processing.noise_added_db if analysis.adaptive_processing else None,
         }
         for key, label in self.metric_labels.items():
             value = metrics.get(key)
@@ -1960,11 +2075,17 @@ class MainWindow(QMainWindow):
         for key, label in self.proc_labels.items():
             value = processing.get(key)
             label.setText("--" if value is None else f"{value:.2f}" if isinstance(value, float) else str(value))
-        rationale = (
-            analysis.adaptive_processing.rationale
-            if analysis.adaptive_processing
-            else "No adaptive rationale available."
-        )
+        if playlist_mode:
+            rationale = (
+                "Playlist Creator keeps the original track untouched, then uses BPM/key-aware sequencing, "
+                "smart crossfades, and final loudness matching on the combined playlist."
+            )
+        else:
+            rationale = (
+                analysis.adaptive_processing.rationale
+                if analysis.adaptive_processing
+                else "No adaptive rationale available."
+            )
         self.rationale_console.setPlainText(rationale)
 
     def _on_track_order_changed(self) -> None:
@@ -2321,6 +2442,7 @@ class MainWindow(QMainWindow):
             self._preset_overrides_by_preset[settings.preset] = self._clone_overrides(
                 settings.preset_overrides
             )
+        self._set_studio_mode(settings.studio_mode)
         self._refresh_smart_ordering_mode_state()
         self._set_workspace_mode(settings.workspace_mode)
         self._refresh_bitrate_state()

@@ -230,6 +230,21 @@ def format_hms(ms: int) -> str:
     return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
 
+def format_youtube_timestamp(ms: int) -> str:
+    """Format milliseconds as a YouTube description timestamp.
+
+    YouTube recognises timestamps of the form ``M:SS`` or ``H:MM:SS``.
+    No leading zero on the outermost unit so the link renders correctly.
+    """
+    total_seconds = max(0, int(ms // 1000))
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
+    if hours:
+        return f"{hours}:{minutes:02d}:{seconds:02d}"
+    return f"{minutes}:{seconds:02d}"
+
+
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:

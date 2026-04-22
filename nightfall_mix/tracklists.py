@@ -6,7 +6,7 @@ from pathlib import Path
 
 from nightfall_mix.analysis import TrackAnalysis
 from nightfall_mix.mixer import MixPlan
-from nightfall_mix.utils import format_hms, write_json
+from nightfall_mix.utils import format_hms, format_youtube_timestamp, write_json
 
 
 @dataclass
@@ -30,7 +30,8 @@ def write_tracklist_artifacts(
     txt_path.parent.mkdir(parents=True, exist_ok=True)
     with txt_path.open("w", encoding="utf-8") as f:
         for entry in plan.timeline:
-            f.write(f"{format_hms(entry.start_time_ms)} | {entry.filename}\n")
+            title = Path(entry.filename).stem
+            f.write(f"{format_youtube_timestamp(entry.start_time_ms)} {title}\n")
 
     payload = []
     for entry in plan.timeline:

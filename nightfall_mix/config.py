@@ -24,6 +24,11 @@ class SmartOrderingMode(str, Enum):
     bpm_key_balanced = "bpm_key_balanced"
 
 
+class RenderStyle(str, Enum):
+    lofi = "lofi"
+    clean_playlist = "clean_playlist"
+
+
 class PresetName(str, Enum):
     tokyo_cassette = "tokyo_cassette"
     vinyl_room = "vinyl_room"
@@ -64,6 +69,7 @@ class RunConfig(BaseModel):
     smart_crossfade: bool = False
     smart_ordering: bool = False
     smart_ordering_mode: SmartOrderingMode = SmartOrderingMode.bpm_key_balanced
+    render_style: RenderStyle = RenderStyle.lofi
     lufs: float = -14.0
     preset: PresetName = PresetName.tokyo_cassette
     metadata_tags: dict[str, str] = Field(default_factory=dict)

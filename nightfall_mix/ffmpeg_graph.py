@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 from nightfall_mix.analysis import AdaptiveProcessing, TrackAnalysis
-from nightfall_mix.config import OutputFormat, QualityMode, RainPresence, RunConfig
+from nightfall_mix.config import OutputFormat, QualityMode, RainPresence, RenderStyle, RunConfig
 from nightfall_mix.effects_presets import PresetSpec
 from nightfall_mix.mixer import MixPlan
 
@@ -209,6 +209,18 @@ def _per_track_chain(
     return ",".join(chain)
 
 
+def _clean_playlist_master_chain(config: RunConfig) -> str:
+    final_softclip = "asoftclip=type=tanh:threshold=0.985:output=0.985:oversample=4"
+    final_limiter = f"alimiter=limit={FINAL_TRUE_PEAK_LIMIT:.3f}:attack=5:release=50:level=false"
+    return ",".join(
+        [
+            final_softclip,
+            f"loudnorm=I={config.lufs}:TP=-1.0:LRA=11",
+            final_limiter,
+        ]
+    )
+
+
 def _adaptive_track_chain(
     config: RunConfig,
     analysis: TrackAnalysis | None,
@@ -371,6 +383,9 @@ def build_filtergraph(
         return ";\n".join(lines)
 
     music_label = mix_label
+    if config.render_style == RenderStyle.clean_playlist:
+        lines.append(f"{music_label}{_clean_playlist_master_chain(config)}[outa]")
+        return ";\n".join(lines)
     if config.adaptive_lofi:
         lines.append(f"{music_label}{_adaptive_master_chain()}[music0]")
         music_label = "[music0]"
