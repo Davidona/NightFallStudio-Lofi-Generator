@@ -6,6 +6,21 @@ from pathlib import Path
 from nightfall_mix import analysis as analysis_mod
 
 
+def test_boundary_detector_ignores_silence_inside_boundary_window() -> None:
+    # Active music, a long internal pause, then active music through the edge.
+    curve = ([0.2] * 40) + ([0.0] * 80) + ([0.2] * 80)
+    start_ms, end_ms = analysis_mod._boundary_active_range_ms(curve, 10_000)
+    assert start_ms == 0
+    assert end_ms == 10_000
+
+
+def test_boundary_detector_finds_only_leading_and_trailing_edge_silence() -> None:
+    curve = ([0.0] * 20) + ([0.2] * 160) + ([0.0] * 20)
+    start_ms, end_ms = analysis_mod._boundary_active_range_ms(curve, 10_000)
+    assert 700 <= start_ms <= 1_000
+    assert 9_000 <= end_ms <= 9_300
+
+
 def _write_sidecar(track_path: Path, payload: dict) -> Path:
     sidecar = track_path.with_name(f"{track_path.name}.nightfall_analysis.json")
     sidecar.write_text(json.dumps(payload, indent=2), encoding="utf-8")
@@ -17,9 +32,15 @@ def test_read_analysis_cache_summary_returns_cached_bpm_key(tmp_path: Path) -> N
     track.write_bytes(b"dummy")
     stat = track.stat()
     payload = {
-        "version": 1,
+        "version": analysis_mod.ANALYSIS_SIDECAR_VERSION,
         "source": {"mtime_ns": int(stat.st_mtime_ns), "size": int(stat.st_size)},
-        "computed": {"loudness": True, "bpm_key": True, "rms_edges": True},
+        "computed": {
+            "loudness": True,
+            "bpm_key": True,
+            "rms_edges": True,
+            "boundary_cues": True,
+            "beat_grid": True,
+        },
         "analysis": {
             "bpm": 74.2,
             "bpm_confidence": 0.81,
@@ -27,6 +48,9 @@ def test_read_analysis_cache_summary_returns_cached_bpm_key(tmp_path: Path) -> N
             "key_confidence": 0.73,
             "head_rms_curve": [0.1, 0.2],
             "tail_rms_curve": [0.2, 0.1],
+            "content_start_ms": 250,
+            "content_end_ms": 119500,
+            "beat_times_ms": [500, 1300],
             "loudness": {"input_i": -13.6, "measured": {"input_i": -13.6}},
             "warnings": [],
         },
@@ -38,6 +62,8 @@ def test_read_analysis_cache_summary_returns_cached_bpm_key(tmp_path: Path) -> N
     assert summary["bpm"] == 74.2
     assert summary["key"] == "A:min"
     assert summary["has_bpm_key"] is True
+    assert summary["has_boundary_cues"] is True
+    assert summary["has_beat_grid"] is True
 
 
 def test_read_analysis_cache_summary_invalidated_when_file_changes(tmp_path: Path) -> None:
@@ -45,7 +71,7 @@ def test_read_analysis_cache_summary_invalidated_when_file_changes(tmp_path: Pat
     track.write_bytes(b"dummy")
     stat = track.stat()
     payload = {
-        "version": 1,
+        "version": analysis_mod.ANALYSIS_SIDECAR_VERSION,
         "source": {"mtime_ns": int(stat.st_mtime_ns), "size": int(stat.st_size)},
         "computed": {"loudness": True, "bpm_key": False, "rms_edges": False},
         "analysis": {"loudness": {"input_i": -14.0, "measured": {"input_i": -14.0}}},
@@ -65,7 +91,7 @@ def test_analyze_track_reuses_cached_sidecar_without_remeasuring_loudness(
     track.write_bytes(b"dummy")
     stat = track.stat()
     payload = {
-        "version": 1,
+        "version": analysis_mod.ANALYSIS_SIDECAR_VERSION,
         "source": {"mtime_ns": int(stat.st_mtime_ns), "size": int(stat.st_size)},
         "computed": {"loudness": True, "bpm_key": False, "rms_edges": False},
         "analysis": {

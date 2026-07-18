@@ -364,3 +364,73 @@ def test_filtergraph_key_mask_duck_is_confined_to_transition(tmp_path: Path) -> 
     assert "lowpass=f=7800.0:t=q:w=0.707:enable='lt(t," in graph  # incoming head
     assert "lowpass=f=7800:t=q:w=0.707," not in graph  # never ungated
 
+
+def test_filtergraph_trims_to_planned_boundary_cues(tmp_path: Path) -> None:
+    songs_folder = tmp_path / "songs"
+    songs_folder.mkdir()
+    output = tmp_path / "mix.mp3"
+    t0 = _stub_track(songs_folder, "a.mp3", 30_000, "t0")
+    t1 = _stub_track(songs_folder, "b.mp3", 30_000, "t1")
+    instances = [
+        TrackInstance(instance_index=0, track=t0, cycle_index=0),
+        TrackInstance(instance_index=1, track=t1, cycle_index=0),
+    ]
+    analyses = {
+        "t0": TrackAnalysis(track_id="t0", content_start_ms=250, content_end_ms=29_200),
+        "t1": TrackAnalysis(track_id="t1", content_start_ms=800, content_end_ms=29_700),
+    }
+    plan = build_mix_plan(
+        instances=instances,
+        analyses=analyses,
+        crossfade_sec=6.0,
+        smart_crossfade=True,
+        target_duration_min=None,
+    )
+    cfg = RunConfig(songs_folder=songs_folder, output=output, smart_crossfade=True)
+    graph = build_filtergraph(
+        mix_plan=plan,
+        analyses=analyses,
+        config=cfg,
+        preset=get_preset(cfg.preset),
+        include_master=False,
+        include_rain=False,
+        per_track_processing=False,
+    )
+    assert "[0:a]atrim=start=0.250:end=29.200,asetpts=PTS-STARTPTS[s0]" in graph
+    assert "[1:a]atrim=start=0.800:end=29.700,asetpts=PTS-STARTPTS[s1]" in graph
+
+
+def test_filtergraph_applies_planned_pitch_preserving_tempo_ratio(tmp_path: Path) -> None:
+    songs_folder = tmp_path / "songs"
+    songs_folder.mkdir()
+    output = tmp_path / "mix.mp3"
+    t0 = _stub_track(songs_folder, "a.mp3", 60_000, "t0")
+    t1 = _stub_track(songs_folder, "b.mp3", 60_000, "t1")
+    instances = [
+        TrackInstance(instance_index=0, track=t0, cycle_index=0),
+        TrackInstance(instance_index=1, track=t1, cycle_index=0),
+    ]
+    analyses = {
+        "t0": TrackAnalysis(track_id="t0", bpm=80.0, bpm_confidence=0.9, content_end_ms=60_000),
+        "t1": TrackAnalysis(track_id="t1", bpm=78.0, bpm_confidence=0.9, content_end_ms=60_000),
+    }
+    plan = build_mix_plan(
+        instances=instances,
+        analyses=analyses,
+        crossfade_sec=6.0,
+        smart_crossfade=True,
+        target_duration_min=None,
+        enable_warp=True,
+        max_warp_percent=4.0,
+    )
+    cfg = RunConfig(songs_folder=songs_folder, output=output, smart_crossfade=True, enable_warp=True)
+    graph = build_filtergraph(
+        mix_plan=plan,
+        analyses=analyses,
+        config=cfg,
+        preset=get_preset(cfg.preset),
+        include_master=False,
+        include_rain=False,
+        per_track_processing=False,
+    )
+    assert "rubberband=tempo=1.025641" in graph

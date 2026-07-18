@@ -80,6 +80,8 @@ class GuiEngineService:
             crossfade_curve=settings.crossfade_curve,
             smart_ordering=settings.smart_ordering,
             smart_ordering_mode=settings.smart_ordering_mode,
+            enable_warp=settings.enable_warp,
+            max_warp_percent=settings.max_warp_percent,
             render_style=settings.render_style,
             lufs=settings.lufs,
             preset=settings.preset,
@@ -379,6 +381,8 @@ class GuiEngineService:
             crossfade_sec=config.crossfade_sec,
             smart_crossfade=config.smart_crossfade,
             target_duration_min=config.target_duration_min,
+            enable_warp=config.enable_warp,
+            max_warp_percent=config.max_warp_percent,
         )
 
     def analyze_folder(
@@ -802,6 +806,21 @@ class GuiEngineService:
                     crossfade_sec=config.crossfade_sec,
                     smart_crossfade=False,
                     target_duration_min=None,
+                )
+                # A one-track processing plan has no preceding transition, so
+                # carry the source cue and tempo decision from the full plan.
+                original_entry = session.mix_plan.timeline[idx]
+                effective_ms = max(1, original_entry.end_time_ms - original_entry.start_time_ms)
+                proc_entry = replace(
+                    original_entry,
+                    instance_index=0,
+                    start_time_ms=0,
+                    end_time_ms=effective_ms,
+                )
+                proc_plan = replace(
+                    proc_plan,
+                    timeline=[proc_entry],
+                    estimated_duration_ms=effective_ms,
                 )
                 proc_out = temp_root / f"proc_{idx:03d}.w64"
                 self._emit_log(on_log, f"Bounded render: {stage_prefix}")
@@ -1372,6 +1391,10 @@ class GuiEngineService:
                         reason=f"{reason}+fallback-concat",
                         key_distance=transition.key_distance,
                         lpf_duck_ms=None,
+                        incoming_trim_ms=transition.incoming_trim_ms,
+                        outgoing_end_ms=transition.outgoing_end_ms,
+                        beat_align_ms=transition.beat_align_ms,
+                        tempo_ratio=transition.tempo_ratio,
                     )
                 )
             else:
@@ -1383,7 +1406,15 @@ class GuiEngineService:
             if idx > 0 and idx - 1 < len(transitions):
                 cursor_ms -= transitions[idx - 1].crossfade_ms
             start = max(0, cursor_ms)
-            end = start + instance.track.duration_ms
+            previous_entry = plan.timeline[idx] if idx < len(plan.timeline) else None
+            source_start_ms = previous_entry.source_start_ms if previous_entry else 0
+            source_end_ms = (
+                previous_entry.source_end_ms
+                if previous_entry and previous_entry.source_end_ms is not None
+                else instance.track.duration_ms
+            )
+            tempo_ratio = previous_entry.tempo_ratio if previous_entry else 1.0
+            end = start + max(1, int(round((source_end_ms - source_start_ms) / tempo_ratio)))
             prev_snapshot = (
                 copy.deepcopy(plan.timeline[idx].analysis_snapshot)
                 if idx < len(plan.timeline)
@@ -1397,6 +1428,9 @@ class GuiEngineService:
                     start_time_ms=start,
                     end_time_ms=end,
                     cycle_index=instance.cycle_index,
+                    source_start_ms=source_start_ms,
+                    source_end_ms=source_end_ms,
+                    tempo_ratio=tempo_ratio,
                     analysis_snapshot=prev_snapshot,
                 )
             )

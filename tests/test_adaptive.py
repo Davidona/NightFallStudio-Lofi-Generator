@@ -147,7 +147,7 @@ def test_filtergraph_adaptive_mode_really_skips_lpf_when_requested(tmp_path: Pat
     assert "lowpass=f=9000.0" not in graph
 
 
-def test_filtergraph_places_loudnorm_before_headroom_trim(tmp_path: Path) -> None:
+def test_filtergraph_uses_rough_per_track_gain_without_second_loudnorm(tmp_path: Path) -> None:
     songs = tmp_path / "songs"
     songs.mkdir()
     output = tmp_path / "out.mp3"
@@ -165,6 +165,7 @@ def test_filtergraph_places_loudnorm_before_headroom_trim(tmp_path: Path) -> Non
             input_tp=-1.2,
             input_thresh=-26.0,
             target_offset=0.1,
+            recommended_gain_db=2.0,
             measured={
                 "input_i": -16.0,
                 "input_lra": 5.0,
@@ -190,9 +191,8 @@ def test_filtergraph_places_loudnorm_before_headroom_trim(tmp_path: Path) -> Non
         include_rain=False,
         per_track_processing=True,
     )
-    loudnorm_idx = graph.index("loudnorm=I=-14.0:TP=-1.0:LRA=11")
-    volume_idx = graph.index("volume=-3dB")
-    assert loudnorm_idx < volume_idx
+    assert "volume=2.00dB" in graph
+    assert "loudnorm=I=-14.0:TP=-1.0:LRA=11" not in graph
 
 
 def test_analyze_track_warns_when_smart_ordering_without_librosa(monkeypatch) -> None:

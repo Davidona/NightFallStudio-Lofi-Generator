@@ -3,6 +3,7 @@ from __future__ import annotations
 import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
+import math
 import re
 from typing import Optional
 
@@ -62,6 +63,10 @@ class TransitionPlan:
     reason: str
     key_distance: Optional[int] = None
     lpf_duck_ms: Optional[int] = None
+    incoming_trim_ms: int = 0
+    outgoing_end_ms: Optional[int] = None
+    beat_align_ms: int = 0
+    tempo_ratio: float = 1.0
 
 
 @dataclass
@@ -72,6 +77,9 @@ class TimelineEntry:
     start_time_ms: int
     end_time_ms: int
     cycle_index: int
+    source_start_ms: int = 0
+    source_end_ms: Optional[int] = None
+    tempo_ratio: float = 1.0
     analysis_snapshot: dict[str, Optional[float | str]] = field(default_factory=dict)
 
 
@@ -299,10 +307,95 @@ def order_sources_by_transition_fit(
     return ordered
 
 
-def _crossfade_bounds(left: TrackSource, right: TrackSource) -> tuple[int, int]:
+def _analysis_bounds(source: TrackSource, analysis: Optional[TrackAnalysis]) -> tuple[int, int]:
+    if analysis is None:
+        return 0, source.duration_ms
+    start = min(max(0, int(analysis.content_start_ms)), max(0, source.duration_ms - 1))
+    raw_end = analysis.content_end_ms if analysis.content_end_ms is not None else source.duration_ms
+    end = min(source.duration_ms, max(start + 1, int(raw_end)))
+    return start, end
+
+
+def _crossfade_bounds(
+    left: TrackSource,
+    right: TrackSource,
+    left_start_ms: int = 0,
+    left_end_ms: Optional[int] = None,
+    right_start_ms: int = 0,
+    right_end_ms: Optional[int] = None,
+) -> tuple[int, int]:
     min_ms = 500
-    max_allowed = max(min_ms, min(left.duration_ms, right.duration_ms) - 500)
+    left_available = max(1, int(left_end_ms or left.duration_ms) - left_start_ms)
+    right_available = max(1, int(right_end_ms or right.duration_ms) - right_start_ms)
+    max_allowed = max(min_ms, min(left_available, right_available) - 500)
     return min_ms, max_allowed
+
+
+def _curve_window(
+    values: list[float],
+    source_start_ms: int,
+    source_end_ms: int,
+    duration_ms: int,
+    take_tail: bool,
+) -> list[float]:
+    if not values:
+        return []
+    hop_ms = 50
+    window_total_ms = len(values) * hop_ms
+    window_origin_ms = max(0, duration_ms - window_total_ms) if take_tail else 0
+    start_idx = max(0, min(len(values), (source_start_ms - window_origin_ms) // hop_ms))
+    end_idx = max(start_idx + 1, min(len(values), int(math.ceil((source_end_ms - window_origin_ms) / hop_ms))))
+    return values[start_idx:end_idx]
+
+
+def _normalized_energy(values: list[float], reference_values: Optional[list[float]] = None) -> list[float]:
+    if not values:
+        return []
+    basis = reference_values if reference_values else values
+    ordered = sorted(max(0.0, float(value)) for value in basis)
+    reference = ordered[min(len(ordered) - 1, int(len(ordered) * 0.8))]
+    reference = max(reference, 1e-6)
+    return [min(1.5, max(0.0, value / reference)) for value in values]
+
+
+def _beat_aligned_incoming_trim(
+    left_analysis: Optional[TrackAnalysis],
+    right_analysis: Optional[TrackAnalysis],
+    left_transition_start_ms: int,
+    right_base_start_ms: int,
+    right_end_ms: int,
+    crossfade_ms: int,
+    left_tempo_ratio: float = 1.0,
+    right_tempo_ratio: float = 1.0,
+) -> tuple[int, int]:
+    if not left_analysis or not right_analysis or not left_analysis.beat_times_ms or not right_analysis.beat_times_ms:
+        return right_base_start_ms, 0
+    if not left_analysis.bpm or not right_analysis.bpm:
+        return right_base_start_ms, 0
+    if abs(left_analysis.bpm - right_analysis.bpm) / max(left_analysis.bpm, right_analysis.bpm) > 0.08:
+        return right_base_start_ms, 0
+
+    left_beats = [beat for beat in left_analysis.beat_times_ms if left_transition_start_ms <= beat]
+    right_beats = [beat for beat in right_analysis.beat_times_ms if right_base_start_ms <= beat]
+    if not left_beats or not right_beats:
+        return right_base_start_ms, 0
+
+    max_extra_trim = min(int(60_000.0 / right_analysis.bpm), 1200)
+    best: Optional[tuple[int, int]] = None
+    for left_beat in left_beats[:4]:
+        phase_ms = (left_beat - left_transition_start_ms) / left_tempo_ratio
+        if phase_ms > crossfade_ms:
+            break
+        for right_beat in right_beats[:4]:
+            candidate = int(round(right_beat - phase_ms * right_tempo_ratio))
+            extra = candidate - right_base_start_ms
+            if 0 <= extra <= max_extra_trim and right_end_ms - candidate > crossfade_ms + 500:
+                choice = (extra, candidate)
+                if best is None or choice < best:
+                    best = choice
+    if best is None:
+        return right_base_start_ms, 0
+    return best[1], best[0]
 
 
 def _smart_crossfade_ms(
@@ -311,8 +404,21 @@ def _smart_crossfade_ms(
     left_analysis: Optional[TrackAnalysis],
     right_analysis: Optional[TrackAnalysis],
     base_ms: int,
+    left_start_ms: int = 0,
+    left_end_ms: Optional[int] = None,
+    right_start_ms: int = 0,
+    right_end_ms: Optional[int] = None,
 ) -> tuple[int, str]:
-    min_ms, max_allowed = _crossfade_bounds(left, right)
+    resolved_left_end = left_end_ms if left_end_ms is not None else left.duration_ms
+    resolved_right_end = right_end_ms if right_end_ms is not None else right.duration_ms
+    min_ms, max_allowed = _crossfade_bounds(
+        left,
+        right,
+        left_start_ms=left_start_ms,
+        left_end_ms=resolved_left_end,
+        right_start_ms=right_start_ms,
+        right_end_ms=resolved_right_end,
+    )
     max_ms = 10000
     if max_allowed <= min_ms:
         return max(min_ms, min(base_ms, max_allowed)), "fixed-short-track"
@@ -334,14 +440,47 @@ def _smart_crossfade_ms(
     best_score = float("inf")
     for ms in sorted(set(candidates)):
         frames = max(1, int(ms / 50))
-        tail = left_analysis.tail_rms_curve
-        head = right_analysis.head_rms_curve
-        tail_window = tail[max(0, len(tail) - frames):]
-        head_window = head[:min(len(head), frames)]
-        tail_energy = sum(tail_window) / max(1, len(tail_window))
-        head_energy = sum(head_window) / max(1, len(head_window))
-        score = tail_energy + head_energy
-        score += 0.15 * abs(ms - base_ms) / max(base_ms, 1)
+        tail = _curve_window(
+            left_analysis.tail_rms_curve,
+            max(left_start_ms, resolved_left_end - ms),
+            resolved_left_end,
+            left.duration_ms,
+            take_tail=True,
+        )[-frames:]
+        head = _curve_window(
+            right_analysis.head_rms_curve,
+            right_start_ms,
+            min(resolved_right_end, right_start_ms + ms),
+            right.duration_ms,
+            take_tail=False,
+        )[:frames]
+        tail_norm = _normalized_energy(tail, left_analysis.tail_rms_curve)
+        head_norm = _normalized_energy(head, right_analysis.head_rms_curve)
+        sample_count = min(len(tail_norm), len(head_norm))
+        if sample_count == 0:
+            continue
+        # Approximate an equal-power crossfade and penalize holes much more
+        # strongly than busy overlaps. The former implementation minimized raw
+        # energy, which unintentionally selected quiet+quiet transitions.
+        gap_penalty = 0.0
+        collision_penalty = 0.0
+        movement_penalty = 0.0
+        previous_mix: Optional[float] = None
+        for frame_idx in range(sample_count):
+            position = frame_idx / max(1, sample_count - 1)
+            out_gain = math.cos(position * math.pi / 2.0)
+            in_gain = math.sin(position * math.pi / 2.0)
+            mixed = math.sqrt(
+                (tail_norm[-sample_count + frame_idx] * out_gain) ** 2
+                + (head_norm[frame_idx] * in_gain) ** 2
+            )
+            gap_penalty += max(0.0, 0.58 - mixed) ** 2
+            collision_penalty += max(0.0, mixed - 1.18) ** 2
+            if previous_mix is not None:
+                movement_penalty += abs(mixed - previous_mix)
+            previous_mix = mixed
+        score = (gap_penalty * 4.0 + collision_penalty + movement_penalty * 0.15) / sample_count
+        score += 0.08 * abs(ms - base_ms) / max(base_ms, 1)
         if score < best_score:
             best_score = score
             best_ms = ms
@@ -357,8 +496,8 @@ def _smart_crossfade_ms(
         nearest = min(options, key=lambda x: abs(x - best_ms))
         if abs(nearest - best_ms) <= 750:
             best_ms = max(min_ms, min(nearest, max_allowed))
-            return best_ms, "smart-rms+bpm"
-    return best_ms, "smart-rms"
+            return best_ms, "smart-energy+bpm"
+    return best_ms, "smart-energy"
 
 
 def build_mix_plan(
@@ -367,17 +506,34 @@ def build_mix_plan(
     crossfade_sec: float,
     smart_crossfade: bool,
     target_duration_min: Optional[int],
+    enable_warp: bool = False,
+    max_warp_percent: float = 4.0,
 ) -> MixPlan:
     if not instances:
         raise ValueError("cannot build mix plan with no track instances")
     base_ms = int(crossfade_sec * 1000)
     transitions: list[TransitionPlan] = []
+    tempo_ratios: list[float] = [1.0 for _ in instances]
+    source_starts: list[int] = []
+    source_ends: list[int] = []
+    for instance in instances:
+        start, end = (
+            _analysis_bounds(instance.track, analyses.get(instance.track.id))
+            if smart_crossfade
+            else (0, instance.track.duration_ms)
+        )
+        source_starts.append(start)
+        source_ends.append(end)
 
     for idx in range(len(instances) - 1):
         left = instances[idx]
         right = instances[idx + 1]
         left_analysis = analyses.get(left.track.id)
         right_analysis = analyses.get(right.track.id)
+        left_start_ms = source_starts[idx]
+        left_end_ms = source_ends[idx]
+        right_start_ms = source_starts[idx + 1]
+        right_end_ms = source_ends[idx + 1]
         dist = key_distance(left_analysis.key if left_analysis else None, right_analysis.key if right_analysis else None)
         lpf_duck_ms: Optional[int] = None
         if smart_crossfade:
@@ -387,6 +543,10 @@ def build_mix_plan(
                 left_analysis=left_analysis,
                 right_analysis=right_analysis,
                 base_ms=base_ms,
+                left_start_ms=left_start_ms,
+                left_end_ms=left_end_ms,
+                right_start_ms=right_start_ms,
+                right_end_ms=right_end_ms,
             )
             smart_used = reason.startswith("smart")
             if (
@@ -397,17 +557,79 @@ def build_mix_plan(
                 and (right_analysis.key_confidence or 0.0) >= 0.4
                 and dist >= 5
             ):
-                min_ms, max_allowed = _crossfade_bounds(left.track, right.track)
+                min_ms, max_allowed = _crossfade_bounds(
+                    left.track,
+                    right.track,
+                    left_start_ms,
+                    left_end_ms,
+                    right_start_ms,
+                    right_end_ms,
+                )
                 extended = min(crossfade_ms + 500, max_allowed)
                 if extended > crossfade_ms:
                     crossfade_ms = extended
                 lpf_duck_ms = 1200
                 reason = f"{reason}+key-mask"
         else:
-            min_ms, max_allowed = _crossfade_bounds(left.track, right.track)
+            min_ms, max_allowed = _crossfade_bounds(
+                left.track,
+                right.track,
+                left_start_ms,
+                left_end_ms,
+                right_start_ms,
+                right_end_ms,
+            )
             crossfade_ms = max(min_ms, min(base_ms, max_allowed))
             reason = "fixed"
             smart_used = False
+
+        beat_align_ms = 0
+        if smart_crossfade:
+            tempo_ratio = 1.0
+            if (
+                enable_warp
+                and left_analysis is not None
+                and right_analysis is not None
+                and left_analysis.bpm
+                and right_analysis.bpm
+                and (left_analysis.bpm_confidence or 0.0) >= 0.35
+                and (right_analysis.bpm_confidence or 0.0) >= 0.35
+            ):
+                limit = max(0.0, min(8.0, float(max_warp_percent))) / 100.0
+                effective_left_bpm = left_analysis.bpm * tempo_ratios[idx]
+                raw_ratio = effective_left_bpm / right_analysis.bpm
+                if abs(raw_ratio - 1.0) <= limit:
+                    tempo_ratio = raw_ratio
+                    tempo_ratios[idx + 1] = tempo_ratio
+                    if abs(tempo_ratio - 1.0) >= 0.001:
+                        reason = f"{reason}+tempo-match"
+                        smart_used = True
+            aligned_start_ms, beat_align_ms = _beat_aligned_incoming_trim(
+                left_analysis=left_analysis,
+                right_analysis=right_analysis,
+                left_transition_start_ms=max(
+                    left_start_ms,
+                    left_end_ms - int(round(crossfade_ms * tempo_ratios[idx])),
+                ),
+                right_base_start_ms=right_start_ms,
+                right_end_ms=right_end_ms,
+                crossfade_ms=crossfade_ms,
+                left_tempo_ratio=tempo_ratios[idx],
+                right_tempo_ratio=tempo_ratio,
+            )
+            if beat_align_ms > 0:
+                source_starts[idx + 1] = aligned_start_ms
+                right_start_ms = aligned_start_ms
+                reason = f"{reason}+beat-align"
+                smart_used = True
+
+        boundary_trimmed = (
+            left_end_ms < left.track.duration_ms
+            or right_start_ms > 0
+        )
+        if smart_crossfade and boundary_trimmed:
+            reason = f"{reason}+boundary-cues"
+            smart_used = True
 
         transitions.append(
             TransitionPlan(
@@ -418,6 +640,10 @@ def build_mix_plan(
                 reason=reason,
                 key_distance=dist,
                 lpf_duck_ms=lpf_duck_ms,
+                incoming_trim_ms=right_start_ms,
+                outgoing_end_ms=left_end_ms,
+                beat_align_ms=beat_align_ms,
+                tempo_ratio=tempo_ratios[idx + 1],
             )
         )
 
@@ -427,7 +653,11 @@ def build_mix_plan(
         if idx > 0:
             cursor_ms -= transitions[idx - 1].crossfade_ms
         start = max(0, cursor_ms)
-        end = start + instance.track.duration_ms
+        source_start_ms = source_starts[idx]
+        source_end_ms = source_ends[idx]
+        tempo_ratio = tempo_ratios[idx]
+        effective_duration_ms = max(1, int(round((source_end_ms - source_start_ms) / tempo_ratio)))
+        end = start + effective_duration_ms
         analysis = analyses.get(instance.track.id)
         timeline.append(
             TimelineEntry(
@@ -437,11 +667,16 @@ def build_mix_plan(
                 start_time_ms=start,
                 end_time_ms=end,
                 cycle_index=instance.cycle_index,
+                source_start_ms=source_start_ms,
+                source_end_ms=source_end_ms,
+                tempo_ratio=tempo_ratio,
                 analysis_snapshot={
                     "bpm": analysis.bpm if analysis else None,
                     "key": analysis.key if analysis else None,
                     "key_confidence": analysis.key_confidence if analysis else None,
                     "loudness_i": analysis.loudness.input_i if analysis else None,
+                    "content_start_ms": analysis.content_start_ms if analysis else 0,
+                    "content_end_ms": analysis.content_end_ms if analysis else instance.track.duration_ms,
                 },
             )
         )

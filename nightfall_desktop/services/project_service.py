@@ -242,6 +242,8 @@ def save_project_file(path: Path, settings: GuiSettings, ordered_paths: list[Pat
             "smart_crossfade": settings.smart_crossfade,
             "smart_ordering": settings.smart_ordering,
             "smart_ordering_mode": settings.smart_ordering_mode.value,
+            "enable_warp": settings.enable_warp,
+            "max_warp_percent": settings.max_warp_percent,
             "preview_mode": settings.preview_mode,
             "preview_duration_sec": settings.preview_duration_sec,
             "workspace_mode": settings.workspace_mode.value,
@@ -342,6 +344,8 @@ def load_project_file(path: Path) -> tuple[GuiSettings, list[Path]]:
             settings.get("smart_ordering_mode"),
             SmartOrderingMode.bpm_key_balanced,
         ),
+        enable_warp=_as_bool(settings.get("enable_warp", False), False),
+        max_warp_percent=max(0.0, min(8.0, _as_float(settings.get("max_warp_percent", 4.0), 4.0))),
         preview_mode=_as_bool(settings.get("preview_mode", False), False),
         preview_duration_sec=_as_float(settings.get("preview_duration_sec", 60.0), 60.0),
         workspace_mode=_parse_enum(

@@ -79,6 +79,8 @@ class GuiSettings:
     smart_crossfade: bool = True
     smart_ordering: bool = False
     smart_ordering_mode: SmartOrderingMode = SmartOrderingMode.bpm_key_balanced
+    enable_warp: bool = False
+    max_warp_percent: float = 4.0
     preview_mode: bool = False
     preview_duration_sec: float = 60.0
     workspace_mode: WorkspaceMode = WorkspaceMode.advanced

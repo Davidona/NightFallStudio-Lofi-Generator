@@ -23,7 +23,11 @@ except Exception:  # pragma: no cover - environment dependent
     LIBROSA_AVAILABLE = False
 
 EPS = 1e-12
-ANALYSIS_SIDECAR_VERSION = 1
+ANALYSIS_SIDECAR_VERSION = 2
+BOUNDARY_WINDOW_SEC = 30.0
+BOUNDARY_HOP_SEC = 0.05
+MIN_BOUNDARY_SILENCE_MS = 250
+BOUNDARY_SAFETY_PAD_MS = 150
 
 
 @dataclass
@@ -69,6 +73,9 @@ class TrackAnalysis:
     key_confidence: Optional[float] = None
     tail_rms_curve: list[float] = field(default_factory=list)
     head_rms_curve: list[float] = field(default_factory=list)
+    content_start_ms: int = 0
+    content_end_ms: Optional[int] = None
+    beat_times_ms: list[int] = field(default_factory=list)
     loudness: LoudnessStats = field(default_factory=LoudnessStats)
     adaptive_metrics: Optional[AdaptiveMetrics] = None
     adaptive_processing: Optional[AdaptiveProcessing] = None
@@ -128,6 +135,52 @@ def _rms_curve(y: np.ndarray, sr: int, hop_sec: float = 0.05) -> list[float]:
         y = np.pad(y, (0, frame - len(y)))
     rms = librosa.feature.rms(y=y, frame_length=frame, hop_length=hop).flatten()
     return [float(v) for v in rms]
+
+
+def _boundary_active_range_ms(
+    rms_curve: list[float],
+    window_duration_ms: int,
+) -> tuple[int, int]:
+    """Return the active range inside one boundary window.
+
+    This intentionally knows nothing about the middle of a track. It is called
+    only for the decoded head and tail windows, so an internal breakdown or
+    pause can never become a trim point.
+    """
+    if not rms_curve or window_duration_ms <= 0:
+        return 0, max(0, window_duration_ms)
+
+    values = np.asarray(rms_curve, dtype=np.float64)
+    reference = float(np.percentile(values, 80))
+    # Require a meaningful absolute signal while adapting to quiet masters.
+    threshold = max(10.0 ** (-52.0 / 20.0), reference * (10.0 ** (-28.0 / 20.0)))
+    active = values >= threshold
+    # Reject isolated clicks: require roughly 150 ms of nearby activity.
+    run_frames = max(2, int(round(0.15 / BOUNDARY_HOP_SEC)))
+    kernel = np.ones(run_frames, dtype=np.int16)
+    sustained = np.convolve(active.astype(np.int16), kernel, mode="same") >= max(2, run_frames - 1)
+    indices = np.flatnonzero(sustained)
+    if indices.size == 0:
+        return 0, max(0, window_duration_ms)
+
+    first_ms = max(0, int(indices[0] * BOUNDARY_HOP_SEC * 1000) - BOUNDARY_SAFETY_PAD_MS)
+    last_ms = min(
+        window_duration_ms,
+        int((indices[-1] + 1) * BOUNDARY_HOP_SEC * 1000) + BOUNDARY_SAFETY_PAD_MS,
+    )
+    if first_ms < MIN_BOUNDARY_SILENCE_MS:
+        first_ms = 0
+    if window_duration_ms - last_ms < MIN_BOUNDARY_SILENCE_MS:
+        last_ms = window_duration_ms
+    return first_ms, max(first_ms + 1, last_ms)
+
+
+def _detect_beat_times_ms(y: np.ndarray, sr: int, offset_sec: float = 0.0) -> list[int]:
+    if y.size == 0:
+        return []
+    _tempo, beats = librosa.beat.beat_track(y=y, sr=sr)
+    times = librosa.frames_to_time(beats, sr=sr)
+    return [int(round((offset_sec + float(value)) * 1000.0)) for value in times]
 
 
 def _detect_key(y: np.ndarray, sr: int) -> tuple[Optional[str], Optional[float]]:
@@ -229,7 +282,7 @@ def _load_analysis_sidecar(
     track_id: str,
     path: Path,
     target_lufs: float,
-) -> Optional[tuple[TrackAnalysis, bool, bool, bool]]:
+) -> Optional[tuple[TrackAnalysis, bool, bool, bool, bool, bool]]:
     sidecar = _analysis_sidecar_path(path)
     if not sidecar.exists():
         return None
@@ -250,6 +303,8 @@ def _load_analysis_sidecar(
     loudness_done = bool(computed.get("loudness"))
     bpm_key_done = bool(computed.get("bpm_key"))
     rms_edges_done = bool(computed.get("rms_edges"))
+    boundary_cues_done = bool(computed.get("boundary_cues"))
+    beat_grid_done = bool(computed.get("beat_grid"))
 
     analysis_payload = payload.get("analysis", {})
     analysis = TrackAnalysis(track_id=track_id)
@@ -259,6 +314,14 @@ def _load_analysis_sidecar(
     analysis.key_confidence = _coerce_optional_float(analysis_payload.get("key_confidence"))
     analysis.head_rms_curve = _coerce_float_list(analysis_payload.get("head_rms_curve"))
     analysis.tail_rms_curve = _coerce_float_list(analysis_payload.get("tail_rms_curve"))
+    analysis.content_start_ms = int(_coerce_optional_float(analysis_payload.get("content_start_ms")) or 0)
+    analysis.content_end_ms = (
+        int(value) if (value := _coerce_optional_float(analysis_payload.get("content_end_ms"))) is not None else None
+    )
+    analysis.beat_times_ms = [
+        int(value) for value in _coerce_float_list(analysis_payload.get("beat_times_ms"))
+        if value >= 0
+    ]
 
     loudness_payload = analysis_payload.get("loudness", {})
     if isinstance(loudness_payload, dict):
@@ -288,7 +351,7 @@ def _load_analysis_sidecar(
     if isinstance(warnings_payload, list):
         analysis.warnings = [str(item) for item in warnings_payload if isinstance(item, str)]
 
-    return analysis, loudness_done, bpm_key_done, rms_edges_done
+    return analysis, loudness_done, bpm_key_done, rms_edges_done, boundary_cues_done, beat_grid_done
 
 
 def _save_analysis_sidecar(
@@ -297,6 +360,8 @@ def _save_analysis_sidecar(
     loudness_done: bool,
     bpm_key_done: bool,
     rms_edges_done: bool,
+    boundary_cues_done: bool = False,
+    beat_grid_done: bool = False,
 ) -> None:
     sidecar = _analysis_sidecar_path(path)
     payload = {
@@ -306,6 +371,8 @@ def _save_analysis_sidecar(
             "loudness": bool(loudness_done),
             "bpm_key": bool(bpm_key_done),
             "rms_edges": bool(rms_edges_done),
+            "boundary_cues": bool(boundary_cues_done),
+            "beat_grid": bool(beat_grid_done),
         },
         "analysis": {
             "bpm": analysis.bpm,
@@ -314,6 +381,9 @@ def _save_analysis_sidecar(
             "key_confidence": analysis.key_confidence,
             "head_rms_curve": analysis.head_rms_curve,
             "tail_rms_curve": analysis.tail_rms_curve,
+            "content_start_ms": analysis.content_start_ms,
+            "content_end_ms": analysis.content_end_ms,
+            "beat_times_ms": analysis.beat_times_ms,
             "loudness": {
                 "input_i": analysis.loudness.input_i,
                 "input_tp": analysis.loudness.input_tp,
@@ -389,6 +459,8 @@ def read_analysis_cache_summary(path: Path) -> Optional[dict[str, Any]]:
         "has_loudness": bool(computed.get("loudness")),
         "has_bpm_key": bool(computed.get("bpm_key")),
         "has_rms_edges": bool(computed.get("rms_edges")),
+        "has_boundary_cues": bool(computed.get("boundary_cues")),
+        "has_beat_grid": bool(computed.get("beat_grid")),
         "has_adaptive_metrics": has_adaptive_metrics,
     }
 
@@ -742,15 +814,26 @@ def analyze_track(
 ) -> TrackAnalysis:
     need_bpm_key = smart_crossfade or smart_ordering
     need_rms_edges = smart_crossfade
+    need_boundary_cues = smart_crossfade
+    need_beat_grid = smart_crossfade
 
     cached = _load_analysis_sidecar(track_id=track_id, path=path, target_lufs=target_lufs)
     if cached is not None:
-        analysis, loudness_done, bpm_key_done, rms_edges_done = cached
+        (
+            analysis,
+            loudness_done,
+            bpm_key_done,
+            rms_edges_done,
+            boundary_cues_done,
+            beat_grid_done,
+        ) = cached
     else:
         analysis = TrackAnalysis(track_id=track_id)
         loudness_done = False
         bpm_key_done = False
         rms_edges_done = False
+        boundary_cues_done = False
+        beat_grid_done = False
 
     if not loudness_done:
         try:
@@ -769,12 +852,14 @@ def analyze_track(
                 loudness_done=loudness_done,
                 bpm_key_done=bpm_key_done,
                 rms_edges_done=rms_edges_done,
+                boundary_cues_done=boundary_cues_done,
+                beat_grid_done=beat_grid_done,
             )
         except Exception:
             pass
         return analysis
 
-    if not need_bpm_key and not need_rms_edges:
+    if not need_bpm_key and not need_rms_edges and not need_boundary_cues and not need_beat_grid:
         try:
             _save_analysis_sidecar(
                 path=path,
@@ -782,22 +867,39 @@ def analyze_track(
                 loudness_done=loudness_done,
                 bpm_key_done=bpm_key_done,
                 rms_edges_done=rms_edges_done,
+                boundary_cues_done=boundary_cues_done,
+                beat_grid_done=beat_grid_done,
             )
         except Exception:
             pass
         return analysis
 
     sr = 22050
-    if need_rms_edges and not rms_edges_done:
+    if (need_rms_edges and not rms_edges_done) or (need_boundary_cues and not boundary_cues_done):
         try:
-            edge_sec = min(15.0, max(1.0, duration_ms / 1000.0))
+            duration_sec = max(0.001, duration_ms / 1000.0)
+            edge_sec = min(BOUNDARY_WINDOW_SEC, max(1.0, duration_sec))
             y_head, _ = librosa.load(path.as_posix(), sr=sr, mono=True, duration=edge_sec)
             analysis.head_rms_curve = _rms_curve(y_head, sr=sr)
 
-            offset_sec = max(0.0, duration_ms / 1000.0 - edge_sec)
+            offset_sec = max(0.0, duration_sec - edge_sec)
             y_tail, _ = librosa.load(path.as_posix(), sr=sr, mono=True, offset=offset_sec, duration=edge_sec)
             analysis.tail_rms_curve = _rms_curve(y_tail, sr=sr)
+            head_duration_ms = min(duration_ms, int(round(len(y_head) / sr * 1000.0)))
+            tail_duration_ms = min(duration_ms, int(round(len(y_tail) / sr * 1000.0)))
+            head_start_ms, _head_end_ms = _boundary_active_range_ms(
+                analysis.head_rms_curve,
+                head_duration_ms,
+            )
+            _tail_start_ms, tail_end_ms = _boundary_active_range_ms(
+                analysis.tail_rms_curve,
+                tail_duration_ms,
+            )
+            tail_offset_ms = max(0, duration_ms - tail_duration_ms)
+            analysis.content_start_ms = min(max(0, head_start_ms), max(0, duration_ms - 1))
+            analysis.content_end_ms = min(duration_ms, max(analysis.content_start_ms + 1, tail_offset_ms + tail_end_ms))
             rms_edges_done = True
+            boundary_cues_done = True
         except Exception as exc:
             analysis.warnings.append(f"rms edge analysis failed for {path.name}: {exc}")
 
@@ -815,6 +917,22 @@ def analyze_track(
         except Exception as exc:
             analysis.warnings.append(f"bpm/key analysis failed for {path.name}: {exc}")
 
+    if need_beat_grid and not beat_grid_done:
+        try:
+            duration_sec = max(0.001, duration_ms / 1000.0)
+            edge_sec = min(BOUNDARY_WINDOW_SEC, duration_sec)
+            y_head, _ = librosa.load(path.as_posix(), sr=sr, mono=True, duration=edge_sec)
+            tail_offset_sec = max(0.0, duration_sec - edge_sec)
+            y_tail, _ = librosa.load(
+                path.as_posix(), sr=sr, mono=True, offset=tail_offset_sec, duration=edge_sec
+            )
+            beats = _detect_beat_times_ms(y_head, sr=sr)
+            beats.extend(_detect_beat_times_ms(y_tail, sr=sr, offset_sec=tail_offset_sec))
+            analysis.beat_times_ms = sorted({beat for beat in beats if 0 <= beat <= duration_ms})
+            beat_grid_done = True
+        except Exception as exc:
+            analysis.warnings.append(f"beat-grid analysis failed for {path.name}: {exc}")
+
     if analysis.bpm is not None and analysis.bpm <= 0:
         analysis.bpm = None
         analysis.bpm_confidence = None
@@ -829,6 +947,8 @@ def analyze_track(
             loudness_done=loudness_done,
             bpm_key_done=bpm_key_done,
             rms_edges_done=rms_edges_done,
+            boundary_cues_done=boundary_cues_done,
+            beat_grid_done=beat_grid_done,
         )
     except Exception as exc:
         logger.warning("analysis sidecar write failed for %s: %s", path.name, exc)

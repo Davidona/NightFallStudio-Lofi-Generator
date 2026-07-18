@@ -89,6 +89,7 @@ class RunConfig(BaseModel):
     rain_preserve_low_drops: bool = True
     mix_log: Optional[Path] = None
     enable_warp: bool = False
+    max_warp_percent: float = 4.0
     output_format: OutputFormat = OutputFormat.auto
     bitrate: str = "192k"
     strict_analysis: bool = False
@@ -129,6 +130,13 @@ class RunConfig(BaseModel):
     def validate_lufs(cls, value: float) -> float:
         if not -30.0 <= value <= -5.0:
             raise ValueError("LUFS target must be between -30 and -5")
+        return value
+
+    @field_validator("max_warp_percent")
+    @classmethod
+    def validate_max_warp_percent(cls, value: float) -> float:
+        if not 0.0 <= value <= 8.0:
+            raise ValueError("max warp percent must be between 0 and 8")
         return value
 
     @field_validator("rain_level_db")

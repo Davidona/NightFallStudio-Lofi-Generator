@@ -360,7 +360,21 @@ def build_filtergraph(
             mix_plan.transitions[idx - 1] if idx > 0 and idx - 1 < len(mix_plan.transitions) else None
         )
         transition_out = mix_plan.transitions[idx] if idx < len(mix_plan.transitions) else None
-        track_len_sec = max(0.1, instance.track.duration_ms / 1000.0)
+        timeline_entry = mix_plan.timeline[idx] if idx < len(mix_plan.timeline) else None
+        source_start_sec = max(0.0, (timeline_entry.source_start_ms if timeline_entry else 0) / 1000.0)
+        raw_source_end_ms = timeline_entry.source_end_ms if timeline_entry else instance.track.duration_ms
+        source_end_sec = max(source_start_sec + 0.001, (raw_source_end_ms or instance.track.duration_ms) / 1000.0)
+        track_len_sec = max(0.1, source_end_sec - source_start_sec)
+        source_label = f"[s{idx}]"
+        tempo_step = (
+            f",rubberband=tempo={timeline_entry.tempo_ratio:.6f}"
+            if timeline_entry and abs(timeline_entry.tempo_ratio - 1.0) >= 0.001
+            else ""
+        )
+        lines.append(
+            f"[{idx}:a]atrim=start={source_start_sec:.3f}:end={source_end_sec:.3f},"
+            f"asetpts=PTS-STARTPTS{tempo_step}{source_label}"
+        )
         duck_in_sec = (
             transition_in.crossfade_ms / 1000.0
             if transition_in and transition_in.lpf_duck_ms
@@ -383,13 +397,13 @@ def build_filtergraph(
                     duck_out_sec=duck_out_sec,
                     track_len_sec=track_len_sec,
                 )
-                lines.append(f"[{idx}:a]{chain}[tp{idx}]")
+                lines.append(f"{source_label}{chain}[tp{idx}]")
                 processed_label = "[tp{idx}]".format(idx=idx)
                 current_label = _add_noise_layers(
                     lines=lines,
                     input_label=processed_label,
                     output_prefix=f"t{idx}_",
-                    duration_sec=max(0.1, instance.track.duration_ms / 1000.0),
+                    duration_sec=track_len_sec,
                     vinyl_db=vinyl_db,
                     hiss_db=hiss_db,
                     seed_base=10_000 + (idx * 10),
@@ -403,9 +417,9 @@ def build_filtergraph(
                     duck_out_sec=duck_out_sec,
                     track_len_sec=track_len_sec,
                 )
-                lines.append(f"[{idx}:a]{chain}{out_label}")
+                lines.append(f"{source_label}{chain}{out_label}")
         else:
-            lines.append(f"[{idx}:a]anull{out_label}")
+            lines.append(f"{source_label}anull{out_label}")
 
     if len(mix_plan.instances) == 1:
         mix_label = "[mix0]"

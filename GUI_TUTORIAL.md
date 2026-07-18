@@ -99,9 +99,16 @@ Core pipeline:
 
 `Smart Crossfade`
 1. Enables transition-level analysis for overlap length selection.
-2. Uses RMS edge curves (and BPM confidence when available) to prefer smoother joins.
-3. Can extend transition and add LPF ducking behavior on harmonically distant transitions (key-mask path).
-4. OFF means fixed overlap from `Crossfade (s)` (still clamped for short tracks).
+2. Examines only the beginning and ending boundary windows; silence in the middle of a song is never used as a cue point.
+3. Trims meaningful leading/trailing boundary silence, balances overlap energy, and aligns nearby beat grids when confidence permits.
+4. Can extend transition and add LPF ducking behavior on harmonically distant transitions (key-mask path).
+5. OFF means fixed overlap from `Crossfade (s)` with no smart cue trimming (still clamped for short tracks).
+
+`Gentle Tempo Match`
+1. Optional and OFF by default.
+2. Pitch-preserving time stretch is applied only when adjacent BPMs are already within the selected maximum percentage.
+3. Keep the cap around 3-4% for subtle results; higher values can change the song's feel or reveal artifacts.
+4. Requires an FFmpeg build with the `rubberband` audio filter.
 
 `Smart Ordering`
 1. Reorders initial track list by BPM/key proximity at analysis time.
@@ -441,8 +448,9 @@ Preview seek bar:
 1. Playback is preview-file based, not true real-time DSP streaming.
 2. `Short Preview` and `Full Preview` rerun render logic before playback.
 3. Smart ordering is applied during analysis, not continuously while editing.
-4. Size estimation is approximate and codec/container overhead can differ.
-5. Storage checks are estimates, not exact byte-for-byte guarantees.
+4. Smart cue/beat data uses analysis cache version 2, so tracks analyzed by an older build are reanalyzed once.
+5. Size estimation is approximate and codec/container overhead can differ.
+6. Storage checks are estimates, not exact byte-for-byte guarantees.
 
 ## 12. MP3 Splitter tab
 

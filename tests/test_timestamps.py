@@ -73,3 +73,94 @@ def test_smart_crossfade_without_analysis_respects_low_values(crossfade_sec: flo
     )
     assert plan.transitions[0].crossfade_ms == int(crossfade_sec * 1000)
     assert plan.transitions[0].reason == "fixed-no-analysis"
+
+
+def test_smart_plan_trims_only_analyzed_track_boundaries() -> None:
+    tracks = [_source(0, 30_000), _source(1, 30_000)]
+    instances = [TrackInstance(instance_index=i, track=t, cycle_index=0) for i, t in enumerate(tracks)]
+    analyses = {
+        "t0": TrackAnalysis(track_id="t0", content_start_ms=400, content_end_ms=29_000),
+        "t1": TrackAnalysis(track_id="t1", content_start_ms=700, content_end_ms=29_500),
+    }
+
+    plan = build_mix_plan(
+        instances=instances,
+        analyses=analyses,
+        crossfade_sec=6.0,
+        smart_crossfade=True,
+        target_duration_min=None,
+    )
+
+    assert plan.timeline[0].source_start_ms == 400
+    assert plan.timeline[0].source_end_ms == 29_000
+    assert plan.timeline[1].source_start_ms == 700
+    assert plan.timeline[1].source_end_ms == 29_500
+    assert plan.estimated_duration_ms == (28_600 + 28_800 - 6_000)
+    assert "boundary-cues" in plan.transitions[0].reason
+
+
+def test_smart_plan_aligns_nearby_beat_grids_by_trimming_incoming_head() -> None:
+    tracks = [_source(0, 30_000), _source(1, 30_000)]
+    instances = [TrackInstance(instance_index=i, track=t, cycle_index=0) for i, t in enumerate(tracks)]
+    analyses = {
+        "t0": TrackAnalysis(
+            track_id="t0",
+            bpm=60.0,
+            bpm_confidence=0.9,
+            content_end_ms=29_000,
+            beat_times_ms=[23_500, 24_500, 25_500],
+        ),
+        "t1": TrackAnalysis(
+            track_id="t1",
+            bpm=60.0,
+            bpm_confidence=0.9,
+            content_start_ms=1_000,
+            content_end_ms=30_000,
+            beat_times_ms=[2_000, 3_000, 4_000],
+        ),
+    }
+
+    plan = build_mix_plan(
+        instances=instances,
+        analyses=analyses,
+        crossfade_sec=6.0,
+        smart_crossfade=True,
+        target_duration_min=None,
+    )
+
+    transition = plan.transitions[0]
+    assert transition.beat_align_ms == 500
+    assert transition.incoming_trim_ms == 1_500
+    assert plan.timeline[1].source_start_ms == 1_500
+    assert "beat-align" in transition.reason
+
+
+def test_tempo_matching_is_bounded_and_opt_in() -> None:
+    tracks = [_source(0, 60_000), _source(1, 60_000)]
+    instances = [TrackInstance(instance_index=i, track=t, cycle_index=0) for i, t in enumerate(tracks)]
+    analyses = {
+        "t0": TrackAnalysis(track_id="t0", bpm=80.0, bpm_confidence=0.9, content_end_ms=60_000),
+        "t1": TrackAnalysis(track_id="t1", bpm=78.0, bpm_confidence=0.9, content_end_ms=60_000),
+    }
+
+    unchanged = build_mix_plan(
+        instances=instances,
+        analyses=analyses,
+        crossfade_sec=6.0,
+        smart_crossfade=True,
+        target_duration_min=None,
+    )
+    matched = build_mix_plan(
+        instances=instances,
+        analyses=analyses,
+        crossfade_sec=6.0,
+        smart_crossfade=True,
+        target_duration_min=None,
+        enable_warp=True,
+        max_warp_percent=4.0,
+    )
+
+    assert unchanged.timeline[1].tempo_ratio == 1.0
+    assert matched.timeline[1].tempo_ratio == pytest.approx(80.0 / 78.0)
+    assert "tempo-match" in matched.transitions[0].reason
+    assert matched.timeline[1].end_time_ms < unchanged.timeline[1].end_time_ms

@@ -19,6 +19,8 @@ def test_project_save_load_roundtrip(tmp_path: Path) -> None:
         adaptive_lofi=True,
         smart_ordering=True,
         smart_ordering_mode=SmartOrderingMode.bpm_first,
+        enable_warp=True,
+        max_warp_percent=3.5,
         output_chunks_enabled=True,
         output_chunk_minutes=15,
         target_duration_min=120,
@@ -50,6 +52,8 @@ def test_project_save_load_roundtrip(tmp_path: Path) -> None:
     assert loaded.adaptive_lofi is True
     assert loaded.smart_ordering is True
     assert loaded.smart_ordering_mode == SmartOrderingMode.bpm_first
+    assert loaded.enable_warp is True
+    assert loaded.max_warp_percent == 3.5
     assert loaded.output_chunks_enabled is True
     assert loaded.output_chunk_minutes == 15
     assert loaded.workspace_mode == WorkspaceMode.simple
