@@ -1,113 +1,413 @@
 [
   {
-    "track": "Teahouse in Dusk.mp3",
+    "track": "Bosphorus Thread.mp3",
     "metrics": {
-      "lufs": -14.76,
-      "crest_factor_db": 16.06359764378724,
-      "spectral_centroid_hz": 269.1464280416362,
-      "rolloff_hz": 691.754150390625,
-      "stereo_width": 0.33910435884122053,
-      "noise_floor_dbfs": -27.94549909387245
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.339,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 692Hz), compression increased (crest 16.1dB), stereo unchanged (0.34), noise skipped (floor -27.9dBFS)"
-  },
-  {
-    "track": "Santur & Smoke.mp3",
-    "metrics": {
-      "lufs": -13.94,
-      "crest_factor_db": 16.179734571533153,
-      "spectral_centroid_hz": 284.7643011505785,
-      "rolloff_hz": 683.67919921875,
-      "stereo_width": 0.44459084971953466,
-      "noise_floor_dbfs": -26.270584764404298
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.445,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 684Hz), compression increased (crest 16.2dB), stereo unchanged (0.44), noise skipped (floor -26.3dBFS)"
-  },
-  {
-    "track": "Velvet Strings of Tehran.mp3",
-    "metrics": {
-      "lufs": -14.14,
-      "crest_factor_db": 16.092405282361756,
-      "spectral_centroid_hz": 243.13190396200062,
-      "rolloff_hz": 656.7626953125,
-      "stereo_width": 0.4421103876892746,
-      "noise_floor_dbfs": -27.69176048562362
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.442,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 657Hz), compression increased (crest 16.1dB), stereo unchanged (0.44), noise skipped (floor -27.7dBFS)"
-  },
-  {
-    "track": "Ancient Strings, Modern Silence.mp3",
-    "metrics": {
-      "lufs": -13.07,
-      "crest_factor_db": 14.31471746355177,
-      "spectral_centroid_hz": 290.4136149615641,
-      "rolloff_hz": 662.14599609375,
-      "stereo_width": 0.37900870583701196,
-      "noise_floor_dbfs": -24.987472830251676
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.379,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 662Hz), compression increased (crest 14.3dB), stereo unchanged (0.38), noise skipped (floor -25.0dBFS)"
-  },
-  {
-    "track": "Whispers of Santur.mp3",
-    "metrics": {
-      "lufs": -14.46,
-      "crest_factor_db": 15.551125053389926,
-      "spectral_centroid_hz": 311.774351445481,
-      "rolloff_hz": 707.904052734375,
-      "stereo_width": 0.3937721070772866,
-      "noise_floor_dbfs": -25.56580972421373
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.394,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 708Hz), compression increased (crest 15.6dB), stereo unchanged (0.39), noise skipped (floor -25.6dBFS)"
-  },
-  {
-    "track": "Tehran Afternoon Walk.mp3",
-    "metrics": {
-      "lufs": -13.54,
-      "crest_factor_db": 14.219276643704037,
-      "spectral_centroid_hz": 250.3432238256169,
+      "lufs": -13.22,
+      "crest_factor_db": 13.968948791426135,
+      "spectral_centroid_hz": 286.65262653333275,
       "rolloff_hz": 672.91259765625,
-      "stereo_width": 0.35984816390383173,
-      "noise_floor_dbfs": -25.11416343007403
+      "stereo_width": 0.32119532146577623,
+      "noise_floor_dbfs": -22.496235651840454
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.975,
+      "stereo_width_target": 0.321,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.87
+    },
+    "rationale": "LPF skipped (rolloff 673Hz), compression moderate (crest 14.0dB), stereo unchanged (0.32), noise skipped (floor -22.5dBFS)"
+  },
+  {
+    "track": "Café Before Noon.mp3",
+    "metrics": {
+      "lufs": -13.22,
+      "crest_factor_db": 14.733938741920404,
+      "spectral_centroid_hz": 257.4215582752268,
+      "rolloff_hz": 823.64501953125,
+      "stereo_width": 0.3753293616940031,
+      "noise_floor_dbfs": -22.766165544543476
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.375,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 824Hz), compression increased (crest 14.7dB), stereo unchanged (0.38), noise skipped (floor -22.8dBFS)"
+  },
+  {
+    "track": "Thirteen Shadows.mp3",
+    "metrics": {
+      "lufs": -13.66,
+      "crest_factor_db": 13.700884714306708,
+      "spectral_centroid_hz": 300.24141961615106,
+      "rolloff_hz": 880.169677734375,
+      "stereo_width": 0.2639605299879493,
+      "noise_floor_dbfs": -23.836594546929103
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.264,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.75
+    },
+    "rationale": "LPF skipped (rolloff 880Hz), compression moderate (crest 13.7dB), stereo unchanged (0.26), noise skipped (floor -23.8dBFS)"
+  },
+  {
+    "track": "İpek Kanun.mp3",
+    "metrics": {
+      "lufs": -14.02,
+      "crest_factor_db": 13.52137066824182,
+      "spectral_centroid_hz": 229.2953684039702,
+      "rolloff_hz": 627.154541015625,
+      "stereo_width": 0.2583747346204741,
+      "noise_floor_dbfs": -22.03581446182939
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.258,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.01
+    },
+    "rationale": "LPF skipped (rolloff 627Hz), compression moderate (crest 13.5dB), stereo unchanged (0.26), noise skipped (floor -22.0dBFS)"
+  },
+  {
+    "track": "Steps Through the Old Quarter.mp3",
+    "metrics": {
+      "lufs": -13.16,
+      "crest_factor_db": 13.797648418183629,
+      "spectral_centroid_hz": 246.91887084493501,
+      "rolloff_hz": 662.14599609375,
+      "stereo_width": 0.3057713633011218,
+      "noise_floor_dbfs": -21.53324027320855
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.306,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.16
+    },
+    "rationale": "LPF skipped (rolloff 662Hz), compression moderate (crest 13.8dB), stereo unchanged (0.31), noise skipped (floor -21.5dBFS)"
+  },
+  {
+    "track": "Unfinished Letters.mp3",
+    "metrics": {
+      "lufs": -13.22,
+      "crest_factor_db": 14.058650394383312,
+      "spectral_centroid_hz": 251.31749881620723,
+      "rolloff_hz": 662.14599609375,
+      "stereo_width": 0.3052182692919361,
+      "noise_floor_dbfs": -23.718637602522456
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.305,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 662Hz), compression increased (crest 14.1dB), stereo unchanged (0.31), noise skipped (floor -23.7dBFS)"
+  },
+  {
+    "track": "Anatolian Whisper.mp3",
+    "metrics": {
+      "lufs": -13.74,
+      "crest_factor_db": 13.563471215089614,
+      "spectral_centroid_hz": 221.31761601144024,
+      "rolloff_hz": 667.529296875,
+      "stereo_width": 0.363230779573102,
+      "noise_floor_dbfs": -23.97497855190258
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.363,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.18
+    },
+    "rationale": "LPF skipped (rolloff 668Hz), compression moderate (crest 13.6dB), stereo unchanged (0.36), noise skipped (floor -24.0dBFS)"
+  },
+  {
+    "track": "The Bağlama Replies.mp3",
+    "metrics": {
+      "lufs": -13.87,
+      "crest_factor_db": 13.983108560052607,
+      "spectral_centroid_hz": 243.90954558240662,
+      "rolloff_hz": 683.67919921875,
+      "stereo_width": 0.3529382822477033,
+      "noise_floor_dbfs": -24.19378829257989
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.975,
+      "stereo_width_target": 0.353,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.93
+    },
+    "rationale": "LPF skipped (rolloff 684Hz), compression moderate (crest 14.0dB), stereo unchanged (0.35), noise skipped (floor -24.2dBFS)"
+  },
+  {
+    "track": "The Road Turns East.mp3",
+    "metrics": {
+      "lufs": -13.75,
+      "crest_factor_db": 13.180460261734497,
+      "spectral_centroid_hz": 226.89816595790003,
+      "rolloff_hz": 586.77978515625,
+      "stereo_width": 0.35766643948153204,
+      "noise_floor_dbfs": -23.869972329522888
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.972,
+      "stereo_width_target": 0.358,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.59
+    },
+    "rationale": "LPF skipped (rolloff 587Hz), compression moderate (crest 13.2dB), stereo unchanged (0.36), noise skipped (floor -23.9dBFS)"
+  },
+  {
+    "track": "Bosphorus After Hours.mp3",
+    "metrics": {
+      "lufs": -14.39,
+      "crest_factor_db": 15.309815445619401,
+      "spectral_centroid_hz": 307.23448341784683,
+      "rolloff_hz": 990.52734375,
+      "stereo_width": 0.4642298163853631,
+      "noise_floor_dbfs": -22.707448326004172
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.464,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 991Hz), compression increased (crest 15.3dB), stereo unchanged (0.46), noise skipped (floor -22.7dBFS)"
+  },
+  {
+    "track": "Mavi Hanımeli.mp3",
+    "metrics": {
+      "lufs": -13.77,
+      "crest_factor_db": 13.828541443608993,
+      "spectral_centroid_hz": 237.58705762723199,
+      "rolloff_hz": 662.14599609375,
+      "stereo_width": 0.3432716521361627,
+      "noise_floor_dbfs": -23.6773468111217
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.343,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.29
+    },
+    "rationale": "LPF skipped (rolloff 662Hz), compression moderate (crest 13.8dB), stereo unchanged (0.34), noise skipped (floor -23.7dBFS)"
+  },
+  {
+    "track": "Makam in Motion.mp3",
+    "metrics": {
+      "lufs": -12.67,
+      "crest_factor_db": 12.99648106834377,
+      "spectral_centroid_hz": 227.28813089547447,
+      "rolloff_hz": 605.621337890625,
+      "stereo_width": 0.28452038218691,
+      "noise_floor_dbfs": -22.81147470317113
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.285,
+      "noise_added_db": null,
+      "lofi_needed_score": 20.82
+    },
+    "rationale": "LPF skipped (rolloff 606Hz), compression moderate (crest 13.0dB), stereo unchanged (0.28), noise skipped (floor -22.8dBFS)"
+  },
+  {
+    "track": "Between Two Shores.mp3",
+    "metrics": {
+      "lufs": -14.61,
+      "crest_factor_db": 15.813069630048886,
+      "spectral_centroid_hz": 331.2684664585952,
+      "rolloff_hz": 880.169677734375,
+      "stereo_width": 0.421814884454728,
+      "noise_floor_dbfs": -24.28838966612172
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.422,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 880Hz), compression increased (crest 15.8dB), stereo unchanged (0.42), noise skipped (floor -24.3dBFS)"
+  },
+  {
+    "track": "Golden Patterns.mp3",
+    "metrics": {
+      "lufs": -13.5,
+      "crest_factor_db": 13.691287515600806,
+      "spectral_centroid_hz": 292.18666576875853,
+      "rolloff_hz": 662.14599609375,
+      "stereo_width": 0.25675386353603374,
+      "noise_floor_dbfs": -23.651154911668183
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.257,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.71
+    },
+    "rationale": "LPF skipped (rolloff 662Hz), compression moderate (crest 13.7dB), stereo unchanged (0.26), noise skipped (floor -23.7dBFS)"
+  },
+  {
+    "track": "Bakır Çay Saati.mp3",
+    "metrics": {
+      "lufs": -13.27,
+      "crest_factor_db": 13.256635076237163,
+      "spectral_centroid_hz": 305.2893770580241,
+      "rolloff_hz": 880.169677734375,
+      "stereo_width": 0.3171679173816337,
+      "noise_floor_dbfs": -21.645949758970893
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.275,
+      "compression_strength": 0.972,
+      "stereo_width_target": 0.317,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.9
+    },
+    "rationale": "LPF skipped (rolloff 880Hz), compression moderate (crest 13.3dB), stereo unchanged (0.32), noise skipped (floor -21.6dBFS)"
+  },
+  {
+    "track": "Kumruların Gölgesi.mp3",
+    "metrics": {
+      "lufs": -12.38,
+      "crest_factor_db": 13.16444665597778,
+      "spectral_centroid_hz": 219.19418425675514,
+      "rolloff_hz": 541.021728515625,
+      "stereo_width": 0.32037357512997755,
+      "noise_floor_dbfs": -23.296658859580752
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.972,
+      "stereo_width_target": 0.32,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.52
+    },
+    "rationale": "LPF skipped (rolloff 541Hz), compression moderate (crest 13.2dB), stereo unchanged (0.32), noise skipped (floor -23.3dBFS)"
+  },
+  {
+    "track": "Boğazda Mesele.mp3",
+    "metrics": {
+      "lufs": -13.78,
+      "crest_factor_db": 13.70296273230316,
+      "spectral_centroid_hz": 227.02532244014162,
+      "rolloff_hz": 691.754150390625,
+      "stereo_width": 0.3609261427294337,
+      "noise_floor_dbfs": -24.94559152598267
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.361,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.76
+    },
+    "rationale": "LPF skipped (rolloff 692Hz), compression moderate (crest 13.7dB), stereo unchanged (0.36), noise skipped (floor -24.9dBFS)"
+  },
+  {
+    "track": "Bosphorus Nightsky.mp3",
+    "metrics": {
+      "lufs": -14.57,
+      "crest_factor_db": 15.505432657025969,
+      "spectral_centroid_hz": 246.51047589792307,
+      "rolloff_hz": 963.61083984375,
+      "stereo_width": 0.4972531445524109,
+      "noise_floor_dbfs": -25.36588623000243
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 1.17,
+      "stereo_width_target": 0.497,
+      "noise_added_db": null,
+      "lofi_needed_score": 25.0
+    },
+    "rationale": "LPF skipped (rolloff 964Hz), compression increased (crest 15.5dB), stereo unchanged (0.50), noise skipped (floor -25.4dBFS)"
+  },
+  {
+    "track": "Dust on the Morning Road.mp3",
+    "metrics": {
+      "lufs": -13.36,
+      "crest_factor_db": 13.04514818693072,
+      "spectral_centroid_hz": 269.18346457051166,
+      "rolloff_hz": 699.8291015625,
+      "stereo_width": 0.38017730614566575,
+      "noise_floor_dbfs": -22.696269780686112
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.38,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.02
+    },
+    "rationale": "LPF skipped (rolloff 700Hz), compression moderate (crest 13.0dB), stereo unchanged (0.38), noise skipped (floor -22.7dBFS)"
+  },
+  {
+    "track": "A Small Light on the Bosphorus.mp3",
+    "metrics": {
+      "lufs": -13.27,
+      "crest_factor_db": 13.795374305473024,
+      "spectral_centroid_hz": 276.00619988263276,
+      "rolloff_hz": 699.8291015625,
+      "stereo_width": 0.3353590281512068,
+      "noise_floor_dbfs": -23.48001287999704
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.335,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.15
+    },
+    "rationale": "LPF skipped (rolloff 700Hz), compression moderate (crest 13.8dB), stereo unchanged (0.34), noise skipped (floor -23.5dBFS)"
+  },
+  {
+    "track": "Cedar Caravan.mp3",
+    "metrics": {
+      "lufs": -14.05,
+      "crest_factor_db": 14.733229339260197,
+      "spectral_centroid_hz": 244.12245633755734,
+      "rolloff_hz": 718.670654296875,
+      "stereo_width": 0.3596871148887675,
+      "noise_floor_dbfs": -27.236551842199646
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
@@ -117,286 +417,106 @@
       "noise_added_db": null,
       "lofi_needed_score": 25.0
     },
-    "rationale": "LPF skipped (rolloff 673Hz), compression increased (crest 14.2dB), stereo unchanged (0.36), noise skipped (floor -25.1dBFS)"
+    "rationale": "LPF skipped (rolloff 719Hz), compression increased (crest 14.7dB), stereo unchanged (0.36), noise skipped (floor -27.2dBFS)"
   },
   {
-    "track": "Dastgah Moon.mp3",
+    "track": "Bosphorus Dialogues.mp3",
     "metrics": {
-      "lufs": -13.35,
-      "crest_factor_db": 14.712506186654922,
-      "spectral_centroid_hz": 218.0070016112562,
-      "rolloff_hz": 788.653564453125,
-      "stereo_width": 0.36920628158933677,
-      "noise_floor_dbfs": -24.004296441611636
+      "lufs": -14.02,
+      "crest_factor_db": 14.145973079395509,
+      "spectral_centroid_hz": 330.83862661245973,
+      "rolloff_hz": 888.24462890625,
+      "stereo_width": 0.3674690608467662,
+      "noise_floor_dbfs": -22.75253060264475
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
       "saturation_strength": 0.277,
       "compression_strength": 1.17,
-      "stereo_width_target": 0.369,
+      "stereo_width_target": 0.367,
       "noise_added_db": null,
       "lofi_needed_score": 25.0
     },
-    "rationale": "LPF skipped (rolloff 789Hz), compression increased (crest 14.7dB), stereo unchanged (0.37), noise skipped (floor -24.0dBFS)"
+    "rationale": "LPF skipped (rolloff 888Hz), compression increased (crest 14.1dB), stereo unchanged (0.37), noise skipped (floor -22.8dBFS)"
   },
   {
-    "track": "Flowing Through Persian Nights.mp3",
+    "track": "Boğazda Swing.mp3",
     "metrics": {
-      "lufs": -14.01,
-      "crest_factor_db": 15.849319391529786,
-      "spectral_centroid_hz": 247.1487120721381,
-      "rolloff_hz": 845.17822265625,
-      "stereo_width": 0.4128007106564827,
-      "noise_floor_dbfs": -26.471921443625934
+      "lufs": -13.54,
+      "crest_factor_db": 13.408167395076685,
+      "spectral_centroid_hz": 352.7038234632645,
+      "rolloff_hz": 1211.24267578125,
+      "stereo_width": 0.36120975134180666,
+      "noise_floor_dbfs": -23.31857559418555
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.413,
+      "saturation_strength": 0.275,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.361,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 22.53
     },
-    "rationale": "LPF skipped (rolloff 845Hz), compression increased (crest 15.8dB), stereo unchanged (0.41), noise skipped (floor -26.5dBFS)"
+    "rationale": "LPF skipped (rolloff 1211Hz), compression moderate (crest 13.4dB), stereo unchanged (0.36), noise skipped (floor -23.3dBFS)"
   },
   {
-    "track": "Santur of the Forgotten Court.mp3",
+    "track": "Kumlu Saz Cazı.mp3",
     "metrics": {
-      "lufs": -13.84,
-      "crest_factor_db": 13.861961143806788,
-      "spectral_centroid_hz": 269.98334219649473,
-      "rolloff_hz": 753.662109375,
-      "stereo_width": 0.3473791001461935,
-      "noise_floor_dbfs": -25.57998838395615
+      "lufs": -13.01,
+      "crest_factor_db": 13.117715957734525,
+      "spectral_centroid_hz": 354.3822590887904,
+      "rolloff_hz": 931.31103515625,
+      "stereo_width": 0.30652121858477477,
+      "noise_floor_dbfs": -22.714386484200105
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 0.974,
-      "stereo_width_target": 0.347,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.307,
       "noise_added_db": null,
-      "lofi_needed_score": 24.42
+      "lofi_needed_score": 21.32
     },
-    "rationale": "LPF skipped (rolloff 754Hz), compression moderate (crest 13.9dB), stereo unchanged (0.35), noise skipped (floor -25.6dBFS)"
+    "rationale": "LPF skipped (rolloff 931Hz), compression moderate (crest 13.1dB), stereo unchanged (0.31), noise skipped (floor -22.7dBFS)"
   },
   {
-    "track": "Reflections of the Silk Road.mp3",
+    "track": "Baklava Blue.mp3",
     "metrics": {
-      "lufs": -14.21,
-      "crest_factor_db": 15.148104129644246,
-      "spectral_centroid_hz": 278.7250653274988,
-      "rolloff_hz": 724.053955078125,
-      "stereo_width": 0.441473031775667,
-      "noise_floor_dbfs": -26.800552567217082
+      "lufs": -14.0,
+      "crest_factor_db": 13.49201069337611,
+      "spectral_centroid_hz": 229.96205296129426,
+      "rolloff_hz": 699.8291015625,
+      "stereo_width": 0.25660778099881115,
+      "noise_floor_dbfs": -22.488546519407187
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.441,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.257,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 22.88
     },
-    "rationale": "LPF skipped (rolloff 724Hz), compression increased (crest 15.1dB), stereo unchanged (0.44), noise skipped (floor -26.8dBFS)"
+    "rationale": "LPF skipped (rolloff 700Hz), compression moderate (crest 13.5dB), stereo unchanged (0.26), noise skipped (floor -22.5dBFS)"
   },
   {
-    "track": "Moon Over Isfahan.mp3",
+    "track": "Kanun Rüzgarı.mp3",
     "metrics": {
-      "lufs": -13.57,
-      "crest_factor_db": 14.78826493215864,
-      "spectral_centroid_hz": 214.01571374127698,
-      "rolloff_hz": 527.5634765625,
-      "stereo_width": 0.34615691119597125,
-      "noise_floor_dbfs": -27.177795264162185
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.346,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 528Hz), compression increased (crest 14.8dB), stereo unchanged (0.35), noise skipped (floor -27.2dBFS)"
-  },
-  {
-    "track": "Calm Over Persian Skies.mp3",
-    "metrics": {
-      "lufs": -13.69,
-      "crest_factor_db": 14.532889476659994,
-      "spectral_centroid_hz": 258.1105977520835,
+      "lufs": -13.97,
+      "crest_factor_db": 13.10790940871307,
+      "spectral_centroid_hz": 256.3918511790243,
       "rolloff_hz": 592.1630859375,
-      "stereo_width": 0.33337469685199683,
-      "noise_floor_dbfs": -26.701136161158782
+      "stereo_width": 0.38761582685317303,
+      "noise_floor_dbfs": -22.966701018594815
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.333,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.388,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 21.28
     },
-    "rationale": "LPF skipped (rolloff 592Hz), compression increased (crest 14.5dB), stereo unchanged (0.33), noise skipped (floor -26.7dBFS)"
-  },
-  {
-    "track": "Santoor in Rain.mp3",
-    "metrics": {
-      "lufs": -13.81,
-      "crest_factor_db": 15.115270040072375,
-      "spectral_centroid_hz": 256.6770614287951,
-      "rolloff_hz": 624.462890625,
-      "stereo_width": 0.3316176252476093,
-      "noise_floor_dbfs": -26.76168376724633
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.332,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 624Hz), compression increased (crest 15.1dB), stereo unchanged (0.33), noise skipped (floor -26.8dBFS)"
-  },
-  {
-    "track": "Dialogue in Dastgah.mp3",
-    "metrics": {
-      "lufs": -14.64,
-      "crest_factor_db": 15.849963425540244,
-      "spectral_centroid_hz": 299.9144241203627,
-      "rolloff_hz": 934.002685546875,
-      "stereo_width": 0.4064670850564751,
-      "noise_floor_dbfs": -27.382135618610437
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.406,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 934Hz), compression increased (crest 15.8dB), stereo unchanged (0.41), noise skipped (floor -27.4dBFS)"
-  },
-  {
-    "track": "Ney Over Silent Gardens.mp3",
-    "metrics": {
-      "lufs": -13.64,
-      "crest_factor_db": 14.950969812413792,
-      "spectral_centroid_hz": 273.8887735940889,
-      "rolloff_hz": 662.14599609375,
-      "stereo_width": 0.3426744098648151,
-      "noise_floor_dbfs": -25.441721242979835
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.343,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 662Hz), compression increased (crest 15.0dB), stereo unchanged (0.34), noise skipped (floor -25.4dBFS)"
-  },
-  {
-    "track": "Tehran Rain Glass.mp3",
-    "metrics": {
-      "lufs": -13.82,
-      "crest_factor_db": 14.309482127958503,
-      "spectral_centroid_hz": 237.80935732889805,
-      "rolloff_hz": 624.462890625,
-      "stereo_width": 0.39965064057249855,
-      "noise_floor_dbfs": -27.60940384422878
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.4,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 624Hz), compression increased (crest 14.3dB), stereo unchanged (0.40), noise skipped (floor -27.6dBFS)"
-  },
-  {
-    "track": "Between Pulse and Pause.mp3",
-    "metrics": {
-      "lufs": -14.11,
-      "crest_factor_db": 15.700524210332514,
-      "spectral_centroid_hz": 308.35274389222434,
-      "rolloff_hz": 699.8291015625,
-      "stereo_width": 0.42465259957395673,
-      "noise_floor_dbfs": -27.28920314574343
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.425,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 700Hz), compression increased (crest 15.7dB), stereo unchanged (0.42), noise skipped (floor -27.3dBFS)"
-  },
-  {
-    "track": "Persian Café at Dusk.mp3",
-    "metrics": {
-      "lufs": -12.37,
-      "crest_factor_db": 14.032436960458286,
-      "spectral_centroid_hz": 293.5426145872693,
-      "rolloff_hz": 699.8291015625,
-      "stereo_width": 0.33812079357513825,
-      "noise_floor_dbfs": -27.177766670571778
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.338,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 700Hz), compression increased (crest 14.0dB), stereo unchanged (0.34), noise skipped (floor -27.2dBFS)"
-  },
-  {
-    "track": "Desert Air & Distant Ney.mp3",
-    "metrics": {
-      "lufs": -14.03,
-      "crest_factor_db": 15.335379312629144,
-      "spectral_centroid_hz": 218.461070587562,
-      "rolloff_hz": 557.171630859375,
-      "stereo_width": 0.4158313931156663,
-      "noise_floor_dbfs": -28.062071640000813
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.416,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 557Hz), compression increased (crest 15.3dB), stereo unchanged (0.42), noise skipped (floor -28.1dBFS)"
-  },
-  {
-    "track": "Quiet Tables in Shiraz.mp3",
-    "metrics": {
-      "lufs": -13.88,
-      "crest_factor_db": 15.10511575083257,
-      "spectral_centroid_hz": 272.63208044291423,
-      "rolloff_hz": 788.653564453125,
-      "stereo_width": 0.26968431627997447,
-      "noise_floor_dbfs": -26.255872551056925
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.27,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 789Hz), compression increased (crest 15.1dB), stereo unchanged (0.27), noise skipped (floor -26.3dBFS)"
+    "rationale": "LPF skipped (rolloff 592Hz), compression moderate (crest 13.1dB), stereo unchanged (0.39), noise skipped (floor -23.0dBFS)"
   }
 ]

@@ -56,6 +56,14 @@ class RainPresence(str, Enum):
     upfront = "upfront"
 
 
+class CrossfadeCurve(str, Enum):
+    equal_power = "equal_power"
+    smooth = "smooth"
+    exponential = "exponential"
+    logarithmic = "logarithmic"
+    linear = "linear"
+
+
 class RunConfig(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -67,6 +75,7 @@ class RunConfig(BaseModel):
     target_duration_min: Optional[int] = None
     crossfade_sec: float = 6.0
     smart_crossfade: bool = False
+    crossfade_curve: CrossfadeCurve = CrossfadeCurve.equal_power
     smart_ordering: bool = False
     smart_ordering_mode: SmartOrderingMode = SmartOrderingMode.bpm_key_balanced
     render_style: RenderStyle = RenderStyle.lofi

@@ -77,6 +77,7 @@ class GuiEngineService:
             target_duration_min=settings.target_duration_min,
             crossfade_sec=settings.crossfade_sec,
             smart_crossfade=settings.smart_crossfade,
+            crossfade_curve=settings.crossfade_curve,
             smart_ordering=settings.smart_ordering,
             smart_ordering_mode=settings.smart_ordering_mode,
             render_style=settings.render_style,

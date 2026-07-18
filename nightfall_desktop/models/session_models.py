@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 from nightfall_mix.analysis import TrackAnalysis
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
+from nightfall_mix.config import CrossfadeCurve, OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
 from nightfall_mix.mixer import MixPlan, TrackSource
 
 
@@ -71,6 +71,7 @@ class GuiSettings:
     rain_presence: RainPresence = RainPresence.balanced
     rain_preserve_low_drops: bool = True
     crossfade_sec: float = 6.0
+    crossfade_curve: CrossfadeCurve = CrossfadeCurve.equal_power
     lufs: float = -14.0
     shuffle: bool = False
     seed: Optional[int] = 123

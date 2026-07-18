@@ -22,6 +22,7 @@ from nightfall_mix.analysis import (
     fallback_adaptive_processing,
 )
 from nightfall_mix.config import (
+    CrossfadeCurve,
     OrderMode,
     OutputFormat,
     PresetName,
@@ -397,6 +398,9 @@ def run_nightfall_mix(
     target_duration_min: Optional[int] = typer.Option(None, "--target-duration-min"),
     crossfade_sec: float = typer.Option(6.0, "--crossfade-sec"),
     smart_crossfade: bool = typer.Option(False, "--smart-crossfade"),
+    crossfade_curve: CrossfadeCurve = typer.Option(
+        CrossfadeCurve.equal_power, "--crossfade-curve"
+    ),
     smart_ordering: bool = typer.Option(False, "--smart-ordering"),
     smart_ordering_mode: SmartOrderingMode = typer.Option(
         SmartOrderingMode.bpm_key_balanced, "--smart-ordering-mode"
@@ -433,6 +437,7 @@ def run_nightfall_mix(
             target_duration_min=target_duration_min,
             crossfade_sec=crossfade_sec,
             smart_crossfade=smart_crossfade,
+            crossfade_curve=crossfade_curve,
             smart_ordering=smart_ordering,
             smart_ordering_mode=smart_ordering_mode,
             lufs=lufs,

@@ -5,7 +5,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional, TypeVar
 
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
+from nightfall_mix.config import CrossfadeCurve, OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
 from nightfall_desktop.models.session_models import GuiSettings, PresetOverrides, StudioMode, WorkspaceMode
 
 SUPPORTED_PROJECT_VERSION = 1
@@ -234,6 +234,7 @@ def save_project_file(path: Path, settings: GuiSettings, ordered_paths: list[Pat
             "rain_presence": settings.rain_presence.value,
             "rain_preserve_low_drops": settings.rain_preserve_low_drops,
             "crossfade_sec": settings.crossfade_sec,
+            "crossfade_curve": settings.crossfade_curve.value,
             "lufs": settings.lufs,
             "shuffle": settings.shuffle,
             "seed": settings.seed,
@@ -327,6 +328,9 @@ def load_project_file(path: Path) -> tuple[GuiSettings, list[Path]]:
         rain_presence=_parse_enum(RainPresence, settings.get("rain_presence"), RainPresence.balanced),
         rain_preserve_low_drops=_as_bool(settings.get("rain_preserve_low_drops", True), True),
         crossfade_sec=_as_float(settings.get("crossfade_sec", 6.0), 6.0),
+        crossfade_curve=_parse_enum(
+            CrossfadeCurve, settings.get("crossfade_curve"), CrossfadeCurve.equal_power
+        ),
         lufs=_as_float(settings.get("lufs", -14.0), -14.0),
         shuffle=_as_bool(settings.get("shuffle", False), False),
         seed=settings.get("seed"),

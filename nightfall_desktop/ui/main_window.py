@@ -43,7 +43,7 @@ except Exception:
     MULTIMEDIA_AVAILABLE = False
 
 from nightfall_mix.analysis import TrackAnalysis, read_analysis_cache_summary
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
+from nightfall_mix.config import CrossfadeCurve, OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
 from nightfall_mix.effects_presets import get_preset
 from nightfall_mix.mixer import discover_audio_files
 from nightfall_mix.utils import ffprobe_duration_ms, format_hms
@@ -314,6 +314,16 @@ class MainWindow(QMainWindow):
         self.crossfade_spin.setValue(6.0)
         self.crossfade_spin.setSuffix(" sec")
         self.crossfade_spin.setToolTip("Base crossfade duration in seconds used by fixed and smart transitions.")
+        self.crossfade_curve_combo = QComboBox()
+        self.crossfade_curve_combo.addItem("Equal Power", CrossfadeCurve.equal_power.value)
+        self.crossfade_curve_combo.addItem("Smooth", CrossfadeCurve.smooth.value)
+        self.crossfade_curve_combo.addItem("Exponential", CrossfadeCurve.exponential.value)
+        self.crossfade_curve_combo.addItem("Logarithmic", CrossfadeCurve.logarithmic.value)
+        self.crossfade_curve_combo.addItem("Linear", CrossfadeCurve.linear.value)
+        self.crossfade_curve_combo.setToolTip(
+            "Shape of the fade between songs. Equal Power keeps constant loudness; "
+            "Smooth/Exponential/Logarithmic give gentler, warmer blends; Linear is a straight fade."
+        )
         self.lufs_spin = QDoubleSpinBox()
         self.lufs_spin.setRange(-30.0, -5.0)
         self.lufs_spin.setSingleStep(0.5)
@@ -353,6 +363,7 @@ class MainWindow(QMainWindow):
         self.crossfade_spin.valueChanged.connect(self._on_plan_controls_changed)
         self.target_checkbox.toggled.connect(self._on_plan_controls_changed)
         self.target_spin.valueChanged.connect(self._on_plan_controls_changed)
+        self.crossfade_curve_combo.currentIndexChanged.connect(self._mark_preview_dirty)
         self.lufs_spin.valueChanged.connect(self._mark_preview_dirty)
         self.rain_line.textChanged.connect(self._mark_preview_dirty)
         self.rain_slider.valueChanged.connect(self._mark_preview_dirty)
@@ -400,6 +411,8 @@ class MainWindow(QMainWindow):
         transition_layout.addWidget(self.shuffle_checkbox, 0, 3)
         transition_layout.addWidget(QLabel("Crossfade"), 1, 0)
         transition_layout.addWidget(self.crossfade_spin, 1, 1)
+        transition_layout.addWidget(QLabel("Fade Curve"), 1, 2)
+        transition_layout.addWidget(self.crossfade_curve_combo, 1, 3)
 
         self.length_box = QGroupBox("Length And Scope")
         length_layout = QGridLayout(self.length_box)
@@ -1723,6 +1736,7 @@ class MainWindow(QMainWindow):
             rain_presence=RainPresence(str(self.rain_presence_combo.currentData())),
             rain_preserve_low_drops=self.rain_low_drops_checkbox.isChecked(),
             crossfade_sec=self.crossfade_spin.value(),
+            crossfade_curve=CrossfadeCurve(str(self.crossfade_curve_combo.currentData())),
             lufs=self.lufs_spin.value(),
             shuffle=self.shuffle_checkbox.isChecked(),
             target_duration_min=target,
@@ -2418,6 +2432,9 @@ class MainWindow(QMainWindow):
             self.rain_presence_combo.setCurrentIndex(presence_idx)
         self.rain_low_drops_checkbox.setChecked(settings.rain_preserve_low_drops)
         self.crossfade_spin.setValue(settings.crossfade_sec)
+        curve_idx = self.crossfade_curve_combo.findData(settings.crossfade_curve.value)
+        if curve_idx >= 0:
+            self.crossfade_curve_combo.setCurrentIndex(curve_idx)
         self.lufs_spin.setValue(settings.lufs)
         self.target_checkbox.setChecked(settings.target_duration_min is not None)
         if settings.target_duration_min is not None:

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from nightfall_mix.analysis import TrackAnalysis
-from nightfall_mix.config import PresetName, QualityMode, RenderStyle, RunConfig
+from nightfall_mix.config import CrossfadeCurve, PresetName, QualityMode, RenderStyle, RunConfig
 from nightfall_mix.effects_presets import get_preset
 from nightfall_mix.ffmpeg_graph import build_ffmpeg_command, build_filtergraph
 from nightfall_mix.mixer import TrackInstance, TrackSource, build_mix_plan
@@ -272,3 +272,95 @@ def test_filtergraph_playlist_mode_keeps_smart_crossfade_transition(tmp_path: Pa
         per_track_processing=True,
     )
     assert f"acrossfade=d={plan.transitions[0].crossfade_ms / 1000.0:.3f}" in graph
+
+
+def test_filtergraph_uses_configured_crossfade_curve(tmp_path: Path) -> None:
+    songs_folder = tmp_path / "songs"
+    songs_folder.mkdir()
+    output = tmp_path / "mix.mp3"
+
+    t0 = _stub_track(songs_folder, "a.mp3", 30_000, "t0")
+    t1 = _stub_track(songs_folder, "b.mp3", 30_000, "t1")
+    instances = [
+        TrackInstance(instance_index=0, track=t0, cycle_index=0),
+        TrackInstance(instance_index=1, track=t1, cycle_index=0),
+    ]
+    analyses = {
+        "t0": TrackAnalysis(track_id="t0"),
+        "t1": TrackAnalysis(track_id="t1"),
+    }
+    plan = build_mix_plan(
+        instances=instances,
+        analyses=analyses,
+        crossfade_sec=6.0,
+        smart_crossfade=False,
+        target_duration_min=None,
+    )
+    cfg = RunConfig(
+        songs_folder=songs_folder,
+        output=output,
+        quality_mode=QualityMode.best,
+        preset=PresetName.tokyo_cassette,
+        crossfade_curve=CrossfadeCurve.exponential,
+    )
+    graph = build_filtergraph(
+        mix_plan=plan,
+        analyses=analyses,
+        config=cfg,
+        preset=get_preset(cfg.preset),
+        include_master=True,
+        include_rain=False,
+        per_track_processing=True,
+    )
+    assert "c1=exp:c2=exp" in graph
+    assert "c1=qsin:c2=qsin" not in graph
+
+
+def test_filtergraph_key_mask_duck_is_confined_to_transition(tmp_path: Path) -> None:
+    songs_folder = tmp_path / "songs"
+    songs_folder.mkdir()
+    output = tmp_path / "mix.mp3"
+
+    t0 = _stub_track(songs_folder, "a.mp3", 30_000, "t0")
+    t1 = _stub_track(songs_folder, "b.mp3", 30_000, "t1")
+    instances = [
+        TrackInstance(instance_index=0, track=t0, cycle_index=0),
+        TrackInstance(instance_index=1, track=t1, cycle_index=0),
+    ]
+    # Distant keys (C vs F#, distance 6) with confident detection trigger the
+    # key-mask LPF duck across this transition.
+    analyses = {
+        "t0": TrackAnalysis(track_id="t0", key="C", key_confidence=0.9),
+        "t1": TrackAnalysis(track_id="t1", key="F#", key_confidence=0.9),
+    }
+    plan = build_mix_plan(
+        instances=instances,
+        analyses=analyses,
+        crossfade_sec=6.0,
+        smart_crossfade=True,
+        target_duration_min=None,
+    )
+    assert plan.transitions[0].lpf_duck_ms is not None
+
+    cfg = RunConfig(
+        songs_folder=songs_folder,
+        output=output,
+        quality_mode=QualityMode.best,
+        preset=PresetName.tokyo_cassette,
+        smart_crossfade=True,
+    )
+    graph = build_filtergraph(
+        mix_plan=plan,
+        analyses=analyses,
+        config=cfg,
+        preset=get_preset(cfg.preset),
+        include_master=True,
+        include_rain=False,
+        per_track_processing=True,
+    )
+    # The duck lowpass must be time-gated (enable=...) rather than applied to
+    # the whole track, and must not affect the non-masked regions.
+    assert "lowpass=f=7800.0:t=q:w=0.707:enable='gt(t," in graph  # outgoing tail
+    assert "lowpass=f=7800.0:t=q:w=0.707:enable='lt(t," in graph  # incoming head
+    assert "lowpass=f=7800:t=q:w=0.707," not in graph  # never ungated
+
