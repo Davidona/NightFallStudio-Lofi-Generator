@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import math
+import os
 import queue
 import random
 import re
@@ -25,11 +26,20 @@ def seeded_random(seed: Optional[int]) -> random.Random:
     return random.Random(seed if seed is not None else 0)
 
 
+def _process_creation_flags(low_priority: bool) -> int:
+    """Return subprocess creationflags; on Windows optionally run at
+    below-normal priority so long renders never starve the OS."""
+    if not low_priority or os.name != "nt":
+        return 0
+    return int(subprocess.BELOW_NORMAL_PRIORITY_CLASS)
+
+
 def run_command(
     args: list[str],
     logger: logging.Logger,
     check: bool = True,
     capture_output: bool = True,
+    low_priority: bool = False,
 ) -> subprocess.CompletedProcess[str]:
     logger.debug("Running command: %s", " ".join(args))
     completed = subprocess.run(
@@ -39,6 +49,7 @@ def run_command(
         check=False,
         encoding="utf-8",
         errors="replace",
+        creationflags=_process_creation_flags(low_priority),
     )
     if check and completed.returncode != 0:
         raise CommandError(
@@ -54,12 +65,14 @@ def run_command_binary(
     args: list[str],
     logger: logging.Logger,
     check: bool = True,
+    low_priority: bool = False,
 ) -> subprocess.CompletedProcess[bytes]:
     logger.debug("Running binary command: %s", " ".join(args))
     completed = subprocess.run(
         args,
         capture_output=True,
         check=False,
+        creationflags=_process_creation_flags(low_priority),
     )
     if check and completed.returncode != 0:
         raise CommandError(
@@ -77,6 +90,7 @@ def run_command_stream(
     on_stdout_line: Optional[Callable[[str], None]] = None,
     on_stderr_line: Optional[Callable[[str], None]] = None,
     should_cancel: Optional[Callable[[], bool]] = None,
+    low_priority: bool = False,
 ) -> int:
     logger.debug("Running stream command: %s", " ".join(args))
     proc = subprocess.Popen(
@@ -86,6 +100,7 @@ def run_command_stream(
         text=True,
         encoding="utf-8",
         errors="replace",
+        creationflags=_process_creation_flags(low_priority),
     )
     assert proc.stdout is not None
     assert proc.stderr is not None

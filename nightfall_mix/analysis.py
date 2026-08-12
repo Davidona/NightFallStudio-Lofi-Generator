@@ -211,6 +211,8 @@ def _detect_key(y: np.ndarray, sr: int) -> tuple[Optional[str], Optional[float]]
 
 def _normalize_bpm_for_lofi(tempo: float) -> float:
     # Beat tracking often flips by x2/x0.5 for chill genres; fold tempo to a stable range.
+    if not math.isfinite(tempo) or tempo <= 0.0:
+        return 0.0
     normalized = float(tempo)
     while normalized > 120.0:
         normalized /= 2.0
@@ -221,7 +223,7 @@ def _normalize_bpm_for_lofi(tempo: float) -> float:
 
 def _detect_bpm(y: np.ndarray, sr: int) -> tuple[Optional[float], Optional[float]]:
     tempo, beats = librosa.beat.beat_track(y=y, sr=sr)
-    if tempo is None or np.isnan(float(tempo)):
+    if tempo is None or not math.isfinite(float(tempo)) or float(tempo) <= 0.0:
         return None, None
     duration_min = max(len(y) / sr / 60.0, 1e-6)
     beat_density = len(beats) / duration_min

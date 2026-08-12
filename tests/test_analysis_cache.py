@@ -6,6 +6,17 @@ from pathlib import Path
 from nightfall_mix import analysis as analysis_mod
 
 
+def test_normalize_bpm_guards_non_finite_and_zero() -> None:
+    # librosa.beat.beat_track returns 0.0 or inf/nan for beatless audio; the
+    # old fold-to-range loops would spin forever on those values.
+    assert analysis_mod._normalize_bpm_for_lofi(0.0) == 0.0
+    assert analysis_mod._normalize_bpm_for_lofi(float("inf")) == 0.0
+    assert analysis_mod._normalize_bpm_for_lofi(float("nan")) == 0.0
+    assert analysis_mod._normalize_bpm_for_lofi(90.0) == 90.0
+    assert analysis_mod._normalize_bpm_for_lofi(180.0) == 90.0
+    assert analysis_mod._normalize_bpm_for_lofi(40.0) == 80.0
+
+
 def test_boundary_detector_ignores_silence_inside_boundary_window() -> None:
     # Active music, a long internal pause, then active music through the edge.
     curve = ([0.2] * 40) + ([0.0] * 80) + ([0.2] * 80)
