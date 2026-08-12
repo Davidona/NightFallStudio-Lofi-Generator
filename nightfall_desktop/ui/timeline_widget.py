@@ -19,6 +19,12 @@ class _Segment:
     end_ms: int
 
 
+@dataclass
+class _TransitionSegment:
+    rect: QRectF
+    label: str
+
+
 class TimelineWidget(QWidget):
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
@@ -27,6 +33,7 @@ class TimelineWidget(QWidget):
         self._plan: Optional[MixPlan] = None
         self._has_rain = False
         self._segments: list[_Segment] = []
+        self._transition_segments: list[_TransitionSegment] = []
 
     def set_plan(self, plan: Optional[MixPlan], has_rain: bool) -> None:
         self._plan = plan
@@ -47,6 +54,7 @@ class TimelineWidget(QWidget):
         painter.setPen(QPen(QColor("#2E3B50"), 1))
         painter.drawRoundedRect(panel_rect, 8, 8)
         self._segments.clear()
+        self._transition_segments.clear()
 
         if not self._plan or not self._plan.timeline:
             painter.setPen(QColor("#8894A7"))
@@ -88,6 +96,21 @@ class TimelineWidget(QWidget):
             x1 = inner.x() + (cross_end / duration) * inner.width()
             cf_rect = QRectF(x0, base_y, max(1.5, x1 - x0), timeline_h)
             painter.fillRect(cf_rect, QColor(255, 170, 60, 110))
+            trimmed_out_ms = max(0, left.source_end_ms or 0)
+            self._transition_segments.append(
+                _TransitionSegment(
+                    rect=cf_rect,
+                    label=(
+                        f"{left.filename} → {right.filename}\n"
+                        f"Crossfade: {transition.crossfade_ms / 1000.0:.2f}s\n"
+                        f"Incoming cue: {right.source_start_ms / 1000.0:.2f}s\n"
+                        f"Outgoing cue: {trimmed_out_ms / 1000.0:.2f}s\n"
+                        f"Beat adjustment: {transition.beat_align_ms}ms\n"
+                        f"Tempo: {transition.tempo_ratio:.4f}x\n"
+                        f"Decision: {transition.reason}"
+                    ),
+                )
+            )
 
         painter.setPen(QColor("#A8B6C8"))
         painter.drawText(inner.x(), inner.bottom() + 24, "00:00:00")
@@ -96,7 +119,11 @@ class TimelineWidget(QWidget):
     def mouseMoveEvent(self, event) -> None:  # noqa: N802
         pos = event.position().toPoint() if hasattr(event, "position") else event.pos()
         tip = None
-        for segment in self._segments:
+        for transition in self._transition_segments:
+            if transition.rect.contains(pos):
+                tip = transition.label
+                break
+        for segment in self._segments if tip is None else []:
             if segment.rect.contains(pos):
                 tip = (
                     f"{segment.track_name}\n"
@@ -109,4 +136,3 @@ class TimelineWidget(QWidget):
         else:
             QToolTip.hideText()
         super().mouseMoveEvent(event)
-

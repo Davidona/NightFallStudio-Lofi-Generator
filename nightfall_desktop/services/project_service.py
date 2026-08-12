@@ -5,7 +5,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional, TypeVar
 
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
+from nightfall_mix.config import CrossfadeCurve, OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
 from nightfall_desktop.models.session_models import GuiSettings, PresetOverrides, StudioMode, WorkspaceMode
 
 SUPPORTED_PROJECT_VERSION = 1
@@ -234,6 +234,7 @@ def save_project_file(path: Path, settings: GuiSettings, ordered_paths: list[Pat
             "rain_presence": settings.rain_presence.value,
             "rain_preserve_low_drops": settings.rain_preserve_low_drops,
             "crossfade_sec": settings.crossfade_sec,
+            "crossfade_curve": settings.crossfade_curve.value,
             "lufs": settings.lufs,
             "shuffle": settings.shuffle,
             "seed": settings.seed,
@@ -241,6 +242,8 @@ def save_project_file(path: Path, settings: GuiSettings, ordered_paths: list[Pat
             "smart_crossfade": settings.smart_crossfade,
             "smart_ordering": settings.smart_ordering,
             "smart_ordering_mode": settings.smart_ordering_mode.value,
+            "enable_warp": settings.enable_warp,
+            "max_warp_percent": settings.max_warp_percent,
             "preview_mode": settings.preview_mode,
             "preview_duration_sec": settings.preview_duration_sec,
             "workspace_mode": settings.workspace_mode.value,
@@ -327,6 +330,9 @@ def load_project_file(path: Path) -> tuple[GuiSettings, list[Path]]:
         rain_presence=_parse_enum(RainPresence, settings.get("rain_presence"), RainPresence.balanced),
         rain_preserve_low_drops=_as_bool(settings.get("rain_preserve_low_drops", True), True),
         crossfade_sec=_as_float(settings.get("crossfade_sec", 6.0), 6.0),
+        crossfade_curve=_parse_enum(
+            CrossfadeCurve, settings.get("crossfade_curve"), CrossfadeCurve.equal_power
+        ),
         lufs=_as_float(settings.get("lufs", -14.0), -14.0),
         shuffle=_as_bool(settings.get("shuffle", False), False),
         seed=settings.get("seed"),
@@ -338,6 +344,8 @@ def load_project_file(path: Path) -> tuple[GuiSettings, list[Path]]:
             settings.get("smart_ordering_mode"),
             SmartOrderingMode.bpm_key_balanced,
         ),
+        enable_warp=_as_bool(settings.get("enable_warp", False), False),
+        max_warp_percent=max(0.0, min(8.0, _as_float(settings.get("max_warp_percent", 4.0), 4.0))),
         preview_mode=_as_bool(settings.get("preview_mode", False), False),
         preview_duration_sec=_as_float(settings.get("preview_duration_sec", 60.0), 60.0),
         workspace_mode=_parse_enum(

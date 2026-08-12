@@ -13,6 +13,18 @@ BASE_SAMPLE_RATE = 48_000
 MIN_SUB_BASS_CLEANUP_HZ = 30.0
 FINAL_TRUE_PEAK_LIMIT = 10 ** (-1.0 / 20.0)
 
+# Duck cutoff used to soften harmonic clashes across a masked transition.
+TRANSITION_DUCK_LPF_HZ = 7800.0
+
+# Maps user-facing crossfade curve choices onto ffmpeg acrossfade curve names.
+_CROSSFADE_CURVE_MAP = {
+    "equal_power": "qsin",
+    "smooth": "hsin",
+    "exponential": "exp",
+    "logarithmic": "log",
+    "linear": "tri",
+}
+
 
 def _db_to_linear(db: float) -> float:
     return 10 ** (db / 20.0)
@@ -194,18 +206,43 @@ def _add_noise_layers(
     return current_label
 
 
+def _lpf_duck_steps(
+    duck_in_sec: Optional[float],
+    duck_out_sec: Optional[float],
+    track_len_sec: float,
+) -> list[str]:
+    """Lowpass the track only during a masked crossfade window.
+
+    Gating with a timeline ``enable`` expression keeps the rest of the track at
+    full brightness instead of dulling the whole song.
+    """
+    steps: list[str] = []
+    if duck_in_sec and duck_in_sec > 0.0:
+        window = min(duck_in_sec, track_len_sec)
+        steps.append(
+            f"lowpass=f={TRANSITION_DUCK_LPF_HZ:.1f}:t=q:w=0.707:enable='lt(t,{window:.3f})'"
+        )
+    if duck_out_sec and duck_out_sec > 0.0:
+        start = max(0.0, track_len_sec - duck_out_sec)
+        steps.append(
+            f"lowpass=f={TRANSITION_DUCK_LPF_HZ:.1f}:t=q:w=0.707:enable='gt(t,{start:.3f})'"
+        )
+    return steps
+
+
 def _per_track_chain(
     config: RunConfig,
     analysis: TrackAnalysis | None,
-    lpf_dip: bool,
+    duck_in_sec: Optional[float],
+    duck_out_sec: Optional[float],
+    track_len_sec: float,
 ) -> str:
     chain: list[str] = [
         "aformat=sample_rates=48000:channel_layouts=stereo",
         _hq_resample_filter(),
     ]
     chain.extend(_track_loudness_steps(config=config, analysis=analysis))
-    if lpf_dip:
-        chain.append("lowpass=f=7800:t=q:w=0.707")
+    chain.extend(_lpf_duck_steps(duck_in_sec, duck_out_sec, track_len_sec))
     return ",".join(chain)
 
 
@@ -225,7 +262,9 @@ def _adaptive_track_chain(
     config: RunConfig,
     analysis: TrackAnalysis | None,
     preset: PresetSpec,
-    lpf_dip: bool,
+    duck_in_sec: Optional[float],
+    duck_out_sec: Optional[float],
+    track_len_sec: float,
 ) -> tuple[str, Optional[float], Optional[float]]:
     chain: list[str] = [
         "aformat=sample_rates=48000:channel_layouts=stereo",
@@ -251,8 +290,7 @@ def _adaptive_track_chain(
         chain.extend(_music_processing_steps(preset, wow_depth_scale=0.5))
         vinyl_db, hiss_db = _dominant_noise_levels(preset=preset, adaptive_noise_db=None)
 
-    if lpf_dip:
-        chain.append("lowpass=f=7800:t=q:w=0.707")
+    chain.extend(_lpf_duck_steps(duck_in_sec, duck_out_sec, track_len_sec))
 
     return ",".join(chain), vinyl_db, hiss_db
 
@@ -318,8 +356,35 @@ def build_filtergraph(
     lines: list[str] = []
 
     for idx, instance in enumerate(mix_plan.instances):
-        transition = mix_plan.transitions[idx - 1] if idx > 0 and idx - 1 < len(mix_plan.transitions) else None
-        lpf_dip = bool(transition and transition.lpf_duck_ms)
+        transition_in = (
+            mix_plan.transitions[idx - 1] if idx > 0 and idx - 1 < len(mix_plan.transitions) else None
+        )
+        transition_out = mix_plan.transitions[idx] if idx < len(mix_plan.transitions) else None
+        timeline_entry = mix_plan.timeline[idx] if idx < len(mix_plan.timeline) else None
+        source_start_sec = max(0.0, (timeline_entry.source_start_ms if timeline_entry else 0) / 1000.0)
+        raw_source_end_ms = timeline_entry.source_end_ms if timeline_entry else instance.track.duration_ms
+        source_end_sec = max(source_start_sec + 0.001, (raw_source_end_ms or instance.track.duration_ms) / 1000.0)
+        track_len_sec = max(0.1, source_end_sec - source_start_sec)
+        source_label = f"[s{idx}]"
+        tempo_step = (
+            f",rubberband=tempo={timeline_entry.tempo_ratio:.6f}"
+            if timeline_entry and abs(timeline_entry.tempo_ratio - 1.0) >= 0.001
+            else ""
+        )
+        lines.append(
+            f"[{idx}:a]atrim=start={source_start_sec:.3f}:end={source_end_sec:.3f},"
+            f"asetpts=PTS-STARTPTS{tempo_step}{source_label}"
+        )
+        duck_in_sec = (
+            transition_in.crossfade_ms / 1000.0
+            if transition_in and transition_in.lpf_duck_ms
+            else None
+        )
+        duck_out_sec = (
+            transition_out.crossfade_ms / 1000.0
+            if transition_out and transition_out.lpf_duck_ms
+            else None
+        )
         analysis = analyses.get(instance.track.id)
         out_label = f"[t{idx}]"
         if per_track_processing:
@@ -328,31 +393,40 @@ def build_filtergraph(
                     config=config,
                     analysis=analysis,
                     preset=preset,
-                    lpf_dip=lpf_dip,
+                    duck_in_sec=duck_in_sec,
+                    duck_out_sec=duck_out_sec,
+                    track_len_sec=track_len_sec,
                 )
-                lines.append(f"[{idx}:a]{chain}[tp{idx}]")
+                lines.append(f"{source_label}{chain}[tp{idx}]")
                 processed_label = "[tp{idx}]".format(idx=idx)
                 current_label = _add_noise_layers(
                     lines=lines,
                     input_label=processed_label,
                     output_prefix=f"t{idx}_",
-                    duration_sec=max(0.1, instance.track.duration_ms / 1000.0),
+                    duration_sec=track_len_sec,
                     vinyl_db=vinyl_db,
                     hiss_db=hiss_db,
                     seed_base=10_000 + (idx * 10),
                 )
                 lines.append(f"{current_label}anull{out_label}")
             else:
-                chain = _per_track_chain(config=config, analysis=analysis, lpf_dip=lpf_dip)
-                lines.append(f"[{idx}:a]{chain}{out_label}")
+                chain = _per_track_chain(
+                    config=config,
+                    analysis=analysis,
+                    duck_in_sec=duck_in_sec,
+                    duck_out_sec=duck_out_sec,
+                    track_len_sec=track_len_sec,
+                )
+                lines.append(f"{source_label}{chain}{out_label}")
         else:
-            lines.append(f"[{idx}:a]anull{out_label}")
+            lines.append(f"{source_label}anull{out_label}")
 
     if len(mix_plan.instances) == 1:
         mix_label = "[mix0]"
         lines.append("[t0]anull[mix0]")
     else:
         current = "[t0]"
+        curve = _CROSSFADE_CURVE_MAP.get(config.crossfade_curve.value, "qsin")
         for idx in range(1, len(mix_plan.instances)):
             duration = (
                 mix_plan.transitions[idx - 1].crossfade_ms / 1000.0
@@ -360,7 +434,7 @@ def build_filtergraph(
                 else config.crossfade_sec
             )
             next_label = f"[mix{idx}]"
-            lines.append(f"{current}[t{idx}]acrossfade=d={duration:.3f}:c1=qsin:c2=qsin{next_label}")
+            lines.append(f"{current}[t{idx}]acrossfade=d={duration:.3f}:c1={curve}:c2={curve}{next_label}")
             current = next_label
         mix_label = current
 

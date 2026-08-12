@@ -43,7 +43,7 @@ except Exception:
     MULTIMEDIA_AVAILABLE = False
 
 from nightfall_mix.analysis import TrackAnalysis, read_analysis_cache_summary
-from nightfall_mix.config import OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
+from nightfall_mix.config import CrossfadeCurve, OutputFormat, PresetName, QualityMode, RainPresence, RenderStyle, SmartOrderingMode
 from nightfall_mix.effects_presets import get_preset
 from nightfall_mix.mixer import discover_audio_files
 from nightfall_mix.utils import ffprobe_duration_ms, format_hms
@@ -314,6 +314,29 @@ class MainWindow(QMainWindow):
         self.crossfade_spin.setValue(6.0)
         self.crossfade_spin.setSuffix(" sec")
         self.crossfade_spin.setToolTip("Base crossfade duration in seconds used by fixed and smart transitions.")
+        self.crossfade_curve_combo = QComboBox()
+        self.crossfade_curve_combo.addItem("Equal Power", CrossfadeCurve.equal_power.value)
+        self.crossfade_curve_combo.addItem("Smooth", CrossfadeCurve.smooth.value)
+        self.crossfade_curve_combo.addItem("Exponential", CrossfadeCurve.exponential.value)
+        self.crossfade_curve_combo.addItem("Logarithmic", CrossfadeCurve.logarithmic.value)
+        self.crossfade_curve_combo.addItem("Linear", CrossfadeCurve.linear.value)
+        self.crossfade_curve_combo.setToolTip(
+            "Shape of the fade between songs. Equal Power keeps constant loudness; "
+            "Smooth/Exponential/Logarithmic give gentler, warmer blends; Linear is a straight fade."
+        )
+        self.tempo_match_checkbox = QCheckBox("Gentle Tempo Match")
+        self.tempo_match_checkbox.setChecked(False)
+        self.tempo_match_checkbox.setToolTip(
+            "Optionally time-stretches an incoming track by a small, pitch-preserving amount "
+            "when BPMs are already close. Off by default."
+        )
+        self.tempo_match_spin = QDoubleSpinBox()
+        self.tempo_match_spin.setRange(1.0, 8.0)
+        self.tempo_match_spin.setSingleStep(0.5)
+        self.tempo_match_spin.setValue(4.0)
+        self.tempo_match_spin.setSuffix(" % max")
+        self.tempo_match_spin.setEnabled(False)
+        self.tempo_match_checkbox.toggled.connect(self.tempo_match_spin.setEnabled)
         self.lufs_spin = QDoubleSpinBox()
         self.lufs_spin.setRange(-30.0, -5.0)
         self.lufs_spin.setSingleStep(0.5)
@@ -353,6 +376,7 @@ class MainWindow(QMainWindow):
         self.crossfade_spin.valueChanged.connect(self._on_plan_controls_changed)
         self.target_checkbox.toggled.connect(self._on_plan_controls_changed)
         self.target_spin.valueChanged.connect(self._on_plan_controls_changed)
+        self.crossfade_curve_combo.currentIndexChanged.connect(self._mark_preview_dirty)
         self.lufs_spin.valueChanged.connect(self._mark_preview_dirty)
         self.rain_line.textChanged.connect(self._mark_preview_dirty)
         self.rain_slider.valueChanged.connect(self._mark_preview_dirty)
@@ -363,6 +387,8 @@ class MainWindow(QMainWindow):
         self.quality_combo.currentIndexChanged.connect(self._mark_preview_dirty)
         self.smart_ordering_checkbox.toggled.connect(self._mark_preview_dirty)
         self.smart_ordering_mode_combo.currentIndexChanged.connect(self._mark_preview_dirty)
+        self.tempo_match_checkbox.toggled.connect(self._on_plan_controls_changed)
+        self.tempo_match_spin.valueChanged.connect(self._on_plan_controls_changed)
 
         self.adaptive_report_line = QLineEdit(str(Path("adaptive_report.json")))
         self.adaptive_report_btn = QPushButton("Adaptive Report...")
@@ -400,6 +426,10 @@ class MainWindow(QMainWindow):
         transition_layout.addWidget(self.shuffle_checkbox, 0, 3)
         transition_layout.addWidget(QLabel("Crossfade"), 1, 0)
         transition_layout.addWidget(self.crossfade_spin, 1, 1)
+        transition_layout.addWidget(QLabel("Fade Curve"), 1, 2)
+        transition_layout.addWidget(self.crossfade_curve_combo, 1, 3)
+        transition_layout.addWidget(self.tempo_match_checkbox, 2, 0, 1, 2)
+        transition_layout.addWidget(self.tempo_match_spin, 2, 2, 1, 2)
 
         self.length_box = QGroupBox("Length And Scope")
         length_layout = QGridLayout(self.length_box)
@@ -1104,10 +1134,12 @@ class MainWindow(QMainWindow):
         has_loudness = bool(summary.get("has_loudness"))
         has_bpm_key = bool(summary.get("has_bpm_key"))
         has_rms_edges = bool(summary.get("has_rms_edges"))
+        has_boundary_cues = bool(summary.get("has_boundary_cues"))
+        has_beat_grid = bool(summary.get("has_beat_grid"))
         has_adaptive = bool(summary.get("has_adaptive_metrics"))
-        if has_loudness and has_bpm_key and has_rms_edges:
+        if has_loudness and has_bpm_key and has_rms_edges and has_boundary_cues and has_beat_grid:
             return "Full"
-        if has_loudness or has_bpm_key or has_rms_edges or has_adaptive:
+        if has_loudness or has_bpm_key or has_rms_edges or has_boundary_cues or has_beat_grid or has_adaptive:
             return "Partial"
         return "--"
 
@@ -1187,8 +1219,12 @@ class MainWindow(QMainWindow):
 
     def _on_smart_crossfade_toggled(self, enabled: bool) -> None:
         self.smart_ordering_checkbox.setEnabled(enabled)
+        if hasattr(self, "tempo_match_checkbox"):
+            self.tempo_match_checkbox.setEnabled(enabled)
         if not enabled:
             self.smart_ordering_checkbox.setChecked(False)
+            if hasattr(self, "tempo_match_checkbox"):
+                self.tempo_match_checkbox.setChecked(False)
         self._refresh_smart_ordering_mode_state()
         self._on_plan_controls_changed()
 
@@ -1207,6 +1243,8 @@ class MainWindow(QMainWindow):
                 self.smart_ordering_mode_combo.setCurrentIndex(mode_idx)
             self.shuffle_checkbox.setChecked(False)
             self.crossfade_spin.setValue(6.0)
+            self.tempo_match_checkbox.setChecked(False)
+            self.tempo_match_spin.setValue(4.0)
             self.lufs_spin.setValue(-14.0)
             self.target_checkbox.setChecked(False)
             self.target_spin.setValue(60)
@@ -1261,6 +1299,8 @@ class MainWindow(QMainWindow):
                 self.smart_ordering_mode_combo.setCurrentIndex(mode_idx)
             self.shuffle_checkbox.setChecked(False)
             self.crossfade_spin.setValue(6.0)
+            self.tempo_match_checkbox.setChecked(False)
+            self.tempo_match_spin.setValue(4.0)
             self.lufs_spin.setValue(-14.0)
             self.rain_slider.setValue(-28)
             self.bitrate_combo.setCurrentText("192k")
@@ -1723,12 +1763,15 @@ class MainWindow(QMainWindow):
             rain_presence=RainPresence(str(self.rain_presence_combo.currentData())),
             rain_preserve_low_drops=self.rain_low_drops_checkbox.isChecked(),
             crossfade_sec=self.crossfade_spin.value(),
+            crossfade_curve=CrossfadeCurve(str(self.crossfade_curve_combo.currentData())),
             lufs=self.lufs_spin.value(),
             shuffle=self.shuffle_checkbox.isChecked(),
             target_duration_min=target,
             smart_crossfade=self.smart_crossfade_checkbox.isChecked(),
             smart_ordering=self.smart_crossfade_checkbox.isChecked() and self.smart_ordering_checkbox.isChecked(),
             smart_ordering_mode=self._smart_ordering_mode(),
+            enable_warp=self.tempo_match_checkbox.isChecked(),
+            max_warp_percent=float(self.tempo_match_spin.value()),
             preview_mode=self.preview_checkbox.isChecked(),
             preview_duration_sec=float(self.preview_spin.value()),
             workspace_mode=self._active_workspace_mode(),
@@ -1784,6 +1827,8 @@ class MainWindow(QMainWindow):
             self.smart_ordering_mode_combo,
             self.shuffle_checkbox,
             self.crossfade_spin,
+            self.tempo_match_checkbox,
+            self.tempo_match_spin,
             self.lufs_spin,
             self.target_checkbox,
             self.target_spin,
@@ -1810,6 +1855,7 @@ class MainWindow(QMainWindow):
             self._refresh_bitrate_state()
             self._refresh_chunk_output_state()
             self._refresh_studio_mode_ui()
+            self.tempo_match_spin.setEnabled(self.tempo_match_checkbox.isChecked())
         self._refresh_action_state()
         self._refresh_preview_controls()
 
@@ -2418,6 +2464,11 @@ class MainWindow(QMainWindow):
             self.rain_presence_combo.setCurrentIndex(presence_idx)
         self.rain_low_drops_checkbox.setChecked(settings.rain_preserve_low_drops)
         self.crossfade_spin.setValue(settings.crossfade_sec)
+        curve_idx = self.crossfade_curve_combo.findData(settings.crossfade_curve.value)
+        if curve_idx >= 0:
+            self.crossfade_curve_combo.setCurrentIndex(curve_idx)
+        self.tempo_match_checkbox.setChecked(settings.enable_warp)
+        self.tempo_match_spin.setValue(settings.max_warp_percent)
         self.lufs_spin.setValue(settings.lufs)
         self.target_checkbox.setChecked(settings.target_duration_min is not None)
         if settings.target_duration_min is not None:

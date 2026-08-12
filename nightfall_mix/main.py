@@ -22,6 +22,7 @@ from nightfall_mix.analysis import (
     fallback_adaptive_processing,
 )
 from nightfall_mix.config import (
+    CrossfadeCurve,
     OrderMode,
     OutputFormat,
     PresetName,
@@ -363,6 +364,10 @@ def _collect_metadata(
                 "smart_used": t.smart_used,
                 "key_distance": t.key_distance,
                 "lpf_duck_ms": t.lpf_duck_ms,
+                "incoming_trim_ms": t.incoming_trim_ms,
+                "outgoing_end_ms": t.outgoing_end_ms,
+                "beat_align_ms": t.beat_align_ms,
+                "tempo_ratio": t.tempo_ratio,
             }
             for t in plan.transitions
         ],
@@ -372,6 +377,9 @@ def _collect_metadata(
                 "bpm_confidence": a.bpm_confidence,
                 "key": a.key,
                 "key_confidence": a.key_confidence,
+                "content_start_ms": a.content_start_ms,
+                "content_end_ms": a.content_end_ms,
+                "beat_times_ms": a.beat_times_ms,
                 "warnings": a.warnings,
                 "loudness": {
                     "input_i": a.loudness.input_i,
@@ -397,6 +405,9 @@ def run_nightfall_mix(
     target_duration_min: Optional[int] = typer.Option(None, "--target-duration-min"),
     crossfade_sec: float = typer.Option(6.0, "--crossfade-sec"),
     smart_crossfade: bool = typer.Option(False, "--smart-crossfade"),
+    crossfade_curve: CrossfadeCurve = typer.Option(
+        CrossfadeCurve.equal_power, "--crossfade-curve"
+    ),
     smart_ordering: bool = typer.Option(False, "--smart-ordering"),
     smart_ordering_mode: SmartOrderingMode = typer.Option(
         SmartOrderingMode.bpm_key_balanced, "--smart-ordering-mode"
@@ -408,6 +419,7 @@ def run_nightfall_mix(
     rain_level_db: float = typer.Option(-28.0, "--rain-level-db"),
     mix_log: Optional[Path] = typer.Option(None, "--mix-log"),
     enable_warp: bool = typer.Option(False, "--enable-warp"),
+    max_warp_percent: float = typer.Option(4.0, "--max-warp-percent"),
     output_format: OutputFormat = typer.Option(OutputFormat.auto, "--output-format"),
     bitrate: str = typer.Option("192k", "--bitrate"),
     strict_analysis: bool = typer.Option(False, "--strict-analysis"),
@@ -433,6 +445,7 @@ def run_nightfall_mix(
             target_duration_min=target_duration_min,
             crossfade_sec=crossfade_sec,
             smart_crossfade=smart_crossfade,
+            crossfade_curve=crossfade_curve,
             smart_ordering=smart_ordering,
             smart_ordering_mode=smart_ordering_mode,
             lufs=lufs,
@@ -442,6 +455,7 @@ def run_nightfall_mix(
             rain_level_db=rain_level_db,
             mix_log=mix_log,
             enable_warp=enable_warp,
+            max_warp_percent=max_warp_percent,
             output_format=output_format,
             bitrate=bitrate,
             strict_analysis=strict_analysis,
@@ -567,6 +581,8 @@ def run_nightfall_mix(
         crossfade_sec=config.crossfade_sec,
         smart_crossfade=config.smart_crossfade,
         target_duration_min=config.target_duration_min,
+        enable_warp=config.enable_warp,
+        max_warp_percent=config.max_warp_percent,
     )
 
     try:

@@ -1,402 +1,842 @@
 [
   {
-    "track": "Teahouse in Dusk.mp3",
+    "track": "Quarter Token.mp3",
     "metrics": {
-      "lufs": -14.76,
-      "crest_factor_db": 16.06359764378724,
-      "spectral_centroid_hz": 269.1464280416362,
-      "rolloff_hz": 691.754150390625,
-      "stereo_width": 0.33910435884122053,
-      "noise_floor_dbfs": -27.94549909387245
+      "lufs": -13.18,
+      "crest_factor_db": 10.865207729843199,
+      "spectral_centroid_hz": 170.1542425763082,
+      "rolloff_hz": 654.071044921875,
+      "stereo_width": 0.15397038325500073,
+      "noise_floor_dbfs": -23.659445505030845
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.266,
+      "compression_strength": 0.962,
+      "stereo_width_target": 0.154,
+      "noise_added_db": null,
+      "lofi_needed_score": 11.94
+    },
+    "rationale": "LPF skipped (rolloff 654Hz), compression moderate (crest 10.9dB), stereo unchanged (0.15), noise skipped (floor -23.7dBFS)"
+  },
+  {
+    "track": "Crosswalk Glitch.mp3",
+    "metrics": {
+      "lufs": -12.72,
+      "crest_factor_db": 11.214229783389008,
+      "spectral_centroid_hz": 206.52185840501102,
+      "rolloff_hz": 619.07958984375,
+      "stereo_width": 0.1807870492743216,
+      "noise_floor_dbfs": -24.90496889231028
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.267,
+      "compression_strength": 0.963,
+      "stereo_width_target": 0.181,
+      "noise_added_db": null,
+      "lofi_needed_score": 13.39
+    },
+    "rationale": "LPF skipped (rolloff 619Hz), compression moderate (crest 11.2dB), stereo unchanged (0.18), noise skipped (floor -24.9dBFS)"
+  },
+  {
+    "track": "Vending Machine Rain.mp3",
+    "metrics": {
+      "lufs": -13.36,
+      "crest_factor_db": 13.277660739621258,
+      "spectral_centroid_hz": 196.63280482831382,
+      "rolloff_hz": 648.687744140625,
+      "stereo_width": 0.1439834413779492,
+      "noise_floor_dbfs": -28.168237200986646
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.275,
+      "compression_strength": 0.972,
+      "stereo_width_target": 0.144,
+      "noise_added_db": null,
+      "lofi_needed_score": 21.99
+    },
+    "rationale": "LPF skipped (rolloff 649Hz), compression moderate (crest 13.3dB), stereo unchanged (0.14), noise skipped (floor -28.2dBFS)"
+  },
+  {
+    "track": "Rooftops After Rain.mp3",
+    "metrics": {
+      "lufs": -13.78,
+      "crest_factor_db": 14.708090465655953,
+      "spectral_centroid_hz": 223.90126307300028,
+      "rolloff_hz": 737.51220703125,
+      "stereo_width": 0.13543844462690785,
+      "noise_floor_dbfs": -30.70742644550193
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
       "saturation_strength": 0.277,
       "compression_strength": 1.17,
-      "stereo_width_target": 0.339,
+      "stereo_width_target": 0.135,
       "noise_added_db": null,
       "lofi_needed_score": 25.0
     },
-    "rationale": "LPF skipped (rolloff 692Hz), compression increased (crest 16.1dB), stereo unchanged (0.34), noise skipped (floor -27.9dBFS)"
+    "rationale": "LPF skipped (rolloff 738Hz), compression increased (crest 14.7dB), stereo unchanged (0.14), noise skipped (floor -30.7dBFS)"
   },
   {
-    "track": "Santur & Smoke.mp3",
+    "track": "Arcade Rain.mp3",
     "metrics": {
-      "lufs": -13.94,
-      "crest_factor_db": 16.179734571533153,
-      "spectral_centroid_hz": 284.7643011505785,
-      "rolloff_hz": 683.67919921875,
-      "stereo_width": 0.44459084971953466,
-      "noise_floor_dbfs": -26.270584764404298
+      "lufs": -12.07,
+      "crest_factor_db": 11.047369645373976,
+      "spectral_centroid_hz": 179.26416137271795,
+      "rolloff_hz": 651.37939453125,
+      "stereo_width": 0.23988586630779923,
+      "noise_floor_dbfs": -23.96942259236286
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.266,
+      "compression_strength": 0.963,
+      "stereo_width_target": 0.24,
+      "noise_added_db": null,
+      "lofi_needed_score": 12.7
+    },
+    "rationale": "LPF skipped (rolloff 651Hz), compression moderate (crest 11.0dB), stereo unchanged (0.24), noise skipped (floor -24.0dBFS)"
+  },
+  {
+    "track": "Midnight Rain.mp3",
+    "metrics": {
+      "lufs": -13.19,
+      "crest_factor_db": 10.914902319749496,
+      "spectral_centroid_hz": 127.07814498385503,
+      "rolloff_hz": 411.822509765625,
+      "stereo_width": 0.13695963057646487,
+      "noise_floor_dbfs": -24.677229053756186
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.266,
+      "compression_strength": 0.962,
+      "stereo_width_target": 0.137,
+      "noise_added_db": null,
+      "lofi_needed_score": 12.15
+    },
+    "rationale": "LPF skipped (rolloff 412Hz), compression moderate (crest 10.9dB), stereo unchanged (0.14), noise skipped (floor -24.7dBFS)"
+  },
+  {
+    "track": "Arcade After Closing.mp3",
+    "metrics": {
+      "lufs": -12.68,
+      "crest_factor_db": 11.344576096829954,
+      "spectral_centroid_hz": 146.25605161585315,
+      "rolloff_hz": 511.41357421875,
+      "stereo_width": 0.1895867722529314,
+      "noise_floor_dbfs": -27.24167579649057
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.268,
+      "compression_strength": 0.964,
+      "stereo_width_target": 0.19,
+      "noise_added_db": null,
+      "lofi_needed_score": 13.94
+    },
+    "rationale": "LPF skipped (rolloff 511Hz), compression moderate (crest 11.3dB), stereo unchanged (0.19), noise skipped (floor -27.2dBFS)"
+  },
+  {
+    "track": "Megacity Drift.mp3",
+    "metrics": {
+      "lufs": -13.56,
+      "crest_factor_db": 12.430498166210945,
+      "spectral_centroid_hz": 346.693705694262,
+      "rolloff_hz": 1302.7587890625,
+      "stereo_width": 0.34787584129828286,
+      "noise_floor_dbfs": -21.22620782402111
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.272,
+      "compression_strength": 0.968,
+      "stereo_width_target": 0.348,
+      "noise_added_db": null,
+      "lofi_needed_score": 18.46
+    },
+    "rationale": "LPF skipped (rolloff 1303Hz), compression moderate (crest 12.4dB), stereo unchanged (0.35), noise skipped (floor -21.2dBFS)"
+  },
+  {
+    "track": "Rain on Kairo Drive.mp3",
+    "metrics": {
+      "lufs": -12.28,
+      "crest_factor_db": 10.383298706548178,
+      "spectral_centroid_hz": 269.5846588338114,
+      "rolloff_hz": 1006.67724609375,
+      "stereo_width": 0.29813377685379616,
+      "noise_floor_dbfs": -20.06449446139507
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.264,
+      "compression_strength": 0.96,
+      "stereo_width_target": 0.298,
+      "noise_added_db": null,
+      "lofi_needed_score": 9.93
+    },
+    "rationale": "LPF skipped (rolloff 1007Hz), compression moderate (crest 10.4dB), stereo unchanged (0.30), noise skipped (floor -20.1dBFS)"
+  },
+  {
+    "track": "Rain Tunnel Drift.mp3",
+    "metrics": {
+      "lufs": -12.96,
+      "crest_factor_db": 11.820006075750896,
+      "spectral_centroid_hz": 223.65273601386184,
+      "rolloff_hz": 699.8291015625,
+      "stereo_width": 0.25933057921228175,
+      "noise_floor_dbfs": -24.773918575280035
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.269,
+      "compression_strength": 0.966,
+      "stereo_width_target": 0.259,
+      "noise_added_db": null,
+      "lofi_needed_score": 15.92
+    },
+    "rationale": "LPF skipped (rolloff 700Hz), compression moderate (crest 11.8dB), stereo unchanged (0.26), noise skipped (floor -24.8dBFS)"
+  },
+  {
+    "track": "Rain on the Circuit.mp3",
+    "metrics": {
+      "lufs": -12.79,
+      "crest_factor_db": 10.535836768257983,
+      "spectral_centroid_hz": 244.6328072925578,
+      "rolloff_hz": 694.44580078125,
+      "stereo_width": 0.24359745671623229,
+      "noise_floor_dbfs": -21.550051387588653
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.265,
+      "compression_strength": 0.961,
+      "stereo_width_target": 0.244,
+      "noise_added_db": null,
+      "lofi_needed_score": 10.57
+    },
+    "rationale": "LPF skipped (rolloff 694Hz), compression moderate (crest 10.5dB), stereo unchanged (0.24), noise skipped (floor -21.6dBFS)"
+  },
+  {
+    "track": "Vending Machine Glow.mp3",
+    "metrics": {
+      "lufs": -12.41,
+      "crest_factor_db": 11.40106877129255,
+      "spectral_centroid_hz": 361.4157625601256,
+      "rolloff_hz": 1407.733154296875,
+      "stereo_width": 0.29764336932510344,
+      "noise_floor_dbfs": -18.957620910622268
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.268,
+      "compression_strength": 0.964,
+      "stereo_width_target": 0.298,
+      "noise_added_db": null,
+      "lofi_needed_score": 14.17
+    },
+    "rationale": "LPF skipped (rolloff 1408Hz), compression moderate (crest 11.4dB), stereo unchanged (0.30), noise skipped (floor -19.0dBFS)"
+  },
+  {
+    "track": "Vending Rain Alley.mp3",
+    "metrics": {
+      "lufs": -12.51,
+      "crest_factor_db": 11.044173725633108,
+      "spectral_centroid_hz": 364.52290877966163,
+      "rolloff_hz": 1318.90869140625,
+      "stereo_width": 0.27963221529525645,
+      "noise_floor_dbfs": -18.72239826508295
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.266,
+      "compression_strength": 0.963,
+      "stereo_width_target": 0.28,
+      "noise_added_db": null,
+      "lofi_needed_score": 12.68
+    },
+    "rationale": "LPF skipped (rolloff 1319Hz), compression moderate (crest 11.0dB), stereo unchanged (0.28), noise skipped (floor -18.7dBFS)"
+  },
+  {
+    "track": "Neon After Midnight.mp3",
+    "metrics": {
+      "lufs": -14.56,
+      "crest_factor_db": 12.768237023200484,
+      "spectral_centroid_hz": 175.86846862491632,
+      "rolloff_hz": 581.396484375,
+      "stereo_width": 0.2083576993527649,
+      "noise_floor_dbfs": -23.423833666138037
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.273,
+      "compression_strength": 0.97,
+      "stereo_width_target": 0.208,
+      "noise_added_db": null,
+      "lofi_needed_score": 19.87
+    },
+    "rationale": "LPF skipped (rolloff 581Hz), compression moderate (crest 12.8dB), stereo unchanged (0.21), noise skipped (floor -23.4dBFS)"
+  },
+  {
+    "track": "Rain Alley Circuit.mp3",
+    "metrics": {
+      "lufs": -14.74,
+      "crest_factor_db": 13.989934890933121,
+      "spectral_centroid_hz": 173.73755163003705,
+      "rolloff_hz": 589.471435546875,
+      "stereo_width": 0.28626085759143416,
+      "noise_floor_dbfs": -26.198169235169296
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.277,
+      "compression_strength": 0.975,
+      "stereo_width_target": 0.286,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.96
+    },
+    "rationale": "LPF skipped (rolloff 589Hz), compression moderate (crest 14.0dB), stereo unchanged (0.29), noise skipped (floor -26.2dBFS)"
+  },
+  {
+    "track": "Crosswalk Static.mp3",
+    "metrics": {
+      "lufs": -13.27,
+      "crest_factor_db": 11.268551223182088,
+      "spectral_centroid_hz": 209.1998497799209,
+      "rolloff_hz": 740.203857421875,
+      "stereo_width": 0.15354346332256869,
+      "noise_floor_dbfs": -24.492131624927747
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.267,
+      "compression_strength": 0.964,
+      "stereo_width_target": 0.154,
+      "noise_added_db": null,
+      "lofi_needed_score": 13.62
+    },
+    "rationale": "LPF skipped (rolloff 740Hz), compression moderate (crest 11.3dB), stereo unchanged (0.15), noise skipped (floor -24.5dBFS)"
+  },
+  {
+    "track": "Last Train Underground.mp3",
+    "metrics": {
+      "lufs": -13.02,
+      "crest_factor_db": 11.123607897455745,
+      "spectral_centroid_hz": 151.5072534739813,
+      "rolloff_hz": 567.938232421875,
+      "stereo_width": 0.24536034768332335,
+      "noise_floor_dbfs": -27.76046064448448
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.267,
+      "compression_strength": 0.963,
+      "stereo_width_target": 0.245,
+      "noise_added_db": null,
+      "lofi_needed_score": 13.02
+    },
+    "rationale": "LPF skipped (rolloff 568Hz), compression moderate (crest 11.1dB), stereo unchanged (0.25), noise skipped (floor -27.8dBFS)"
+  },
+  {
+    "track": "City of Electric Rain.mp3",
+    "metrics": {
+      "lufs": -14.13,
+      "crest_factor_db": 13.540168544164455,
+      "spectral_centroid_hz": 591.8437156776317,
+      "rolloff_hz": 2750.86669921875,
+      "stereo_width": 0.24088413089439134,
+      "noise_floor_dbfs": -20.881215764625544
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.973,
+      "stereo_width_target": 0.241,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.08
+    },
+    "rationale": "LPF skipped (rolloff 2751Hz), compression moderate (crest 13.5dB), stereo unchanged (0.24), noise skipped (floor -20.9dBFS)"
+  },
+  {
+    "track": "Rain Vector.mp3",
+    "metrics": {
+      "lufs": -12.31,
+      "crest_factor_db": 10.54865897107029,
+      "spectral_centroid_hz": 194.71063369047252,
+      "rolloff_hz": 702.520751953125,
+      "stereo_width": 0.2503360444689183,
+      "noise_floor_dbfs": -22.682419607010544
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.265,
+      "compression_strength": 0.961,
+      "stereo_width_target": 0.25,
+      "noise_added_db": null,
+      "lofi_needed_score": 10.62
+    },
+    "rationale": "LPF skipped (rolloff 703Hz), compression moderate (crest 10.5dB), stereo unchanged (0.25), noise skipped (floor -22.7dBFS)"
+  },
+  {
+    "track": "Electric Skyline.mp3",
+    "metrics": {
+      "lufs": -14.96,
+      "crest_factor_db": 12.110515191992,
+      "spectral_centroid_hz": 171.33871641468164,
+      "rolloff_hz": 597.54638671875,
+      "stereo_width": 0.2978642177827291,
+      "noise_floor_dbfs": -24.835974043852744
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.27,
+      "compression_strength": 0.967,
+      "stereo_width_target": 0.298,
+      "noise_added_db": null,
+      "lofi_needed_score": 17.13
+    },
+    "rationale": "LPF skipped (rolloff 598Hz), compression moderate (crest 12.1dB), stereo unchanged (0.30), noise skipped (floor -24.8dBFS)"
+  },
+  {
+    "track": "Dreams in Binary.mp3",
+    "metrics": {
+      "lufs": -14.61,
+      "crest_factor_db": 14.169279864079643,
+      "spectral_centroid_hz": 139.5593414158413,
+      "rolloff_hz": 559.86328125,
+      "stereo_width": 0.28276314751342346,
+      "noise_floor_dbfs": -29.83674437414063
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
       "saturation_strength": 0.277,
       "compression_strength": 1.17,
-      "stereo_width_target": 0.445,
+      "stereo_width_target": 0.283,
       "noise_added_db": null,
       "lofi_needed_score": 25.0
     },
-    "rationale": "LPF skipped (rolloff 684Hz), compression increased (crest 16.2dB), stereo unchanged (0.44), noise skipped (floor -26.3dBFS)"
+    "rationale": "LPF skipped (rolloff 560Hz), compression increased (crest 14.2dB), stereo unchanged (0.28), noise skipped (floor -29.8dBFS)"
   },
   {
-    "track": "Velvet Strings of Tehran.mp3",
+    "track": "Rainline Drift.mp3",
     "metrics": {
-      "lufs": -14.14,
-      "crest_factor_db": 16.092405282361756,
-      "spectral_centroid_hz": 243.13190396200062,
-      "rolloff_hz": 656.7626953125,
-      "stereo_width": 0.4421103876892746,
-      "noise_floor_dbfs": -27.69176048562362
+      "lufs": -14.09,
+      "crest_factor_db": 11.331992077308499,
+      "spectral_centroid_hz": 277.3976146356514,
+      "rolloff_hz": 648.687744140625,
+      "stereo_width": 0.25873172304260006,
+      "noise_floor_dbfs": -21.615063334067372
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.442,
+      "saturation_strength": 0.267,
+      "compression_strength": 0.964,
+      "stereo_width_target": 0.259,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 13.88
     },
-    "rationale": "LPF skipped (rolloff 657Hz), compression increased (crest 16.1dB), stereo unchanged (0.44), noise skipped (floor -27.7dBFS)"
+    "rationale": "LPF skipped (rolloff 649Hz), compression moderate (crest 11.3dB), stereo unchanged (0.26), noise skipped (floor -21.6dBFS)"
   },
   {
-    "track": "Ancient Strings, Modern Silence.mp3",
+    "track": "Violet Rain Circuit.mp3",
     "metrics": {
-      "lufs": -13.07,
-      "crest_factor_db": 14.31471746355177,
-      "spectral_centroid_hz": 290.4136149615641,
-      "rolloff_hz": 662.14599609375,
-      "stereo_width": 0.37900870583701196,
-      "noise_floor_dbfs": -24.987472830251676
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.379,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 662Hz), compression increased (crest 14.3dB), stereo unchanged (0.38), noise skipped (floor -25.0dBFS)"
-  },
-  {
-    "track": "Whispers of Santur.mp3",
-    "metrics": {
-      "lufs": -14.46,
-      "crest_factor_db": 15.551125053389926,
-      "spectral_centroid_hz": 311.774351445481,
-      "rolloff_hz": 707.904052734375,
-      "stereo_width": 0.3937721070772866,
-      "noise_floor_dbfs": -25.56580972421373
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.394,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 708Hz), compression increased (crest 15.6dB), stereo unchanged (0.39), noise skipped (floor -25.6dBFS)"
-  },
-  {
-    "track": "Tehran Afternoon Walk.mp3",
-    "metrics": {
-      "lufs": -13.54,
-      "crest_factor_db": 14.219276643704037,
-      "spectral_centroid_hz": 250.3432238256169,
-      "rolloff_hz": 672.91259765625,
-      "stereo_width": 0.35984816390383173,
-      "noise_floor_dbfs": -25.11416343007403
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.36,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 673Hz), compression increased (crest 14.2dB), stereo unchanged (0.36), noise skipped (floor -25.1dBFS)"
-  },
-  {
-    "track": "Dastgah Moon.mp3",
-    "metrics": {
-      "lufs": -13.35,
-      "crest_factor_db": 14.712506186654922,
-      "spectral_centroid_hz": 218.0070016112562,
-      "rolloff_hz": 788.653564453125,
-      "stereo_width": 0.36920628158933677,
-      "noise_floor_dbfs": -24.004296441611636
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.369,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 789Hz), compression increased (crest 14.7dB), stereo unchanged (0.37), noise skipped (floor -24.0dBFS)"
-  },
-  {
-    "track": "Flowing Through Persian Nights.mp3",
-    "metrics": {
-      "lufs": -14.01,
-      "crest_factor_db": 15.849319391529786,
-      "spectral_centroid_hz": 247.1487120721381,
-      "rolloff_hz": 845.17822265625,
-      "stereo_width": 0.4128007106564827,
-      "noise_floor_dbfs": -26.471921443625934
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.413,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 845Hz), compression increased (crest 15.8dB), stereo unchanged (0.41), noise skipped (floor -26.5dBFS)"
-  },
-  {
-    "track": "Santur of the Forgotten Court.mp3",
-    "metrics": {
-      "lufs": -13.84,
-      "crest_factor_db": 13.861961143806788,
-      "spectral_centroid_hz": 269.98334219649473,
-      "rolloff_hz": 753.662109375,
-      "stereo_width": 0.3473791001461935,
-      "noise_floor_dbfs": -25.57998838395615
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 0.974,
-      "stereo_width_target": 0.347,
-      "noise_added_db": null,
-      "lofi_needed_score": 24.42
-    },
-    "rationale": "LPF skipped (rolloff 754Hz), compression moderate (crest 13.9dB), stereo unchanged (0.35), noise skipped (floor -25.6dBFS)"
-  },
-  {
-    "track": "Reflections of the Silk Road.mp3",
-    "metrics": {
-      "lufs": -14.21,
-      "crest_factor_db": 15.148104129644246,
-      "spectral_centroid_hz": 278.7250653274988,
-      "rolloff_hz": 724.053955078125,
-      "stereo_width": 0.441473031775667,
-      "noise_floor_dbfs": -26.800552567217082
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.441,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 724Hz), compression increased (crest 15.1dB), stereo unchanged (0.44), noise skipped (floor -26.8dBFS)"
-  },
-  {
-    "track": "Moon Over Isfahan.mp3",
-    "metrics": {
-      "lufs": -13.57,
-      "crest_factor_db": 14.78826493215864,
-      "spectral_centroid_hz": 214.01571374127698,
+      "lufs": -13.36,
+      "crest_factor_db": 11.756093195982297,
+      "spectral_centroid_hz": 157.82869625392706,
       "rolloff_hz": 527.5634765625,
-      "stereo_width": 0.34615691119597125,
-      "noise_floor_dbfs": -27.177795264162185
+      "stereo_width": 0.2823281546339136,
+      "noise_floor_dbfs": -23.29913939484729
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.346,
+      "saturation_strength": 0.269,
+      "compression_strength": 0.966,
+      "stereo_width_target": 0.282,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 15.65
     },
-    "rationale": "LPF skipped (rolloff 528Hz), compression increased (crest 14.8dB), stereo unchanged (0.35), noise skipped (floor -27.2dBFS)"
+    "rationale": "LPF skipped (rolloff 528Hz), compression moderate (crest 11.8dB), stereo unchanged (0.28), noise skipped (floor -23.3dBFS)"
   },
   {
-    "track": "Calm Over Persian Skies.mp3",
+    "track": "Data in the Rain.mp3",
     "metrics": {
-      "lufs": -13.69,
-      "crest_factor_db": 14.532889476659994,
-      "spectral_centroid_hz": 258.1105977520835,
-      "rolloff_hz": 592.1630859375,
-      "stereo_width": 0.33337469685199683,
-      "noise_floor_dbfs": -26.701136161158782
+      "lufs": -13.92,
+      "crest_factor_db": 12.27454298787194,
+      "spectral_centroid_hz": 153.31881824544575,
+      "rolloff_hz": 562.554931640625,
+      "stereo_width": 0.13323968281092316,
+      "noise_floor_dbfs": -27.438167259188212
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.333,
+      "saturation_strength": 0.271,
+      "compression_strength": 0.968,
+      "stereo_width_target": 0.133,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 17.81
     },
-    "rationale": "LPF skipped (rolloff 592Hz), compression increased (crest 14.5dB), stereo unchanged (0.33), noise skipped (floor -26.7dBFS)"
+    "rationale": "LPF skipped (rolloff 563Hz), compression moderate (crest 12.3dB), stereo unchanged (0.13), noise skipped (floor -27.4dBFS)"
   },
   {
-    "track": "Santoor in Rain.mp3",
+    "track": "Billboards in the Storm.mp3",
     "metrics": {
-      "lufs": -13.81,
-      "crest_factor_db": 15.115270040072375,
-      "spectral_centroid_hz": 256.6770614287951,
-      "rolloff_hz": 624.462890625,
-      "stereo_width": 0.3316176252476093,
-      "noise_floor_dbfs": -26.76168376724633
+      "lufs": -12.92,
+      "crest_factor_db": 11.45556922220717,
+      "spectral_centroid_hz": 149.17533706476615,
+      "rolloff_hz": 549.0966796875,
+      "stereo_width": 0.12542169437899128,
+      "noise_floor_dbfs": -26.01386976374186
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.332,
+      "saturation_strength": 0.268,
+      "compression_strength": 0.964,
+      "stereo_width_target": 0.125,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 14.4
     },
-    "rationale": "LPF skipped (rolloff 624Hz), compression increased (crest 15.1dB), stereo unchanged (0.33), noise skipped (floor -26.8dBFS)"
+    "rationale": "LPF skipped (rolloff 549Hz), compression moderate (crest 11.5dB), stereo unchanged (0.13), noise skipped (floor -26.0dBFS)"
   },
   {
-    "track": "Dialogue in Dastgah.mp3",
+    "track": "Tunnel of Blue Light.mp3",
     "metrics": {
-      "lufs": -14.64,
-      "crest_factor_db": 15.849963425540244,
-      "spectral_centroid_hz": 299.9144241203627,
-      "rolloff_hz": 934.002685546875,
-      "stereo_width": 0.4064670850564751,
-      "noise_floor_dbfs": -27.382135618610437
+      "lufs": -13.38,
+      "crest_factor_db": 11.906046866549552,
+      "spectral_centroid_hz": 194.66138255485447,
+      "rolloff_hz": 654.071044921875,
+      "stereo_width": 0.2157625304932178,
+      "noise_floor_dbfs": -26.49255706902168
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.406,
+      "saturation_strength": 0.27,
+      "compression_strength": 0.966,
+      "stereo_width_target": 0.216,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 16.28
     },
-    "rationale": "LPF skipped (rolloff 934Hz), compression increased (crest 15.8dB), stereo unchanged (0.41), noise skipped (floor -27.4dBFS)"
+    "rationale": "LPF skipped (rolloff 654Hz), compression moderate (crest 11.9dB), stereo unchanged (0.22), noise skipped (floor -26.5dBFS)"
   },
   {
-    "track": "Ney Over Silent Gardens.mp3",
+    "track": "Signal Lost at 2 AM.mp3",
     "metrics": {
-      "lufs": -13.64,
-      "crest_factor_db": 14.950969812413792,
-      "spectral_centroid_hz": 273.8887735940889,
-      "rolloff_hz": 662.14599609375,
-      "stereo_width": 0.3426744098648151,
-      "noise_floor_dbfs": -25.441721242979835
+      "lufs": -13.17,
+      "crest_factor_db": 13.034481339134581,
+      "spectral_centroid_hz": 191.77115324338774,
+      "rolloff_hz": 740.203857421875,
+      "stereo_width": 0.2133896885831072,
+      "noise_floor_dbfs": -24.864314812913292
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.343,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.213,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 20.98
     },
-    "rationale": "LPF skipped (rolloff 662Hz), compression increased (crest 15.0dB), stereo unchanged (0.34), noise skipped (floor -25.4dBFS)"
+    "rationale": "LPF skipped (rolloff 740Hz), compression moderate (crest 13.0dB), stereo unchanged (0.21), noise skipped (floor -24.9dBFS)"
   },
   {
-    "track": "Tehran Rain Glass.mp3",
+    "track": "Blue Light District.mp3",
     "metrics": {
-      "lufs": -13.82,
-      "crest_factor_db": 14.309482127958503,
-      "spectral_centroid_hz": 237.80935732889805,
-      "rolloff_hz": 624.462890625,
-      "stereo_width": 0.39965064057249855,
-      "noise_floor_dbfs": -27.60940384422878
+      "lufs": -14.69,
+      "crest_factor_db": 12.603957711663966,
+      "spectral_centroid_hz": 153.36356404687712,
+      "rolloff_hz": 527.5634765625,
+      "stereo_width": 0.28549001453509915,
+      "noise_floor_dbfs": -21.227243634454027
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.4,
+      "saturation_strength": 0.272,
+      "compression_strength": 0.969,
+      "stereo_width_target": 0.285,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 19.18
     },
-    "rationale": "LPF skipped (rolloff 624Hz), compression increased (crest 14.3dB), stereo unchanged (0.40), noise skipped (floor -27.6dBFS)"
+    "rationale": "LPF skipped (rolloff 528Hz), compression moderate (crest 12.6dB), stereo unchanged (0.29), noise skipped (floor -21.2dBFS)"
   },
   {
-    "track": "Between Pulse and Pause.mp3",
+    "track": "Sirens Through the Glass.mp3",
     "metrics": {
-      "lufs": -14.11,
-      "crest_factor_db": 15.700524210332514,
-      "spectral_centroid_hz": 308.35274389222434,
-      "rolloff_hz": 699.8291015625,
-      "stereo_width": 0.42465259957395673,
-      "noise_floor_dbfs": -27.28920314574343
+      "lufs": -12.6,
+      "crest_factor_db": 10.102155419932071,
+      "spectral_centroid_hz": 127.64506674893926,
+      "rolloff_hz": 546.405029296875,
+      "stereo_width": 0.2491374221856828,
+      "noise_floor_dbfs": -25.627603396167093
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.425,
+      "saturation_strength": 0.263,
+      "compression_strength": 0.959,
+      "stereo_width_target": 0.249,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 8.76
     },
-    "rationale": "LPF skipped (rolloff 700Hz), compression increased (crest 15.7dB), stereo unchanged (0.42), noise skipped (floor -27.3dBFS)"
+    "rationale": "LPF skipped (rolloff 546Hz), compression moderate (crest 10.1dB), stereo unchanged (0.25), noise skipped (floor -25.6dBFS)"
   },
   {
-    "track": "Persian Café at Dusk.mp3",
+    "track": "Chrome Reflections.mp3",
     "metrics": {
-      "lufs": -12.37,
-      "crest_factor_db": 14.032436960458286,
-      "spectral_centroid_hz": 293.5426145872693,
-      "rolloff_hz": 699.8291015625,
-      "stereo_width": 0.33812079357513825,
-      "noise_floor_dbfs": -27.177766670571778
+      "lufs": -12.77,
+      "crest_factor_db": 12.19482935156929,
+      "spectral_centroid_hz": 166.55826240027707,
+      "rolloff_hz": 473.73046875,
+      "stereo_width": 0.21952819412599028,
+      "noise_floor_dbfs": -23.60494068275782
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.338,
+      "saturation_strength": 0.271,
+      "compression_strength": 0.967,
+      "stereo_width_target": 0.22,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 17.48
     },
-    "rationale": "LPF skipped (rolloff 700Hz), compression increased (crest 14.0dB), stereo unchanged (0.34), noise skipped (floor -27.2dBFS)"
+    "rationale": "LPF skipped (rolloff 474Hz), compression moderate (crest 12.2dB), stereo unchanged (0.22), noise skipped (floor -23.6dBFS)"
   },
   {
-    "track": "Desert Air & Distant Ney.mp3",
-    "metrics": {
-      "lufs": -14.03,
-      "crest_factor_db": 15.335379312629144,
-      "spectral_centroid_hz": 218.461070587562,
-      "rolloff_hz": 557.171630859375,
-      "stereo_width": 0.4158313931156663,
-      "noise_floor_dbfs": -28.062071640000813
-    },
-    "applied_processing": {
-      "lpf_cutoff_hz": null,
-      "saturation_strength": 0.277,
-      "compression_strength": 1.17,
-      "stereo_width_target": 0.416,
-      "noise_added_db": null,
-      "lofi_needed_score": 25.0
-    },
-    "rationale": "LPF skipped (rolloff 557Hz), compression increased (crest 15.3dB), stereo unchanged (0.42), noise skipped (floor -28.1dBFS)"
-  },
-  {
-    "track": "Quiet Tables in Shiraz.mp3",
+    "track": "After Hours Drive.mp3",
     "metrics": {
       "lufs": -13.88,
-      "crest_factor_db": 15.10511575083257,
-      "spectral_centroid_hz": 272.63208044291423,
-      "rolloff_hz": 788.653564453125,
-      "stereo_width": 0.26968431627997447,
-      "noise_floor_dbfs": -26.255872551056925
+      "crest_factor_db": 11.627076363629559,
+      "spectral_centroid_hz": 245.98601569257636,
+      "rolloff_hz": 834.41162109375,
+      "stereo_width": 0.24161988191935874,
+      "noise_floor_dbfs": -21.032590077640997
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.269,
+      "compression_strength": 0.965,
+      "stereo_width_target": 0.242,
+      "noise_added_db": null,
+      "lofi_needed_score": 15.11
+    },
+    "rationale": "LPF skipped (rolloff 834Hz), compression moderate (crest 11.6dB), stereo unchanged (0.24), noise skipped (floor -21.0dBFS)"
+  },
+  {
+    "track": "Neon Ghosts.mp3",
+    "metrics": {
+      "lufs": -13.42,
+      "crest_factor_db": 11.752408900755556,
+      "spectral_centroid_hz": 158.611494401046,
+      "rolloff_hz": 549.0966796875,
+      "stereo_width": 0.2732176783457144,
+      "noise_floor_dbfs": -20.485183927213892
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.269,
+      "compression_strength": 0.966,
+      "stereo_width_target": 0.273,
+      "noise_added_db": null,
+      "lofi_needed_score": 15.64
+    },
+    "rationale": "LPF skipped (rolloff 549Hz), compression moderate (crest 11.8dB), stereo unchanged (0.27), noise skipped (floor -20.5dBFS)"
+  },
+  {
+    "track": "Synthetic Memories.mp3",
+    "metrics": {
+      "lufs": -14.8,
+      "crest_factor_db": 12.635549367282255,
+      "spectral_centroid_hz": 137.07741900030254,
+      "rolloff_hz": 495.263671875,
+      "stereo_width": 0.2710660346298055,
+      "noise_floor_dbfs": -24.469369353845913
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.272,
+      "compression_strength": 0.969,
+      "stereo_width_target": 0.271,
+      "noise_added_db": null,
+      "lofi_needed_score": 19.31
+    },
+    "rationale": "LPF skipped (rolloff 495Hz), compression moderate (crest 12.6dB), stereo unchanged (0.27), noise skipped (floor -24.5dBFS)"
+  },
+  {
+    "track": "Rain Loop 80.mp3",
+    "metrics": {
+      "lufs": -12.51,
+      "crest_factor_db": 10.74197406219883,
+      "spectral_centroid_hz": 141.93717109396118,
+      "rolloff_hz": 524.871826171875,
+      "stereo_width": 0.23714687155941852,
+      "noise_floor_dbfs": -25.308409147874
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.265,
+      "compression_strength": 0.961,
+      "stereo_width_target": 0.237,
+      "noise_added_db": null,
+      "lofi_needed_score": 11.42
+    },
+    "rationale": "LPF skipped (rolloff 525Hz), compression moderate (crest 10.7dB), stereo unchanged (0.24), noise skipped (floor -25.3dBFS)"
+  },
+  {
+    "track": "Hologram Streets.mp3",
+    "metrics": {
+      "lufs": -14.34,
+      "crest_factor_db": 13.726551696716545,
+      "spectral_centroid_hz": 187.37570936731834,
+      "rolloff_hz": 721.3623046875,
+      "stereo_width": 0.20935987086230107,
+      "noise_floor_dbfs": -23.831169833744745
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.276,
+      "compression_strength": 0.974,
+      "stereo_width_target": 0.209,
+      "noise_added_db": null,
+      "lofi_needed_score": 23.86
+    },
+    "rationale": "LPF skipped (rolloff 721Hz), compression moderate (crest 13.7dB), stereo unchanged (0.21), noise skipped (floor -23.8dBFS)"
+  },
+  {
+    "track": "Hologram Crosswalk.mp3",
+    "metrics": {
+      "lufs": -15.41,
+      "crest_factor_db": 13.952642023985616,
+      "spectral_centroid_hz": 198.93921422272626,
+      "rolloff_hz": 667.529296875,
+      "stereo_width": 0.20593963738372895,
+      "noise_floor_dbfs": -26.579886426761156
     },
     "applied_processing": {
       "lpf_cutoff_hz": null,
       "saturation_strength": 0.277,
-      "compression_strength": 1.17,
+      "compression_strength": 0.975,
+      "stereo_width_target": 0.206,
+      "noise_added_db": null,
+      "lofi_needed_score": 24.8
+    },
+    "rationale": "LPF skipped (rolloff 668Hz), compression moderate (crest 14.0dB), stereo unchanged (0.21), noise skipped (floor -26.6dBFS)"
+  },
+  {
+    "track": "Rain in Sector Nine.mp3",
+    "metrics": {
+      "lufs": -14.03,
+      "crest_factor_db": 12.934645060732448,
+      "spectral_centroid_hz": 442.63490087682044,
+      "rolloff_hz": 2379.4189453125,
+      "stereo_width": 0.3001387831915652,
+      "noise_floor_dbfs": -20.635940363351775
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.274,
+      "compression_strength": 0.971,
+      "stereo_width_target": 0.3,
+      "noise_added_db": null,
+      "lofi_needed_score": 20.56
+    },
+    "rationale": "LPF skipped (rolloff 2379Hz), compression moderate (crest 12.9dB), stereo unchanged (0.30), noise skipped (floor -20.6dBFS)"
+  },
+  {
+    "track": "Rain on Platform Nine.mp3",
+    "metrics": {
+      "lufs": -12.81,
+      "crest_factor_db": 10.555687331334278,
+      "spectral_centroid_hz": 151.3171273207813,
+      "rolloff_hz": 532.94677734375,
+      "stereo_width": 0.22095361601802738,
+      "noise_floor_dbfs": -23.244640461247982
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.265,
+      "compression_strength": 0.961,
+      "stereo_width_target": 0.221,
+      "noise_added_db": null,
+      "lofi_needed_score": 10.65
+    },
+    "rationale": "LPF skipped (rolloff 533Hz), compression moderate (crest 10.6dB), stereo unchanged (0.22), noise skipped (floor -23.2dBFS)"
+  },
+  {
+    "track": "Storm Above the Skyline.mp3",
+    "metrics": {
+      "lufs": -12.68,
+      "crest_factor_db": 11.064761914419467,
+      "spectral_centroid_hz": 168.14317819796932,
+      "rolloff_hz": 581.396484375,
+      "stereo_width": 0.295205105851733,
+      "noise_floor_dbfs": -22.582867638995875
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.266,
+      "compression_strength": 0.963,
+      "stereo_width_target": 0.295,
+      "noise_added_db": null,
+      "lofi_needed_score": 12.77
+    },
+    "rationale": "LPF skipped (rolloff 581Hz), compression moderate (crest 11.1dB), stereo unchanged (0.30), noise skipped (floor -22.6dBFS)"
+  },
+  {
+    "track": "Midnight Signal.mp3",
+    "metrics": {
+      "lufs": -13.2,
+      "crest_factor_db": 10.39238168581937,
+      "spectral_centroid_hz": 151.57564823146808,
+      "rolloff_hz": 473.73046875,
+      "stereo_width": 0.2400401523703004,
+      "noise_floor_dbfs": -23.2595321349272
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.264,
+      "compression_strength": 0.96,
+      "stereo_width_target": 0.24,
+      "noise_added_db": null,
+      "lofi_needed_score": 9.97
+    },
+    "rationale": "LPF skipped (rolloff 474Hz), compression moderate (crest 10.4dB), stereo unchanged (0.24), noise skipped (floor -23.3dBFS)"
+  },
+  {
+    "track": "Static in the Alley.mp3",
+    "metrics": {
+      "lufs": -12.49,
+      "crest_factor_db": 11.570537412776357,
+      "spectral_centroid_hz": 212.7570772766682,
+      "rolloff_hz": 645.99609375,
+      "stereo_width": 0.17979750556397214,
+      "noise_floor_dbfs": -22.342140327399246
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.268,
+      "compression_strength": 0.965,
+      "stereo_width_target": 0.18,
+      "noise_added_db": null,
+      "lofi_needed_score": 14.88
+    },
+    "rationale": "LPF skipped (rolloff 646Hz), compression moderate (crest 11.6dB), stereo unchanged (0.18), noise skipped (floor -22.3dBFS)"
+  },
+  {
+    "track": "When the Neon Fades.mp3",
+    "metrics": {
+      "lufs": -12.26,
+      "crest_factor_db": 12.139390498234143,
+      "spectral_centroid_hz": 537.047328646706,
+      "rolloff_hz": 3103.472900390625,
+      "stereo_width": 0.2699951951935913,
+      "noise_floor_dbfs": -18.33533983971383
+    },
+    "applied_processing": {
+      "lpf_cutoff_hz": null,
+      "saturation_strength": 0.271,
+      "compression_strength": 0.967,
       "stereo_width_target": 0.27,
       "noise_added_db": null,
-      "lofi_needed_score": 25.0
+      "lofi_needed_score": 17.25
     },
-    "rationale": "LPF skipped (rolloff 789Hz), compression increased (crest 15.1dB), stereo unchanged (0.27), noise skipped (floor -26.3dBFS)"
+    "rationale": "LPF skipped (rolloff 3103Hz), compression moderate (crest 12.1dB), stereo unchanged (0.27), noise skipped (floor -18.3dBFS)"
   }
 ]

@@ -41,6 +41,9 @@ def write_tracklist_artifacts(
                 "filename": entry.filename,
                 "start_time_ms": entry.start_time_ms,
                 "end_time_ms": entry.end_time_ms,
+                "source_start_ms": entry.source_start_ms,
+                "source_end_ms": entry.source_end_ms,
+                "tempo_ratio": entry.tempo_ratio,
                 "bpm": analysis.bpm if analysis else None,
                 "bpm_confidence": analysis.bpm_confidence if analysis else None,
                 "key": analysis.key if analysis else None,
@@ -57,7 +60,7 @@ def write_tracklist_artifacts(
     with timestamps_txt_path.open("w", encoding="utf-8") as f:
         header = (
             "# | Filename | Start | End | Duration | InCrossfadeMs | OutCrossfadeMs | "
-            "InReason | OutReason"
+            "SourceStartMs | SourceEndMs | BeatAlignMs | TempoRatio | InReason | OutReason"
         )
         f.write(header + "\n")
         for idx, entry in enumerate(plan.timeline, start=1):
@@ -69,6 +72,9 @@ def write_tracklist_artifacts(
                 f"{format_hms(entry.end_time_ms)} | {format_hms(duration_ms)} | "
                 f"{in_transition.crossfade_ms if in_transition else 0} | "
                 f"{out_transition.crossfade_ms if out_transition else 0} | "
+                f"{entry.source_start_ms} | {entry.source_end_ms or 0} | "
+                f"{in_transition.beat_align_ms if in_transition else 0} | "
+                f"{entry.tempo_ratio:.6f} | "
                 f"{in_transition.reason if in_transition else ''} | "
                 f"{out_transition.reason if out_transition else ''}\n"
             )
@@ -84,6 +90,10 @@ def write_tracklist_artifacts(
                 "Duration",
                 "InCrossfadeMs",
                 "OutCrossfadeMs",
+                "SourceStartMs",
+                "SourceEndMs",
+                "BeatAlignMs",
+                "TempoRatio",
                 "InReason",
                 "OutReason",
             ],
@@ -102,6 +112,10 @@ def write_tracklist_artifacts(
                     "Duration": format_hms(duration_ms),
                     "InCrossfadeMs": in_transition.crossfade_ms if in_transition else 0,
                     "OutCrossfadeMs": out_transition.crossfade_ms if out_transition else 0,
+                    "SourceStartMs": entry.source_start_ms,
+                    "SourceEndMs": entry.source_end_ms or 0,
+                    "BeatAlignMs": in_transition.beat_align_ms if in_transition else 0,
+                    "TempoRatio": f"{entry.tempo_ratio:.6f}",
                     "InReason": in_transition.reason if in_transition else "",
                     "OutReason": out_transition.reason if out_transition else "",
                 }

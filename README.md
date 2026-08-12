@@ -11,6 +11,7 @@ It includes:
 
 - GUI + CLI workflows
 - Smart crossfade and smart ordering (BPM/key-aware)
+- Boundary-only silence cues, energy-balanced overlaps, beat-grid alignment, and optional gentle tempo matching
 - Adaptive lo-fi processing (per-track metrics + rationale)
 - Expanded lo-fi preset editor: filters, tape drive/bias, compression timing, bit reduction, wow/flutter, stereo, noise, and atmosphere controls
 - Optional rain layer + loudness targeting (LUFS / true peak)
